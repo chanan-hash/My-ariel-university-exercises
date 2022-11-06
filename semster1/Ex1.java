@@ -1,50 +1,52 @@
 package semster1;
+
 import java.util.Scanner;
+
 public class Ex1 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
 		Scanner scan = new Scanner(System.in);
 
 		// Getting two numbers from the user
-		System.out.println("Enter the first number for max prime GCD: ");
-		int x = scan.nextInt();
+		System.out.println("Enter a first number:");
+		long num1 = scan.nextLong();
+		System.out.println("Enter a second number: ");
+		long num2 = scan.nextLong();
 
-		//checking if the number is to big for Integer class
-		while (x>Integer.MAX_VALUE) {
-			System.out.println("your number is to big! please enter smaller number: ");
-			x = scan.nextInt();
+		//measuring the time
+		long start = System.nanoTime();
+
+		long res = PGCD(num1,num2); // saving the result in a special variable
+
+		if (res !=1) {
+			System.out.println("The great prime common divisor is: " + res);
+		}
+		else{
+			System.out.println("Dind't find any pgcd");
 		}
 
-		System.out.println("Enter the second number for max prime GCD:");
-		int y = scan.nextInt();
-
-		while (y>Integer.MAX_VALUE) {
-			System.out.println("your number is to big please enter smaller number!");
-			y = scan.nextInt();
-		}
-
-		System.out.println("\nThe PGCD is: " + PGCD(x,y));
-
+		// printing the time
+		long end = System.nanoTime();
+		double time = (end -start)/1000;
+		System.out.println("It took " + time + " mirco seconds:");
 		scan.close();
 	}
 
 
-
 	// A function for checking if a given number is prime
-	public static boolean isPrime (int num) {
-
+	public static boolean isPrime (long num) {
 		if (num == 2) {				// 2 is the first prime number
 			return true;
 		}
-		
+
 		if (num % 2 == 0) {			//check if the number is even
 			return false;
 		}
 
 		int i = 3;
-		while (i<=Math.sqrt(num)) { 
+		double sqrt = Math.sqrt(num);
+		while (i<=sqrt) { 
 			if (num % i == 0) { 	// checking if the given number can be divided
 				return false;
 			}
@@ -56,31 +58,55 @@ public class Ex1 {
 	}
 
 
-	// function to find the prime great common divisor
-	public static int PGCD (int x, int y) {
-		int min = Math.min(x, y);
-
-		// checking if the two given number are divided by the smallest and if it is prime
-		if ((x % min == 0) && (y % min == 0)){
-			if (isPrime(min) == true) {
-				return min; // this is the PGCD
-			}
+	// a function for finding the great prime common divisor
+	public static long PGCD(long x, long y) {
+		long gcd = x%y;
+		// we will use euclid's algorithm so we can use it on big numbers
+		while (gcd!=0) {
+			// swap
+			x = y;
+			y = gcd;
+			gcd = x%y;
+		}
+		System.out.println(y);
+		// checking if the gcd we've found is prime
+		if(isPrime(y)==true) {
+			return y;
 		}
 
-		int i = min/2;
+		// look int the lecture for example
 
-		while (i>1) {
-
-			if ((x % i == 0) && (y % i == 0)) {
-				if (isPrime(i) == true) {
-					return i;
+		
+		else {
+			x = y/2;
+			y = x/2;
+			while(x!=y) {
+				if(x>y) {
+					x = x-y;
 				}
-				i--;
+				else {
+					y = y-x;
+				}
 			}
-			i = i-1;
+			System.out.println(y);
 		}
+		if(isPrime(y)==true) {
+			return y;
+		}
+
+		// starting loop to check from the gcd till 2 for prime great common divisor
+		long pgcd = (y-1)/2;
+		while (pgcd > 1) {
+			if((x%pgcd == 0)&&(y%pgcd == 0)) {
+				if(isPrime(pgcd)==true) {
+					return pgcd;
+				}
+			}
+			System.out.println(pgcd);
+
+			pgcd = pgcd-1;
+		}	
 		return 1;
 	}
-
 
 }
