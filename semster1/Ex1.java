@@ -60,8 +60,8 @@ public class Ex1 {
 
 	// a function for finding the great prime common divisor
 	public static long PGCD(long x, long y) {
-		long gcd = x%y;
 		// we will use euclid's algorithm so we can use it on big numbers
+		long gcd = x%y;
 		while (gcd!=0) {
 			// swap
 			x = y;
@@ -74,35 +74,15 @@ public class Ex1 {
 			return y;
 		}
 
-		// look int the lecture for example
-
-		
-		else {
-			x = y/2;
-			y = x/2;
-			while(x!=y) {
-				if(x>y) {
-					x = x-y;
-				}
-				else {
-					y = y-x;
-				}
-			}
-			System.out.println(y);
-		}
-		if(isPrime(y)==true) {
-			return y;
-		}
-
 		// starting loop to check from the gcd till 2 for prime great common divisor
-		long pgcd = (y-1)/2;
+		long pgcd = (long)Math.sqrt(y); // need to understand still
 		while (pgcd > 1) {
 			if((x%pgcd == 0)&&(y%pgcd == 0)) {
 				if(isPrime(pgcd)==true) {
 					return pgcd;
 				}
 			}
-			System.out.println(pgcd);
+			System.out.println(pgcd-1);
 
 			pgcd = pgcd-1;
 		}	
