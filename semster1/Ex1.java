@@ -7,7 +7,7 @@ public class Ex1 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Scanner scan = new Scanner(System.in);
-
+		
 		// Getting two numbers from the user
 		System.out.println("Enter a first number:");
 		long num1 = scan.nextLong();
@@ -39,11 +39,10 @@ public class Ex1 {
 		if (num == 2) {				// 2 is the first prime number
 			return true;
 		}
-
 		if (num % 2 == 0) {			//check if the number is even
 			return false;
 		}
-
+		
 		int i = 3;
 		double sqrt = Math.sqrt(num);
 		while (i<=sqrt) { 
@@ -68,21 +67,21 @@ public class Ex1 {
 			y = gcd;
 			gcd = x%y;
 		}
-		System.out.println(y);
+		//System.out.println(y);
 		// checking if the gcd we've found is prime
 		if(isPrime(y)==true) {
 			return y;
 		}
 
 		// starting loop to check from the gcd till 2 for prime great common divisor
-		long pgcd = (long)Math.sqrt(y); // need to understand still
+		long pgcd = ((long)Math.sqrt(y)); 	//fix the root
 		while (pgcd > 1) {
 			if((x%pgcd == 0)&&(y%pgcd == 0)) {
 				if(isPrime(pgcd)==true) {
-					return pgcd;
+					return (pgcd);
 				}
 			}
-			System.out.println(pgcd-1);
+			//System.out.println(pgcd-1);
 
 			pgcd = pgcd-1;
 		}	
