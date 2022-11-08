@@ -1,13 +1,15 @@
 /**
- * This code is for finding the great common divisor(gcd), which is also a prime number
- * the main idea - in math, every dividable number is assembled from multiplication of at least two prime numbers  
+ * This code is for finding the great common divisor(gcd), which is also a prime number - pgcd
+ * the main idea is:
+ * in math, every dividable number is assembled from multiplication of at least two prime numbers  
+ * example - 6 can be represented like this: 2*3, 20 = 2*2*5, etc..
  * it works by three steps:
  *  1) Function for checking checking if a given number is prime
  *  2) Function for finding a gcd using euclid's algorithm (base on the idea of dividable numbers)
- *  3) Function that based on the previous function, and tha idea on the top -
- *   after we finding a gcd, we are trying to divid it as much as we can by prime numbers:
- *    or that we can, and it is not a prime number 
- *    or somewhen we can't divide it any more, means that it itself a prime number and returning it 
+ *  3) Function that based on the previous function, and the idea on the top -
+ *   after we finding a gcd, we are trying to divide it as much as we can by prime numbers:
+ *   - or that we can divide till end, and it is not a prime number 
+ *   - or somewhen we can't divide it any more, means that it itself a prime number and returning it 
  ***/
 
 package semster1;
@@ -21,15 +23,15 @@ public class Ex1 {
 		Scanner scan = new Scanner(System.in);		
 		
 		// Getting two numbers from the user
-		System.out.println("Enter a first number:");
+		System.out.println("Enter a first number for finding pgcd:");
 		long num1 = scan.nextLong();
-		System.out.println("Enter a second number: ");
+		System.out.println("Enter a second number for finding pgcd: ");
 		long num2 = scan.nextLong();
 		//measuring the time
 		long start = System.nanoTime();
 
 		long res = PGCD(num1,num2); // saving the result in a special variable
-		System.out.println("Your numbers for \"prime great common divisor\" are: " + num1 +" and, " + num2 );
+		System.out.println("Your numbers for \"prime great common divisor\" are: " + num1 +", and " + num2 );
 		if (res !=1) {
 			System.out.println("The great prime common divisor is: " + res);
 		}
