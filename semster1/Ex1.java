@@ -1,5 +1,13 @@
 /**
- * Add a documentation
+ * This code is for finding the great common divisor(gcd), which is also a prime number
+ * the main idea - in math, every dividable number is assembled from multiplication of at least two prime numbers  
+ * it works by three steps:
+ *  1) Function for checking checking if a given number is prime
+ *  2) Function for finding a gcd using euclid's algorithm (base on the idea of dividable numbers)
+ *  3) Function that based on the previous function, and tha idea on the top -
+ *   after we finding a gcd, we are trying to divid it as much as we can by prime numbers:
+ *    or that we can, and it is not a prime number 
+ *    or somewhen we can't divide it any more, means that it itself a prime number and returning it 
  ***/
 
 package semster1;
@@ -10,19 +18,18 @@ public class Ex1 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Scanner scan = new Scanner(System.in);
-
+		Scanner scan = new Scanner(System.in);		
+		
 		// Getting two numbers from the user
 		System.out.println("Enter a first number:");
 		long num1 = scan.nextLong();
 		System.out.println("Enter a second number: ");
 		long num2 = scan.nextLong();
-
 		//measuring the time
 		long start = System.nanoTime();
 
 		long res = PGCD(num1,num2); // saving the result in a special variable
-		System.out.println("Your numbers for prime great common divisor are: " + num1 +" and, " + num2 );
+		System.out.println("Your numbers for \"prime great common divisor\" are: " + num1 +" and, " + num2 );
 		if (res !=1) {
 			System.out.println("The great prime common divisor is: " + res);
 		}
@@ -33,7 +40,7 @@ public class Ex1 {
 		// printing the time
 		long end = System.nanoTime();
 		double time = (end -start)/1000;
-		
+
 		System.out.println("It took " + time + " mirco seconds:");
 		scan.close();
 	}
@@ -74,36 +81,34 @@ public class Ex1 {
 	}
 
 	
-	// need to write an explain for this
 	//Function to find the prime gcd using the previous functions
 	public static long PGCD(long x, long y) {
 		long gcd = gcd1(x,y);
-		System.out.println("gcd1= " + gcd);
-		System.out.println("x= " + x + ", y= " + y);
 		long pgcd = 1;
 
-
-		if(isPrime(gcd)==true) {
+		if(isPrime(gcd)==true) { // this is the pgcd
 			return gcd;
 		}
+		
 		else {
+			// dividing as much as we can the gcd by 2, to make it and odd number
 			while(gcd%2==0) {
 				gcd /=2;
-				pgcd = 2;
+				pgcd = 2; // for now this is the prime gcd
 			}
-			for (int i = 3; i<Math.sqrt(gcd); i= i+2) {
+			// after 2, we're checking from 3 till the sqrt to find his divisors and to divide the gcd till we can't
+			for (int i = 3; i<=Math.sqrt(gcd); i= i+2) {
 				while(gcd%i==0) {
-					gcd = gcd/i;
-					pgcd=i;
+					gcd = gcd/i; //means 'i' may be a prime number because he can divide the gcd
+					pgcd=i;			
 				}
 			}
-
+			
 			if(gcd>2) {
 				pgcd = gcd; 
 			}
 			return pgcd;
 		}
-
 	}
 
 }
