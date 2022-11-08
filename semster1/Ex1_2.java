@@ -9,10 +9,10 @@ public class Ex1_2 {
 
 		// Getting two numbers from the user
 		System.out.println("Enter the first number for max prime GCD: ");
-		long x = scan.nextInt();
+		long x = scan.nextLong();
 
 		System.out.println("Enter the second number for max prime GCD:");
-		long y = scan.nextInt();
+		long y = scan.nextLong();
 
 		//measuring the time
 		long start = System.nanoTime();

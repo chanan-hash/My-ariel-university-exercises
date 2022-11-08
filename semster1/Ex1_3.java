@@ -1,12 +1,8 @@
-/**
- * Add a documentation
- ***/
-
 package semster1;
 
 import java.util.Scanner;
 
-public class Ex1 {
+public class Ex1_3 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -22,7 +18,7 @@ public class Ex1 {
 		long start = System.nanoTime();
 
 		long res = PGCD(num1,num2); // saving the result in a special variable
-		System.out.println("Your numbers for prime great common divisor are: " + num1 +" and, " + num2 );
+
 		if (res !=1) {
 			System.out.println("The great prime common divisor is: " + res);
 		}
@@ -33,7 +29,6 @@ public class Ex1 {
 		// printing the time
 		long end = System.nanoTime();
 		double time = (end -start)/1000;
-		
 		System.out.println("It took " + time + " mirco seconds:");
 		scan.close();
 	}
@@ -61,49 +56,40 @@ public class Ex1 {
 		return true;				// the loop has finished and the number is prime
 	}
 
-	// finding the gcd of two given numbers by euclid's algorithm
-	public static long gcd1 (long n1, long n2) {
-		long gcd = n1%n2;
+
+	// a function for finding the great prime common divisor
+	public static long PGCD(long x, long y) {
+		// we will use euclid's algorithm so we can use it on big numbers
+		long gcd = x%y;
 		while (gcd!=0) {
 			// swap
-			n1 = n2;
-			n2 = gcd;
-			gcd = n1%n2;
+			x = y;
+			y = gcd;
+			gcd = x%y;
 		}
-		return n2;
-	}
-
-	
-	// need to write an explain for this
-	//Function to find the prime gcd using the previous functions
-	public static long PGCD(long x, long y) {
-		long gcd = gcd1(x,y);
-		System.out.println("gcd1= " + gcd);
-		System.out.println("x= " + x + ", y= " + y);
-		long pgcd = 1;
-
-
-		if(isPrime(gcd)==true) {
-			return gcd;
+		//System.out.println(y);
+		// checking if the gcd we've found is prime
+		if(isPrime(y)==true) {
+			return y;
 		}
-		else {
-			while(gcd%2==0) {
-				gcd /=2;
-				pgcd = 2;
-			}
-			for (int i = 3; i<Math.sqrt(gcd); i= i+2) {
-				while(gcd%i==0) {
-					gcd = gcd/i;
-					pgcd=i;
+
+		while (x % y!=0) {
+			x = x/y;
+		}
+		
+		// starting loop to check from the gcd till 2 for prime great common divisor
+		long pgcd = ((long)Math.sqrt(y)); 	//fix the root
+		while (pgcd > 1) {
+			if((x%pgcd == 0)&&(y%pgcd == 0)) {
+				if(isPrime(pgcd)==true) {
+					return (pgcd);
 				}
 			}
+			//System.out.println(pgcd-1);
+			pgcd = pgcd-1;
+		}	
 
-			if(gcd>2) {
-				pgcd = gcd; 
-			}
-			return pgcd;
-		}
+		return 1;
 
 	}
-
 }
