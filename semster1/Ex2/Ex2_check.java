@@ -7,8 +7,8 @@ public class Ex2_check {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		double[] p1 = {2,4,5,6,8};
-		double[] p2 = {2,4,5,6,8,9};
-		double[] po1={2,0,3, -1,0}, po2 = {0.1,0,1, 0.1,3};
+		double[] p2 = {3,4,5,6,8,9};
+		double[] po1={2,0,3, -1,0}, po2 = {0.1,-0,1, 0.1,-3};
 		double[] p9 = {5, 0, 10, 6};
 		double[] p10 = {1, 2, 4};
 
@@ -16,7 +16,10 @@ public class Ex2_check {
 		double[] dp1 = {2,6};
 		double[] dp2 = derivative(p);
 
-		double x121 = root(po1, 0, 10, Ex2.EPS);
+		String str = poly(po2);
+		System.out.println(str);
+
+		double x121 = root4(po1, 0, 10, Ex2.EPS);
 		System.out.println(Ex2.EPS);
 		System.out.println(Arrays.toString(po1));
 		System.out.println(x121);
@@ -25,9 +28,26 @@ public class Ex2_check {
 		System.out.println(x22);
 		double [] arr = PolynomFromPoints(p,p10);
 
-		System.out.println(Arrays.toString(arr));
-		//	System.out.println(x121);
 
+		double area = area(p10, po1, 1, 5, 6);
+		System.out.println("area= " + area);
+		System.out.println(Arrays.toString(arr));
+
+		double area2 = polArea(dp1, 1, 5, 6);
+		double area3 = polArea(po1, 1, 5, 6);
+		//		
+		System.out.println(area2);
+		System.out.println(area3);
+		//		
+		double Svalue = sameValue(p2, p1, -10, 10, Ex2.EPS); 
+		System.out.println(Svalue);
+
+		
+		double[] p12 = {-1.1,2.3,3.1}; // 3.1X^+2.3x-1.1
+		String sp = Ex2.poly(p12);
+		double[] p13 = toPol(sp);
+		System.out.println(Arrays.toString(p13));
+		
 	}
 
 	// finished
@@ -113,7 +133,7 @@ public class Ex2_check {
 	}
 
 
-	// TODO change the negative
+	// finished
 	public static String poly(double[] poly) {
 		String ans = "";
 
@@ -121,25 +141,51 @@ public class Ex2_check {
 			return poly[0]+""; // making it to String
 		}
 
-		for (int i = poly.length-1; i > 1; i--) {
+		for (int i = poly.length-1; i > 0; i--) {
 			if (poly[i] != 0) { // if the coefficient is not Zero
-				if (poly[i]>0) {
-					ans += String.valueOf(poly[i])+ "x^" + String.valueOf(i)+ " + ";
-				}
-				else {
-
-				}
+				ans += (poly[i]>0?"+" : "") + String.valueOf(poly[i])+  "x" + (i>1 ? "^": "") + String.valueOf(i);
 			}
 		}
-		if (poly[1] != 0 && poly[0] !=0) {
-			return ans + poly[1]+"x + " + poly[0];
-		}
-		if (poly[1] == 0) {
-			return ans + poly[0];
+		ans += poly[0]!=0 ? ((poly[0]>0? "+" : "") + String.valueOf(poly[0])) :"";
+		return ans;
+
+
+
+	}
+
+	public static double [] toPol(String p) {
+		p=p.strip();
+		String s= p.replaceAll("-", "+-");
+		String [] parts = s.split("\\+");
+		int deg;
+		if (parts[0].contains("x")) {
+			if(parts[0].contains("^")){
+				String temp =parts[0].split("\\^")[1].strip();
+				deg = Integer.parseInt(temp);
+			}else {
+			deg = Integer.parseInt(parts[0].split("x")[1]);
+			}
 		}
 		else {
-			return ans;
+			return new double[] {Integer.parseInt(parts[0])};
 		}
+
+		double [] pol = new double [deg+1];
+		for(String part : parts ) {
+			if (part.isBlank()) continue;
+			if (part.contains("x")) {
+				if(part.contains("^")){
+					String temp =part.split("\\^")[1].strip();
+					deg = Integer.parseInt(temp);
+				} else {
+					deg=1;}
+			}else {
+				deg =0;
+			}
+			String temp =part.split("x")[0].strip();
+			pol[deg] = Double.parseDouble(temp);
+		}
+		return pol;
 	}
 
 
@@ -152,6 +198,7 @@ public class Ex2_check {
 	 * @return
 	 */
 	public static final double[] ZERO = {0};
+	// checked
 	public static double[] getPolynomFromString(String p) {
 		// *** add your code here ***
 
@@ -197,69 +244,26 @@ public class Ex2_check {
 		// **************************
 	}
 
-	/**
-	 * Given a polynom (p), a range [x1,x2] and an epsilon eps. 
-	 * This function computes an x value (x1<=x<=x2) for which |p(x)| < eps, 
-	 * assuming p(x1)*p(x2) <= 0. 
-	 * This function should be implemented iteratively (none recursive).
-	 * @param p - the polynom
-	 * @param x1 - minimal value of the range
-	 * @param x2 - maximal value of the range
-	 * @param eps - epsilon (positive small value (often 10^-3, or 10^-6).
-	 * @return an x value (x1<=x<=x2) for which |p(x)| < eps.
-	 */
-	// actually is to implement binary search and we need to find the x
-	public static double root3(double[] p, double x1, double x2, double eps) {
-		double x12 = (x1+x2)/2;
 
-		double p_x = f(p,x12);
-		if(Math.abs(p_x)<eps) {
-			return x12; // this is the root of the polynom
-		}
-		if (Math.abs(f(p,x1)) < eps) {
-			return x1;
-		}
 
-		if (Math.abs(f(p,x2)) < eps) {
-			return x2;
-		}
+	//checked
+	public static double root4(double[] p, double x1, double x2, double eps) {
+		if (Math.abs(f(p, x1))< eps)	return x1;
+		if (Math.abs(f(p, x2))< eps)	return x2;
 
-		double left = 0;
-		double right = 0;
-		if (x1<x2) {
-			left = x1;
-			right = x2;
-		}
-		else {
-			left = x2;
-			right = x1;
-		}
+		double pos = f(p, x1)> 0 ? x1 : x2; //positive
+		double neg = f(p, x1)> 0 ? x2 : x1; // negative
+		double m = (neg+pos)/2 ;
 
-		// checking if the p(x) is positive or negative , and according this we will go right or left
-		//checking acordding to eps to be close to eps
-		//going to the left side, from x12 till x2
-		while(left <= right) {
-			x12 = (left + right)/2;
-			System.out.println(x12);
-			System.out.println(right);
-			System.out.println(left);
-
-			if (Math.abs(f(p,x12))<eps) {
-				return x12;
+		while (Math.abs(f(p ,m))>=eps) {
+			if (f(p, m)>0) {
+				pos=m;
+			}else {
+				neg=m;
 			}
-
-			//going to the left side
-			if (eps < f(p,x12)) {
-				right = x12;
-			}
-			// going to the right side
-			else {
-				left = x12;
-			}
-			
-
+			m=(neg+pos)/2;
 		}
-		return x12;
+		return m;
 	}
 
 	//
@@ -279,9 +283,11 @@ public class Ex2_check {
 	 *	y2 = A x2^2 + B x2 + C 
 	 *	y3 = A x3^2 + B x3 + C
 	 *
+	 * solving a matrix
+	 *
 	 *	we have three y's and for each one an x values, from those we want to calculate a new polynom 
 	 */
-
+	// NEED TO BE FIXED
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
 		double [] ans =  null;
 		if(xx!=null && yy!=null && xx.length==3 && yy.length==3) {
@@ -296,9 +302,9 @@ public class Ex2_check {
 			// **************************
 
 			ans = new double [3];
-			ans[0] = P1;
+			ans[0] = P3;
 			ans[1] = P2;
-			ans[2] = P3;
+			ans[2] = P1;
 
 		}
 
@@ -380,65 +386,111 @@ public class Ex2_check {
 	}
 
 
-	public static double root2(double[] p, double x1, double x2, double eps) {
-		double apx1 = 0;
-		double apx2 = 0;
-		double x12 = (x1+x2)/2;
-		double apx12 = f(p,x12);
 
-		do{
-			apx1 = Math.abs(f(p,x1)); 
-			if (apx1 < eps) {
-				return x1;
-			}
+	/**
+	 * Given two polynoms (p1,p2), a range [x1,x2] and an integer representing the number of "boxes". 
+	 * This function computes an approximation of the area between the polynoms within the x-range.
+	 * The area is computed using Riemann's like integral (https://en.wikipedia.org/wiki/Riemann_integral)
+	 * @param p1 - first polynom
+	 * @param p2 - second polynom
+	 * @param x1 - minimal value of the range
+	 * @param x2 - maximal value of the range
+	 * @param numberOfBoxes - a natural number representing the number of boxes between xq and x2.
+	 * @return the approximated area between the two polynoms within the [x1,x2] range.
+	 */
+	public static double area(double[] p1,double[]p2, double x1, double x2, int numberOfBoxes) {
+		double ans = 0;
+		// *** add your code here ***
+		double sum1 = 0, sum2 = 0;
 
-			apx2 = Math.abs(f(p,x2)); 
-			if (apx2 < eps) {
-				return x2;
-			}
+		double width = (x2 - x1)/numberOfBoxes; //this will be the width of the rectangle, nust be a constant number
+		double hight1 = 0;
+		double hight2 = 0;	
+		double rect_area1;
+		double rect_area2;
 
-			if(apx1 < apx12) {
-				if (apx2 >= apx12)//apx1<apx12<apx2
-					x2 = x12;
-				//else
-				//throw exception due to fuction definition
-			}
-			else{
-				if (apx2 < apx12) //apx2<apx12<apx1
-					x1 = x12;
-				else { //apx12<?<?{
-					if (apx1 < apx2) { //apx12<pax1<pax2 
-						x2 = x12;
-					}
-					else {  //apx12<pax2<pax1 
-						x1 = x12;
-					}
-				}
-			}
-
-			System.out.println(apx1);
-			System.out.println(apx2);
-			System.out.println(apx12);
-
-			/* if ((apx1 < apx12) && (apx2 >= apx12)) //apx1<apx12<apx2
-			               x2 = x12
-			           else if ((apx1 >= apx12) && (apx2 < apx12)) //apx2<apx12<apx1
-			               x1 = x12
-			           else if ((apx1 > apx12 ) && (apx12 < apx2)) //apx12<?<?
-			                  {
-			                   if (pax1 < pax2) //apx12<pax1<pax2 
-			                       x2 = x12
-			                   else  //apx12<pax2<pax1 
-			                        x1 = x12
-			                   }
-			           else if ((apx1 < apx12) && (apx12> apx2))// ? < ?< apx12
-			                   {
-			                          //throw exception due to fuction definition
-			                   }*/
-
+		// calculating the area of first polynomial
+		for(double i = x1; i<=x2; i++) {
+			hight1 = f(p1,i);
+			rect_area1 = width*hight1;
+			sum1+=rect_area1;
 		}
-		while(Math.abs(f(p,x12))>eps);         
-		return x12;
-	}	
+
+		// calculating the area of second polynomial
+		for(double i = x1; i<=x2; i++) {
+			hight2 = f(p2,i);
+			rect_area2 = width*hight2;
+			sum2+=rect_area2;
+		}
+		// **************************
+		ans = sum1-sum2;
+		return ans;
+	}
+
+	//help Function
+	public static double rectArea(double w, double h) {
+		return w*h;
+	}
+
+	public static double polArea(double[] p, double x1, double x2, int numberOfBoxes) {
+		double sum = 0;
+		double width = (x2 - x1)/numberOfBoxes; //this will be the width of the rectangle, nust be a constant number
+		double hight = 0;
+		double rect_area;
+		double currPos=x1;
+
+		for (int i = 0; i< numberOfBoxes; i++) {
+			sum += f(p, currPos);
+			currPos+=width;
+		}
+		return sum*width;
+		//need to be fixed with the i
+		//			for(double j = x1; j<=x2; j = j+(width)) {
+		//				hight = f(p,j);
+		//				rect_area = rectArea(width, hight);
+		//				sum += rect_area;
+		//			}
+
+		//		return sum;
+
+	}
+
+	public static double area2(double[] p1,double[]p2, double x1, double x2, int numberOfBoxes) {
+		double ans = 0;
+		double sum1 = polArea(p1, x1, x2, numberOfBoxes);
+		double sum2 = polArea(p2, x1, x2, numberOfBoxes);
+
+		ans = sum1 - sum2;
+
+		return ans;
+	}
+
+
+	public static double[] subtruct(double[] poly1, double [] poly2) {
+		double [] mpoly2 = new double[poly2.length];
+		for(int i=0; i<poly2.length; i++) {
+			mpoly2[i] = -poly2[i];
+		}
+		return add(poly1, mpoly2);
+	}
+
+	/**
+	 * Given two polynoms (p1,p2), a range [x1,x2] and an epsilon eps. This function computes an x value (x1<=x<=x2)
+	 * for which |p1(x) -p2(x)| < eps, assuming (p1(x1)-p2(x1)) * (p1(x2)-p2(x2)) <= 0.
+	 * @param p1 - first polynom
+	 * @param p2 - second polynom
+	 * @param x1 - minimal value of the range
+	 * @param x2 - maximal value of the range
+	 * @param eps - epsilon (positive small value (often 10^-3, or 10^-6).
+	 * @return an x value (x1<=x<=x2) for which |p1(x) -p2(x)| < eps.
+	 */
+	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
+		// *** add your code here ***
+		return root4(subtruct(p1, p2), x1, x2, eps);
+		// **************************
+	}
+
+
+
 
 }
