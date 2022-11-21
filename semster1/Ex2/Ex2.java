@@ -85,7 +85,9 @@ public class Ex2 {
 			}
 		}
 		ans += poly[0]!=0 ? ((poly[0]>0? "+" : "") + String.valueOf(poly[0])) :"";
-
+		
+		ans = ans.replace("x1","x"); //taking the degree off from x^1 --> x
+		
 		if(ans.charAt(0)== '+') { //removing the plus at the beginning
 			return ans.substring(1);
 		}
