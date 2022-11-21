@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
  *
  */
 
-//TODO adding failuer
+//TODO adding failuers
 
 class Ex2Test {
 	static double[] po1={2,0,3, -1,0}, po2 = {0.1,0,1, 0.1,3};
@@ -78,6 +78,7 @@ class Ex2Test {
 		assertEquals(same,-5.93763473003502); //there are few point the polynomial are meeting, 2.7484130859375 is also a point 
 	}
 
+	@Test
 	void testArea() {
 		double[] po11 = {2,1,-0.7, -0.02,0.02};
 		double[] po22 = {-3, 0.61, 0.2};
