@@ -55,8 +55,7 @@ public class Ex2 {
 		double ans = 0;
 		// *** add your code here ***
 		for (int i = 1; i<poly.length; i++) {
-			ans = ans +(poly[i]*((Math.pow(x, i)))); // we are taking the value in place i, multiply by the given 'x' pwoer the index
-			System.out.println(ans);
+			ans = ans +(poly[i]*(Math.pow(x, i))); // we are taking the value in place i, multiply by the given 'x' pwoer the index
 		}
 		ans += poly[0];
 		// **************************
@@ -71,6 +70,10 @@ public class Ex2 {
 	// checked
 	public static String poly(double[] poly) {
 		String ans = "";
+		if (poly.length == 0) {
+			ans = null;
+			return ans;
+		}
 
 		if(poly.length == 1) {
 			return poly[0]+""; // making it to String
@@ -82,11 +85,10 @@ public class Ex2 {
 			}
 		}
 		ans += poly[0]!=0 ? ((poly[0]>0? "+" : "") + String.valueOf(poly[0])) :"";
-		
+
 		if(ans.charAt(0)== '+') { //removing the plus at the beginning
 			return ans.substring(1);
 		}
-		
 		return ans;
 	}
 
@@ -206,31 +208,43 @@ public class Ex2 {
 	 */
 	public static double[] getPolynomFromString(String p) {
 		p=p.strip();
-		String s= p.replaceAll("-", "+-");
+		String s= p.replaceAll("-", "+-"); //we want to split according to '+'
 		String [] parts = s.split("\\+");
-		int deg;
+		int deg; 							//getting the degree for the length of the polynomial array
 		if (parts[0].contains("x")) {
 			if(parts[0].contains("^")){
-				String temp =parts[0].split("\\^")[1].strip();
-				deg = Integer.parseInt(temp);
-			}else {
-				deg = Integer.parseInt(parts[0].split("x")[1]);
+				String temp = parts[0].split("\\^")[1].strip(); // taking of all the things around the number
+				deg = Integer.parseInt(temp); 
+			}
+			else {
+				deg = Integer.parseInt(parts[0].split("x")[1]); //the first 'x', the degree is One
 			}
 		}
 		else {
-			return new double[] {Integer.parseInt(parts[0])};
+			if(parts.length < 2 ) {
+				return new double[] {Double.parseDouble(parts[0])}; 
+			}
+			else {
+				return new double[] {Double.parseDouble(parts[1])}; 	
+			} // we have only One number
 		}
 
 		double [] pol = new double [deg+1];
 		for(String part : parts ) {
-			if (part.isBlank()) continue;
+			if (part.isBlank()) {
+				continue;
+			}
 			if (part.contains("x")) {
 				if(part.contains("^")){
 					String temp =part.split("\\^")[1].strip();
 					deg = Integer.parseInt(temp);
-				} else {
+				}
+
+				else {
 					deg=1;}
-			}else {
+			}
+
+			else {
 				deg =0;
 			}
 			String temp =part.split("x")[0].strip();
@@ -359,8 +373,8 @@ public class Ex2 {
 		return ans;
 	}
 
-	
-	
+
+
 	///////////////////// Private /////////////////////
 	// you can add any additional functions (private) below
 
@@ -390,7 +404,7 @@ public class Ex2 {
 		return sum;
 
 	}
-	
+
 	// Subtract to polynoms help us in the sameValue function
 	public static double[] subtract(double[] poly1, double [] poly2) {
 		double [] mpoly2 = new double[poly2.length];

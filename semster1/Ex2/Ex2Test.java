@@ -37,8 +37,11 @@ class Ex2Test {
 		String st = "3.0x^4+0.1x^3+1.0x^2+0.1";
 		String ex2 = Ex2.poly(po1);
 		String ex22 = Ex2.poly(po2);		
-		assertEquals(str, ex2);
+		double [] poll = {};
+		String may_null= Ex2.poly(poll);
+ 		assertEquals(str, ex2);
 		assertEquals(st, ex22);
+		assertEquals(may_null, null);
 	}
 
 
@@ -128,11 +131,21 @@ class Ex2Test {
 	@Test
 	public void testFromString() {
 		double[] p = {-1.1,2.3,3.1}; // 3.1x^+2.3x-1.1
+		double[] pp = {-1.1}; 		// only one number, negative
+		double [] pp3 = {2};		// only one number, positive
+		
 		String sp = Ex2.poly(p);
+		String spp = Ex2.poly(pp);
+		String spp3 = Ex2.poly(pp3);
+		
 		double[] p1 = Ex2.getPolynomFromString(sp);
+		double[] pp2 = Ex2.getPolynomFromString(spp);
+		double[] p3p = Ex2.getPolynomFromString(spp3);
 		boolean isSame = Ex2.equals(p1, p);
 		if(!isSame) {fail();}
 		assertEquals(sp, Ex2.poly(p1));
+		assertEquals(spp, Ex2.poly(pp2));
+		assertEquals(spp3, Ex2.poly(p3p));
 	}
 
 
