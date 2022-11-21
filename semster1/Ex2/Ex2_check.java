@@ -6,47 +6,32 @@ public class Ex2_check {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		double[] p1 = {2,4,5,6,8};
-		double[] p2 = {3,4,5,6,8,9};
-		double[] po1={2,0,3, -1,0}, po2 = {0.1,-0,1, 0.1,-3};
-		double[] p9 = {5, 0, 10, 6};
-		double[] p10 = {1, 2, 4};
-
-		double[] p = {1,2,3}; // 3X^2+2x+1
-		double[] dp1 = {2,6};
-		double[] dp2 = derivative(p);
-
-		String str = poly(po2);
+		double[] po1 = {2,1,-0.7, -0.02,-0.02};
+		double eps = 0.02;
+		double[] po2 = {-3, 0.61, 0.2};
+		String str = poly(po1);
 		System.out.println(str);
-
-		double x121 = root4(po1, 0, 10, Ex2.EPS);
-		System.out.println(Ex2.EPS);
-		System.out.println(Arrays.toString(po1));
-		System.out.println(x121);
-
-		double x22 = root_rec(po1,0,10,Ex2.EPS);
-		System.out.println(x22);
-		double [] arr = PolynomFromPoints(p,p10);
-
-
-		double area = area(p10, po1, 1, 5, 6);
-		System.out.println("area= " + area);
-		System.out.println(Arrays.toString(arr));
-
-		double area2 = polArea(dp1, 1, 5, 6);
-		double area3 = polArea(po1, 1, 5, 6);
-		//		
-		System.out.println(area2);
-		System.out.println(area3);
-		//		
-		double Svalue = sameValue(p2, p1, -10, 10, Ex2.EPS); 
-		System.out.println(Svalue);
-
+//		System.out.println(str.charAt(0));
+//		System.out.println(str.substring(1));
+//		
 		
-		double[] p12 = {-1.1,2.3,3.1}; // 3.1X^+2.3x-1.1
-		String sp = Ex2.poly(p12);
-		double[] p13 = toPol(sp);
-		System.out.println(Arrays.toString(p13));
+//		double sameValue = sameValue(po1, po2, 0, 10, Ex2.EPS);
+//		System.out.println(sameValue);
+//
+//		double area = Ex2.area(po1,po2, 0, 10, 13);
+//		System.out.println(area);
+		//		
+		
+//		String s = "+3.1x^+2.3x-1.1";
+//		String [] st = s.split("((?>=-)|(?=-)|(?>=\\+)|(?=\\+))");
+		
+		
+		
+		double[] p = {-1.1,2.3,3.1}; // 3.1x^+2.3x-1.1
+		String sp = Ex2.poly(p);
+		System.out.println(sp);
+		double[] p1 = Ex2.getPolynomFromString(sp);
+		System.out.println(Arrays.toString(p1));
 		
 	}
 
@@ -75,6 +60,11 @@ public class Ex2_check {
 		// *** add your code here ***
 		double [] longArray;
 		double [] shortArray;
+		
+		if ((p1.length==0)|| (p2.length == 0)) {
+			longArray = null;
+		}
+		
 		if (p1.length>p2.length) {
 			longArray = Arrays.copyOf(p1, p1.length); // copy of the array. 
 			shortArray = Arrays.copyOf(p2, p2.length); 
@@ -140,13 +130,18 @@ public class Ex2_check {
 		if(poly.length == 1) {
 			return poly[0]+""; // making it to String
 		}
-
+	
 		for (int i = poly.length-1; i > 0; i--) {
+			
 			if (poly[i] != 0) { // if the coefficient is not Zero
 				ans += (poly[i]>0?"+" : "") + String.valueOf(poly[i])+  "x" + (i>1 ? "^": "") + String.valueOf(i);
 			}
 		}
 		ans += poly[0]!=0 ? ((poly[0]>0? "+" : "") + String.valueOf(poly[0])) :"";
+		
+		if(ans.charAt(0)== '+') { //removing the plus at the beginning
+			return ans.substring(1);
+		}
 		return ans;
 
 
@@ -163,7 +158,7 @@ public class Ex2_check {
 				String temp =parts[0].split("\\^")[1].strip();
 				deg = Integer.parseInt(temp);
 			}else {
-			deg = Integer.parseInt(parts[0].split("x")[1]);
+				deg = Integer.parseInt(parts[0].split("x")[1]);
 			}
 		}
 		else {
@@ -266,8 +261,6 @@ public class Ex2_check {
 		return m;
 	}
 
-	//
-
 	/**
 	 * This function computes a polynomial representation from a set of 2D points on the polynom.
 	 * Note: this function only works for a set of points containing three points, else returns null.
@@ -287,25 +280,24 @@ public class Ex2_check {
 	 *
 	 *	we have three y's and for each one an x values, from those we want to calculate a new polynom 
 	 */
-	// NEED TO BE FIXED
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
 		double [] ans =  null;
 		if(xx!=null && yy!=null && xx.length==3 && yy.length==3) {
 			// *** add your code here ***
-			double x1 = xx[0], x2 = xx[1], x3 = xx[2];
-			double y1 = yy[0], y2 = yy[1], y3 = yy[2];
 
-			double denom = (x1 - x2) * (x1 - x3) * (x2 - x3);
-			double P1     = (x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / denom;
-			double P2     = (x3*x3 * (y1 - y2) + x2*x2 * (y3 - y1) + x1*x1 * (y2 - y3)) / denom;
-			double P3     = (x2 * x3 * (x2 - x3) * y1 + x3 * x1 * (x3 - x1) * y2 + x1 * x2 * (x1 - x2) * y3) / denom;
-			// **************************
+			double x1 = xx[2], x2 = xx[1], x3 = xx[0];
+			double y1 = yy[2], y2 = yy[1], y3 = yy[0];
+
+			double	denom = (x1-x2) * (x1-x3) * (x2-x3);
+			double	A     = (x3 * (y2-y1) + x2 * (y1-y3) + x1 * (y3-y2)) / denom;
+			double	B     = (x3*x3 * (y1-y2) + x2*x2 * (y3-y1) + x1*x1 * (y2-y3)) / denom;
+			double	C     = (x2 * x3 * (x2-x3) * y1+x3 * x1 * (x3-x1) * y2+x1 * x2 * (x1-x2) * y3) / denom;
+
 
 			ans = new double [3];
-			ans[0] = P3;
-			ans[1] = P2;
-			ans[2] = P1;
-
+			ans[0] = C;
+			ans[1] = B;
+			ans[2] = A;
 		}
 
 		return ans;
@@ -435,8 +427,6 @@ public class Ex2_check {
 	public static double polArea(double[] p, double x1, double x2, int numberOfBoxes) {
 		double sum = 0;
 		double width = (x2 - x1)/numberOfBoxes; //this will be the width of the rectangle, nust be a constant number
-		double hight = 0;
-		double rect_area;
 		double currPos=x1;
 
 		for (int i = 0; i< numberOfBoxes; i++) {

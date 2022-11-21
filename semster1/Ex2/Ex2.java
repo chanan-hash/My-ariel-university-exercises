@@ -73,23 +73,21 @@ public class Ex2 {
 		String ans = "";
 
 		if(poly.length == 1) {
-			return poly[0]+"";
+			return poly[0]+""; // making it to String
 		}
 
-		for (int i = poly.length-1; i > 1; i--) {
-			if (poly[i] != 0) {
-				ans += String.valueOf(poly[i])+ "x^" + String.valueOf(i)+ " + ";
+		for (int i = poly.length-1; i > 0; i--) {
+			if (poly[i] != 0) { 					// if the coefficient is not Zero
+				ans += (poly[i]>0?"+" : "") + String.valueOf(poly[i])+  "x" + (i>1 ? "^": "") + String.valueOf(i);
 			}
 		}
-		if (poly[1] != 0 && poly[0] !=0) {
-			return ans + poly[1]+"x + " + poly[0];
+		ans += poly[0]!=0 ? ((poly[0]>0? "+" : "") + String.valueOf(poly[0])) :"";
+		
+		if(ans.charAt(0)== '+') { //removing the plus at the beginning
+			return ans.substring(1);
 		}
-		if (poly[1] == 0) {
-			return ans + poly[0];
-		}
-		else {
-			return ans;
-		}
+		
+		return ans;
 	}
 
 
@@ -128,6 +126,7 @@ public class Ex2 {
 
 
 	//checked
+	// TODO if the to places are positive
 	/** Given a polynom (p), a range [x1,x2] and an epsilon eps. 
 	 * This function computes an x value (x1<=x<=x2) for which |p(x)| < eps, 
 	 * assuming p(x1)*p(x2) <= 0. 
@@ -167,12 +166,12 @@ public class Ex2 {
 	 * @param eps - epsilon (positive small value (often 10^-3, or 10^-6).
 	 * @return an x value (x1<=x<=x2) for which |p1(x) -p2(x)| < eps.
 	 */
+	// We are finding the root of the subtraction of the two given polynoms, this is the place they meet
 	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
-		double x12 = (x1+x2)/2;
 		// *** add your code here ***
-
+		return root(subtract(p1, p2), x1, x2, eps);
 		// **************************
-		return x12;
+
 	}
 	/**
 	 * Given two polynoms (p1,p2), a range [x1,x2] and an integer representing the number of "boxes". 
@@ -182,25 +181,21 @@ public class Ex2 {
 	 * @param p2 - second polynom
 	 * @param x1 - minimal value of the range
 	 * @param x2 - maximal value of the range
-	 * @param numberOfBoxes - a natural number representing the number of boxes between xq and x2.
+	 * @param numberOfBoxes - a natural number representing the number of boxes between x1 and x2.
 	 * @return the approximated area between the two polynoms within the [x1,x2] range.
 	 */
+	//TODO change
 	public static double area(double[] p1,double[]p2, double x1, double x2, int numberOfBoxes) {
 		double ans = 0;
 		// *** add your code here ***
+		double sum1 = polArea(p1, x1, x2, numberOfBoxes);
+		double sum2 = polArea(p2, x1, x2, numberOfBoxes);
 
-		//		double p1x1 = f(p1,x1);
-		//		double p2x1 = f(p2,x1);
-		//		
-		//		double p1x2 = f(p1,x2);
-		//		double p2x2 = f(p2,x2);
-		//		
+		ans = sum1 - sum2;
 
-
-
-		// **************************
 		return ans;
 	}
+
 	/**
 	 * This function computes the array representation of a polynom from a String
 	 * representation. Note:given a polynom represented as a double array,  
@@ -210,10 +205,42 @@ public class Ex2 {
 	 * @return
 	 */
 	public static double[] getPolynomFromString(String p) {
-		// *** add your code here ***
-		return ZERO;
-		// **************************
+		p=p.strip();
+		String s= p.replaceAll("-", "+-");
+		String [] parts = s.split("\\+");
+		int deg;
+		if (parts[0].contains("x")) {
+			if(parts[0].contains("^")){
+				String temp =parts[0].split("\\^")[1].strip();
+				deg = Integer.parseInt(temp);
+			}else {
+				deg = Integer.parseInt(parts[0].split("x")[1]);
+			}
+		}
+		else {
+			return new double[] {Integer.parseInt(parts[0])};
+		}
+
+		double [] pol = new double [deg+1];
+		for(String part : parts ) {
+			if (part.isBlank()) continue;
+			if (part.contains("x")) {
+				if(part.contains("^")){
+					String temp =part.split("\\^")[1].strip();
+					deg = Integer.parseInt(temp);
+				} else {
+					deg=1;}
+			}else {
+				deg =0;
+			}
+			String temp =part.split("x")[0].strip();
+			pol[deg] = Double.parseDouble(temp);
+		}
+		return pol;
 	}
+
+	// **************************
+
 	/**
 	 * This function computes the polynom which is the sum of two polynoms (p1,p2)
 	 * @param p1
@@ -225,6 +252,9 @@ public class Ex2 {
 		// *** add your code here ***
 		double [] longArray;
 		double [] shortArray;
+		if ((p1.length==0)|| (p2.length == 0)) {
+			longArray = null;
+		}
 		if (p1.length>p2.length) {
 			longArray = Arrays.copyOf(p1, p1.length); // copy of the array. 
 			shortArray = Arrays.copyOf(p2, p2.length); 
@@ -282,7 +312,7 @@ public class Ex2 {
 
 		// **************************
 	}
-	
+
 	/**
 	 * This function computes a polynomial representation from a set of 2D points on the polynom.
 	 * Note: this function only works for a set of points containing three points, else returns null.
@@ -297,33 +327,77 @@ public class Ex2 {
 	 *	y2 = A x2^2 + B x2 + C 
 	 *	y3 = A x3^2 + B x3 + C
 	 *
-	 *	we have three y's and for each one an x values, from those we want to calculate a new polynom 
+	 *	The coefficient matrix:
+	 *	x1^2 x1 1 | y1
+	 *	x2^2 x2 1 | y2
+	 *	x3^2 x3 1 | y3
+	 *
+	 *	it is actually solving a matrix which the variable are A B and C
+	 *	we have three y's (y1,y2,y3) and for each one an x values (x1,x2,x3), from those we want to calculate a new polynom that actually is a parabola 
 	 */
-	//checked
+	//checked in the GUI
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
+		// *** add your code here ***
+		double [] ans =  null;
+		if(xx!=null && yy!=null && xx.length==3 && yy.length==3) {
 			// *** add your code here ***
-			double [] ans =  null;
-			if(xx!=null && yy!=null && xx.length==3 && yy.length==3) {
-				// *** add your code here ***
-				double x1 = xx[0], x2 = xx[1], x3 = xx[2];
-				double y1 = yy[0], y2 = yy[1], y3 = yy[2];
+			double x1 = xx[2], x2 = xx[1], x3 = xx[0];
+			double y1 = yy[2], y2 = yy[1], y3 = yy[0];
 
-				double denom = (x1 - x2) * (x1 - x3) * (x2 - x3);
-				double P1     = (x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / denom;
-				double P2     = (x3*x3 * (y1 - y2) + x2*x2 * (y3 - y1) + x1*x1 * (y2 - y3)) / denom;
-				double P3     = (x2 * x3 * (x2 - x3) * y1 + x3 * x1 * (x3 - x1) * y2 + x1 * x2 * (x1 - x2) * y3) / denom;
-				// **************************
+			double	divide = (x1-x2) * (x1-x3) * (x2-x3);
+			double	A     = (x3 * (y2-y1) + x2 * (y1-y3) + x1 * (y3-y2)) / divide;
+			double	B     = (x3*x3 * (y1-y2) + x2*x2 * (y3-y1) + x1*x1 * (y2-y3)) / divide;
+			double	C     = (x2 * x3 * (x2-x3) * y1+x3 * x1 * (x3-x1) * y2+x1 * x2 * (x1-x2) * y3) / divide;
 
-				ans = new double [3];
-				ans[0] = P1;
-				ans[1] = P2;
-				ans[2] = P3;
-			}
 
-			return ans;
+			ans = new double [3];
+			ans[0] = C;
+			ans[1] = B;
+			ans[2] = A;
 		}
+
+		return ans;
+	}
+
 	
 	
 	///////////////////// Private /////////////////////
 	// you can add any additional functions (private) below
+
+	/**
+	 * those two function helps us for the area function that using Reiman's integral
+	 */
+	// Returning us the area of a rectangle
+	public static double rectArea(double w, double h) {
+		return w*h;
+	}
+
+	// Computing us the area of a given polynom using Reiman's integral
+	public static double polArea(double[] p, double x1, double x2, int numberOfBoxes) {
+		double sum = 0;
+		double width = (x2 - x1)/numberOfBoxes; //this will be the width of the rectangle, nust be a constant number
+		double hight = 0;
+		double rect_area;
+
+		int i = 0; //the value of the next 'x' to put in p(x) will be x1 + i*width
+		for(double j = x1; j<=x2; j = j+(width*i)) {
+			hight = f(p,j);
+			rect_area = rectArea(width, hight);
+			sum+=rect_area;
+			i++;
+		}
+
+		return sum;
+
+	}
+	
+	// Subtract to polynoms help us in the sameValue function
+	public static double[] subtract(double[] poly1, double [] poly2) {
+		double [] mpoly2 = new double[poly2.length];
+		for(int i=0; i<poly2.length; i++) {
+			mpoly2[i] = -poly2[i];
+		}
+		return add(poly1, mpoly2);
+	}
+
 }
