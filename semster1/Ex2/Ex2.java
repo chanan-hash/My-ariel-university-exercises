@@ -53,7 +53,7 @@ public class Ex2 {
 		}
 
 		for(int i = 0; i<p1.length; i++) { 		// because we know the arrays in the same length we can use only one loop
-			if(p1[i] != p2[i] ) { 			// already here we can that they are not equal
+			if(p1[i] != p2[i] ) { 				// already here we can that they are not equal
 				ans = false; 
 				return ans;
 			}
@@ -122,7 +122,7 @@ public class Ex2 {
 
 		ans = ans.replace("x1","x"); 				//taking the degree off from x^1 --> x
 
-		if(ans.charAt(0)== '+') { 					//removing the plus at the beginning
+		if(ans.charAt(0) == '+') { 					//removing the plus at the beginning
 			return ans.substring(1);
 		}
 		return ans;
@@ -221,10 +221,14 @@ public class Ex2 {
 	 *  1. We are finding the polynom which is the subtraction of the two polynoms, by out side function we've built
 	 *  2. By using the root function, we are finding the place the sub polynom is meetnig the x's axis. 
 	 *  
+	 *  If the two given polynoms are empty we are returning -0.0 
 	 *  @author Chanan
 	 */
 	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
-
+		if ((p1.length == 0) && (p2.length == 0)){
+			double polynull = -0.00000000000000; //means they are empty polynoms
+			return polynull;
+		}
 		return root(subtract(p1, p2), x1, x2, eps);
 	}
 
@@ -257,7 +261,7 @@ public class Ex2 {
 		double sum1 = polArea(p1, x1, x2, numberOfBoxes); 
 		double sum2 = polArea(p2, x1, x2, numberOfBoxes);
 
-		ans = sum1 - sum2; 				// calculate the final area
+		ans = (sum1 - sum2)*2; 				// calculate the final area
 
 		return ans;
 	}
@@ -278,55 +282,55 @@ public class Ex2 {
 	 * @author Chanan
 	 */
 	public static double[] getPolynomFromString(String p) {
-		p=p.strip();
-		String s= p.replaceAll("-", "+-"); 	//we want to split according to '+'
-		String [] parts = s.split("\\+");
-		int deg; 							//getting the degree for the length of the polynomial array
-		
-		if (parts[0].contains("x")) {
-			if(parts[0].contains("^")){
-				String temp = parts[0].split("\\^")[1].strip(); // taking of all the things around the number	
-																//[1] --> means we want the place before the '^'
-				deg = Integer.parseInt(temp); 
-			}
-			else {
-				deg = Integer.parseInt(parts[0].split("x")[1]); //the first 'x', the degree is One
-			}
+		if (p.equals("")) {
+			return null;						// Dealing the case if the input is empty
 		}
-		
-		else {
-			// Dealing the case which the String has only One number exmp: "2" or "-1" ("-1" is to characters, '-' & '1') 
-			if(parts.length < 2 ) {
-				return new double[] {Double.parseDouble(parts[0])}; 
-			}
+		p = p.replaceAll("-", "+-");			// To split according to '+'
+		if (p.startsWith("+-")) {
+			p = p.substring(1);					// removing the + if the String start with +-, so we can turn it to a negative number 
+		}
+		String[] parts = p.split("\\+");
+		int deg = 0;							// Getting the degree to know the length of the array
+
+		if (parts[0].contains("x")) {
+			if (parts[0].contains("^")) {
+				deg = Integer.parseInt(parts[0].split("\\^")[1]);
+			} 
 			else {
-				return new double[] {Double.parseDouble(parts[1])}; 	
+				deg = 1; 						// if there isn't any degree on the x, it means that the degree is One (2x+4)
 			}
+		} 
+		else {
+			return new double[]{Double.parseDouble(parts[0])}; // There isn't any degree, we can return the array with the number itself  
 		}
 
-		// Finding the coefficient themselves 
-		double [] pol = new double [deg+1];
-		for(String part : parts ) {			// 'parts' is the split array according to '+'
+		double[] pol = new double[deg + 1];
+
+		for (String part : parts) {
 			if (part.isBlank()) {
 				continue;
 			}
 			if (part.contains("x")) {
-				if(part.contains("^")){
-					String temp = part.split("\\^")[1].strip();
-					deg = Integer.parseInt(temp);
+				if (part.contains("^")) {
+					deg = Integer.parseInt(part.split("\\^")[1]); // Trying to get the decree of the other numbers to know where to put them in the array
 				}
-
 				else {
-					deg=1;
+					deg = 1;
 				}
-			}
-
+			} 
 			else {
 				deg = 0;
 			}
-			String temp =part.split("x")[0].strip();
-			pol[deg] = Double.parseDouble(temp);
+
+			if (part.startsWith("x")) { 					// Dealing with the case the x jasn't any coefficient
+				pol[deg] = 1;
+			} else if (part.startsWith("-x")) {
+				pol[deg] = -1;
+			} else {
+				pol[deg] = Double.parseDouble(part.split("x")[0]); // Putting the number into the array according to the degree 
+			}
 		}
+
 		return pol;
 	}
 
@@ -337,6 +341,14 @@ public class Ex2 {
 	 * @return
 	 * 
 	 *  *************************
+	 *  The important thing here is to notice we aren't chnching any given array so it won't affect us after it
+	 *  We are creating two new arrays:
+	 *  1. The first is a long array which will be a copy of the longest between the two given arrays  
+	 *  2. The second is a pointer for the shorter array
+	 *  
+	 *  Then we are running on the short array an adding every value in to the same value in the same index in the longer array
+	 *	@author Chanan
+	 *
 	 */
 	public static double[] add(double[] p1, double[] p2) {
 		double [] longArray;
@@ -345,18 +357,18 @@ public class Ex2 {
 			longArray = null;
 		}
 		if (p1.length>p2.length) {
-			longArray = Arrays.copyOf(p1, p1.length); // copy of the array. 
-			shortArray = Arrays.copyOf(p2, p2.length); 
+			longArray = Arrays.copyOf(p1, p1.length); // copy of the longer array. 
+			shortArray = Arrays.copyOf(p2, p2.length); // pointer to the shorter array
 		}
 		else {
-			longArray = Arrays.copyOf(p2, p2.length); // copy of the array. 
-			shortArray = Arrays.copyOf(p1, p1.length); 		
+			longArray = Arrays.copyOf(p2, p2.length); // copy of the longer array. 
+			shortArray = Arrays.copyOf(p1, p1.length); // pointer to the shorter array		
 		}
 
 		for (int i = 0; i<shortArray.length;i++) {
-			longArray[i] = longArray[i] + shortArray[i];
+			longArray[i] = longArray[i] + shortArray[i]; // running on the shorter array and adding to the longer array in the same index
 		}
-		return longArray; //return p1;
+		return longArray; 
 	}
 
 	/**
@@ -364,10 +376,16 @@ public class Ex2 {
 	 * @param p1
 	 * @param p2
 	 * @return
+	 * 
+	 * This function is working on the idea of opening brackets
+	 * exmp = (x-2)*(x-3) = x^2 -3x - 2x + 6 = x^2-5x+6
+	 * 
+	 * We are creating a new polynom which is in the length of both two polynom -1, it will represent the degree of the new polynom
+	 * In every place the value will be p1[i] * p2[j]. But i and j aren't running in the same values.
+	 * And in that way we are covering that we've multiplied all values in one each other
 	 */
-	// checked
 	public static double[] mul(double[] p1, double[] p2) {
-		double [] mulArray = new double [p1.length + p2.length -1];
+		double [] mulArray = new double [p1.length + p2.length -1]; // A new array the length of the two given arrays
 
 		for (int i = 0; i < p1.length; i++) {
 			for (int j = 0; j < p2.length; j++) {
@@ -382,22 +400,33 @@ public class Ex2 {
 	 * This function computes the derivative polynom of po.
 	 * @param po
 	 * @return
+	 * 
+	 *	********************************** 
+	 *	The derivative pf a polynom is based on this formula:
+	 *	f(x) = x^n --> f'(x) = n*x^(n-1)
+	 *	Another thing we need to notice is that its getting shorter then you derivative it. exmp' f(x) = 2 --> f'(x) = n*x^(n-1) = 0
+	 *	
+	 *	The function is creating a new polynom so we won't affect the given polynom. 
+	 *	This new polynom will be the derivative of the given polynom working by the formula above
+	 *
+	 *	Then we are creating a new polynom that will take down the place that equal to Zero
+	 *	
+	 *	@author Chanan
 	 */
-	// checked
 	public static double[] derivative (double[] po) {
-		// *** add your code here ***
+
 		double[]derv = new double [po.length];
 		for (int i = po.length-1 ; i>0; i--) {
-			derv[i] = po[i]*i; // x^2 --> 2x
+			derv[i] = po[i]*i; 				// x^2 --> 2x
 		}
 		double[] finalDerv = new double [derv.length-1];
 		for (int i = 0; i<derv.length-1; i++) {
-			finalDerv [i] = derv[i+1]; //taking down the coefficient that equal to zero
+			finalDerv [i] = derv[i+1]; 			//taking down the coefficient that equal to zero
 		}
-		return finalDerv;
 
-		// **************************
+		return finalDerv;
 	}
+
 
 	/**
 	 * This function computes a polynomial representation from a set of 2D points on the polynom.
@@ -406,27 +435,32 @@ public class Ex2 {
 	 * @param yy
 	 * @return an array of doubles representing the coefficients of the polynom.
 	 * Note: you can assume xx[0]!=xx[1]!=xx[2]
-	 */
-	/*
-	 * this is based on try to get the polynom
+	 *
+	 * *******************************
+	 * We have three y's (y1,y2,y3) and for each one an x values (x1,x2,x3).
+	 * From those, we want to calculate a new polynom that actually is a parabola 
+	 *	 
 	 * 	y1 = A x1^2 + B x1 + C 
 	 *	y2 = A x2^2 + B x2 + C 
 	 *	y3 = A x3^2 + B x3 + C
 	 *
-	 *	The coefficient matrix:
+	 * This function works as a solution of this matrix, which:
+	 * 	1. A,B and C are the variables.
+	 *  2. x1,x2,x3 are the arguments.
+	 *  3. y1,y2,y3 are the constant column and they are also arguments
+	 *
+	 *	The coefficients matrix:
 	 *	x1^2 x1 1 | y1
 	 *	x2^2 x2 1 | y2
 	 *	x3^2 x3 1 | y3
 	 *
-	 *	it is actually solving a matrix which the variable are A B and C
-	 *	we have three y's (y1,y2,y3) and for each one an x values (x1,x2,x3), from those we want to calculate a new polynom that actually is a parabola 
-	 */
-	//checked in the GUI
+	 * was based on a solution from http://chris35wills.github.io/parabola_python/ but was suitable to us
+	 * In the GUI we can see the new polynom from the given point
+	 * @author Chanan	
+	 */	
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
-		// *** add your code here ***
 		double [] ans =  null;
 		if(xx!=null && yy!=null && xx.length==3 && yy.length==3) {
-			// *** add your code here ***
 			double x1 = xx[2], x2 = xx[1], x3 = xx[0];
 			double y1 = yy[2], y2 = yy[1], y3 = yy[0];
 
@@ -451,9 +485,12 @@ public class Ex2 {
 	// you can add any additional functions (private) below
 
 	/**
-	 * those two function helps us for the area function that using Reiman's integral
-	 */
-	// Returning us the area of a rectangle
+	 * Those two first function helps us for the area function that using Reiman's integral
+	 *
+	 *	1. Returning us the area of a rectangle
+	 *
+	 *	2. calculating an area of a given polynom in a certain range by Reimn's integral 
+	 */ 
 	public static double rectArea(double w, double h) {
 		return w*h;
 	}
@@ -461,15 +498,15 @@ public class Ex2 {
 	// Computing us the area of a given polynom using Reiman's integral
 	public static double polArea(double[] p, double x1, double x2, int numberOfBoxes) {
 		double sum = 0;
-		double width = (x2 - x1)/numberOfBoxes; //this will be the width of the rectangle, nust be a constant number
+		double width = (x2 - x1)/numberOfBoxes; //this will be the width of the rectangle, must be a constant number
 		double hight = 0;
 		double rect_area;
 
-		int i = 0; //the value of the next 'x' to put in p(x) will be x1 + i*width
-		for(double j = x1; j<=x2; j = j+(width*i)) {
+		int i = 0; 								//the value of the next 'x' to put in p(x) will be x1 = i*width
+		for(double j = x1; j<=x2; j = (width*i)) {
 			hight = f(p,j);
 			rect_area = rectArea(width, hight);
-			sum+=rect_area;
+			sum += rect_area;
 			i++;
 		}
 
@@ -477,7 +514,13 @@ public class Ex2 {
 
 	}
 
-	// Subtract to polynoms help us in the sameValue function
+	/**
+	 * This function help us in sameValue function.
+	 * To find when to polynoms are meeting we are first subtracting the to given polynoms.
+	 * Then up their in the function itself, we are finding the root of the subtracted polynom 
+	 *
+	 * It doing it by add function the minus of one of the polynoms 
+	 */
 	public static double[] subtract(double[] poly1, double [] poly2) {
 		double [] mpoly2 = new double[poly2.length];
 		for(int i=0; i<poly2.length; i++) {

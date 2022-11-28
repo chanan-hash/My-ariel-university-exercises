@@ -9,12 +9,10 @@ import org.junit.jupiter.api.Test;
  *
  */
 
-//TODO adding failuers
-
 class Ex2Test {
 	static double[] po1={2,0,3, -1,0}, po2 = {0.1,0,1, 0.1,3};
 
-	/**my test for equals
+	/**My test for equals
 	 *  checking if two arrays of polynom coefficient are eqaul
 	 */
 	@Test
@@ -28,8 +26,9 @@ class Ex2Test {
 
 	}
 
-	/** my test for poly
-	 *  testing a given array of coefficient to a string
+	/** My test for poly
+	 *  Testing a given array of coefficient to a String
+	 *  expm = [1,3,4] --> 4x^2+3x+1
 	 */
 	@Test
 	void testToString() {
@@ -39,7 +38,7 @@ class Ex2Test {
 		String ex22 = Ex2.poly(po2);		
 		double [] poll = {};
 		String may_null= Ex2.poly(poll);
- 		assertEquals(str, ex2);
+		assertEquals(str, ex2);
 		assertEquals(st, ex22);
 		assertEquals(may_null, null);
 	}
@@ -55,8 +54,9 @@ class Ex2Test {
 		assertEquals(fx2,6);
 	}
 
-	/** my test from polynom from sets of points
-	 *  creating a parabola by using the solution of the matrix, from 3 points
+	/** My test from polynom from sets of points.
+	 *  Creating a parabola by using the solution of the matrix, from 3 points.
+	 *  The test is also based in the GUI where we can see a visual drawing of the function
 	 */
 	@Test
 	void testPolynomFromPoints() {
@@ -69,26 +69,37 @@ class Ex2Test {
 		assertArrayEquals(p12, p13);
 		assertArrayEquals(p15, null);		
 	}
-	
+
+	/** My test for sameValue.
+	 * Checking if the to given polynom are meeting in the same point 
+	 * This Test is also includes the check of subtract function (and root) because it based of this
+	 */
 	@Test
 	void testSameValue() {
 		double[] po11 = {2,1,-0.7, -0.02,0.02};
 		double[] po22 = {-3, 0.61, 0.2};
+		double [] poll = {10,-2};
+		double [] poll1 = {-3,3};
 		double same = Ex2.sameValue(po11,po22, 0, 10, Ex2.EPS);
+		double same2 = Ex2.sameValue(poll, poll1, 0, 10, Ex2.EPS);
 		assertEquals(same,-5.93763473003502); //there are few point the polynomial are meeting, 2.7484130859375 is also a point 
+		assertEquals(same2, 2.6);
 	}
-
+	
+	/**
+	 * This test is based in the GUI to see if we are getting the same area they had calculate
+	 */
 	@Test
 	void testArea() {
 		double[] po11 = {2,1,-0.7, -0.02,0.02};
 		double[] po22 = {-3, 0.61, 0.2};
 		double area = Ex2.area(po11,po22, 0, 10, 13);
-		assertEquals(area,16.614668200046886); //there are few point the polynomial are meeting 
+		assertEquals(area,324.4410909982146);
 	}
-	
+
 	@Test
 	/** my test for root_rec
-	 *  the same test as root, but using the recursion function
+	 *  the same test as root, but using the recursion function, expecting the same value
 	 */
 	void testRoot_rec() {
 		double x12 = Ex2.root_rec(po1, 0, 10, Ex2.EPS);
@@ -101,7 +112,6 @@ class Ex2Test {
 		double x12 = Ex2.root(po1, 0, 10, Ex2.EPS);
 		assertEquals(x12, 3.1958, Ex2.EPS);
 	}
-
 
 	@Test
 	void testAdd() {
@@ -134,21 +144,44 @@ class Ex2Test {
 		double[] p = {-1.1,2.3,3.1}; // 3.1x^+2.3x-1.1
 		double[] pp = {-1.1}; 		// only one number, negative
 		double [] pp3 = {2};		// only one number, positive
-		
+
 		String sp = Ex2.poly(p);
 		String spp = Ex2.poly(pp);
 		String spp3 = Ex2.poly(pp3);
-		
+
 		double[] p1 = Ex2.getPolynomFromString(sp);
 		double[] pp2 = Ex2.getPolynomFromString(spp);
 		double[] p3p = Ex2.getPolynomFromString(spp3);
+		double[] pool = Ex2.getPolynomFromString("");		// Checking the case of an empty String
+		double[] pool1 = Ex2.getPolynomFromString("2x-2");	// Checking the case of degree One
+		double[] pool2 = Ex2.getPolynomFromString("x-2");	// Checking the case of x with out coefficient 
+		double[] pll3 = {-2.0,2.0};
+		double[] pll4 = {-2.0,1};
 		boolean isSame = Ex2.equals(p1, p);
 		if(!isSame) {fail();}
 		assertEquals(sp, Ex2.poly(p1));
 		assertEquals(spp, Ex2.poly(pp2));
 		assertEquals(spp3, Ex2.poly(p3p));
+		assertEquals(pool, null);
+		assertArrayEquals(pool1, pll3);
+		assertArrayEquals(pool2, pll4);
+
+
+
 	}
 
+	/**
+	 * This test is for an external function I've built to help with area function 
+	 */
+	@Test
+	public void testPolArea() {
+		double [] po99 = {0,1}; //A linear equation y=x
+		double [] po10 = {-4,0,1};
+		double po_area = Ex2.polArea(po99, 0, 10, 100);
+		double po10_area = Ex2.polArea(po10, 0, 10, (int)po_area);
+		assertEquals(po_area, 50.5);
+		assertEquals(po10_area, 302.6,Ex2.EPS);
+	}
 
 }
 
