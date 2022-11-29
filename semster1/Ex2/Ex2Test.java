@@ -23,7 +23,6 @@ class Ex2Test {
 		boolean ans2 = Ex2.equals(pl1, pl2);
 		assertEquals(ans, false);
 		assertEquals(ans2, true);
-
 	}
 
 	/** My test for poly
@@ -85,7 +84,7 @@ class Ex2Test {
 		assertEquals(same,-5.93763473003502); //there are few point the polynomial are meeting, 2.7484130859375 is also a point 
 		assertEquals(same2, 2.6);
 	}
-	
+
 	/**
 	 * This test is based in the GUI to see if we are getting the same area they had calculate
 	 */
@@ -93,8 +92,13 @@ class Ex2Test {
 	void testArea() {
 		double[] po11 = {2,1,-0.7, -0.02,0.02};
 		double[] po22 = {-3, 0.61, 0.2};
+		double[] po12 = {0,3};
+		double[] po21 = {0,0,1};
 		double area = Ex2.area(po11,po22, 0, 10, 13);
-		assertEquals(area,324.4410909982146);
+		double area2 = Ex2.area(po12,po21, 0, 3, 13);
+		assertEquals(area,324.4410909982146,Ex2.EPS);
+		assertEquals(area2,9,0.1);						// 0.1 For accurate
+		
 	}
 
 	@Test
@@ -102,15 +106,20 @@ class Ex2Test {
 	 *  the same test as root, but using the recursion function, expecting the same value
 	 */
 	void testRoot_rec() {
+		double[] parbola = {-4,0,1}; // parabola x^2-4
 		double x12 = Ex2.root_rec(po1, 0, 10, Ex2.EPS);
+		double x_parb = Ex2.root(parbola, 0, 10, Ex2.EPS);
 		assertEquals(x12, 3.1958, Ex2.EPS);
+		assertEquals(x_parb, 2,Ex2.EPS);
 	}
-
 
 	@Test
 	void testRoot() {
+		double[] parb = {-4,0,1}; // parabola x^2-4
 		double x12 = Ex2.root(po1, 0, 10, Ex2.EPS);
+		double x_parb = Ex2.root(parb, 0, 10, Ex2.EPS);
 		assertEquals(x12, 3.1958, Ex2.EPS);
+		assertEquals(x_parb, 2,Ex2.EPS);
 	}
 
 	@Test
@@ -139,6 +148,11 @@ class Ex2Test {
 		assertEquals(dp1.length, dp2.length);
 	}
 
+	/**
+	 * The test is built from mixed test
+	 * 1. Some making a polynom to string and then turning them back to a polynom by the function and checking is they are equals 
+	 * 2. Checking all kinds of cases which 
+	 */
 	@Test
 	public void testFromString() {
 		double[] p = {-1.1,2.3,3.1}; // 3.1x^+2.3x-1.1
@@ -157,17 +171,13 @@ class Ex2Test {
 		double[] pool2 = Ex2.getPolynomFromString("x-2");	// Checking the case of x with out coefficient 
 		double[] pll3 = {-2.0,2.0};
 		double[] pll4 = {-2.0,1};
-		boolean isSame = Ex2.equals(p1, p);
-		if(!isSame) {fail();}
+
 		assertEquals(sp, Ex2.poly(p1));
 		assertEquals(spp, Ex2.poly(pp2));
 		assertEquals(spp3, Ex2.poly(p3p));
 		assertEquals(pool, null);
 		assertArrayEquals(pool1, pll3);
 		assertArrayEquals(pool2, pll4);
-
-
-
 	}
 
 	/**

@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 /**'
  *  In every documentation here I added my documentation with explanation on every function
- * @author Chanan
+ *  Chanan
  *
  */
 
@@ -42,7 +42,7 @@ public class Ex2 {
 	 * we are checking if in each index the coefficient is not eqaul, if not we can stop the loop and return false
 	 * if the loop has finished we know nothing changed and they are equal
 	 *
-	 *	@author Chanan
+	 * Chanan
 	 */
 	public static boolean equals(double[] p1, double[] p2) {
 		boolean ans = true;
@@ -73,7 +73,7 @@ public class Ex2 {
 	 * To find the f(x) value, we are multiply the coefficient in the index with x power the index place which means the degree oh the x 
 	 * then we're adding in the and the the coefficient with x^0, not to forget him, because he doesn't been multiply by x
 	 *
-	 *	@author Chanan
+	 * Chanan
 	 */
 	public static double f(double[] poly, double x) {
 		double ans = 0;
@@ -100,7 +100,7 @@ public class Ex2 {
 	 *	Then the function concatenate to the String the values of the polynom power the index they are -1 (because index = 0, dosen't have really a degree).
 	 *	the function skips on the coefficients that are equal to zero
 	 *	
-	 *	@author Chanan
+	 * Chanan
 	 */
 	public static String poly(double[] poly) {
 		String ans = "";
@@ -149,7 +149,7 @@ public class Ex2 {
 	 *  
 	 *  This idea is related to limits and the slope of f(x) in every x
 	 *  
-	 *  @author Chanan
+	 * Chanan
 	 */
 	public static double root(double[] p, double x1, double x2, double eps) {
 
@@ -187,7 +187,7 @@ public class Ex2 {
 	 * 
 	 * The way to do it in recursion, is by calling to the function  itself but with different values of 'x' that we've calculate in the function
 	 * 
-	 *  @author Chanan
+	 * Chanan
 	 */
 	public static double root_rec(double[] p, double x1, double x2, double eps) {
 		double x12 = (x1+x2)/2;
@@ -222,7 +222,8 @@ public class Ex2 {
 	 *  2. By using the root function, we are finding the place the sub polynom is meetnig the x's axis. 
 	 *  
 	 *  If the two given polynoms are empty we are returning -0.0 
-	 *  @author Chanan
+	 * 
+	 * Chanan
 	 */
 	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
 		if ((p1.length == 0) && (p2.length == 0)){
@@ -252,7 +253,7 @@ public class Ex2 {
 	 * Riemann's integral is the base for the whole idea of area under the polynom with integrals.
 	 * Those two functions you can find here in the end
 	 * 
-	 *  @author Chanan
+	 * Chanan
 	 */
 	public static double area(double[] p1,double[]p2, double x1, double x2, int numberOfBoxes) {
 		double ans = 0;
@@ -261,7 +262,7 @@ public class Ex2 {
 		double sum1 = polArea(p1, x1, x2, numberOfBoxes); 
 		double sum2 = polArea(p2, x1, x2, numberOfBoxes);
 
-		ans = (sum1 - sum2)*2; 				// calculate the final area
+		ans = (sum1 - sum2)*2; 			// Calculate the final area. Notice: area in integral can be negative - means the area is under the graph
 
 		return ans;
 	}
@@ -279,7 +280,9 @@ public class Ex2 {
 	 * 1. First we need to find the degree of the function by finding the first x^n, and the value of n, +1 will be the length of the arrays
 	 * 2. After we've found the degree, we are creating the array, and going over the String and extracting the value of the coefficients  
 	 * 
-	 * @author Chanan
+	 * We are assuming That the high degree in the beginning and the after it we can have lower degree before high degree but not the highest   
+	 * 
+	 * Chanan
 	 */
 	public static double[] getPolynomFromString(String p) {
 		if (p.equals("")) {
@@ -347,8 +350,8 @@ public class Ex2 {
 	 *  2. The second is a pointer for the shorter array
 	 *  
 	 *  Then we are running on the short array an adding every value in to the same value in the same index in the longer array
-	 *	@author Chanan
-	 *
+	 * 
+	 * Chanan
 	 */
 	public static double[] add(double[] p1, double[] p2) {
 		double [] longArray;
@@ -383,6 +386,8 @@ public class Ex2 {
 	 * We are creating a new polynom which is in the length of both two polynom -1, it will represent the degree of the new polynom
 	 * In every place the value will be p1[i] * p2[j]. But i and j aren't running in the same values.
 	 * And in that way we are covering that we've multiplied all values in one each other
+	 * 
+	 * Chanan
 	 */
 	public static double[] mul(double[] p1, double[] p2) {
 		double [] mulArray = new double [p1.length + p2.length -1]; // A new array the length of the two given arrays
@@ -411,7 +416,7 @@ public class Ex2 {
 	 *
 	 *	Then we are creating a new polynom that will take down the place that equal to Zero
 	 *	
-	 *	@author Chanan
+	 * Chanan
 	 */
 	public static double[] derivative (double[] po) {
 
@@ -456,7 +461,8 @@ public class Ex2 {
 	 *
 	 * was based on a solution from http://chris35wills.github.io/parabola_python/ but was suitable to us
 	 * In the GUI we can see the new polynom from the given point
-	 * @author Chanan	
+	 * 
+	 * Chanan	
 	 */	
 	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
 		double [] ans =  null;
@@ -490,6 +496,8 @@ public class Ex2 {
 	 *	1. Returning us the area of a rectangle
 	 *
 	 *	2. calculating an area of a given polynom in a certain range by Reimn's integral 
+	 *
+	 *	Chanan
 	 */ 
 	public static double rectArea(double w, double h) {
 		return w*h;
@@ -520,6 +528,8 @@ public class Ex2 {
 	 * Then up their in the function itself, we are finding the root of the subtracted polynom 
 	 *
 	 * It doing it by add function the minus of one of the polynoms 
+	 * 
+	 * Chanan
 	 */
 	public static double[] subtract(double[] poly1, double [] poly2) {
 		double [] mpoly2 = new double[poly2.length];
