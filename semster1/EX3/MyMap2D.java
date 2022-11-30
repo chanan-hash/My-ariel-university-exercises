@@ -45,26 +45,57 @@ public class MyMap2D implements Map2D{
 	@Override
 	/**
 	 * For my self 2D Point class giving us an object of double values (x,y)
+	 *based on
 	 */
 	// This function is getting (x1,y1) (x2,y2) and a vector
 	public void drawSegment(Point2D p1, Point2D p2, int v) {
-		int minX = Math.min(p1.ix(), p2.ix());
-		int minY = Math.min(p1.iy(), p2.iy());
-
-		int width = Math.abs((p1.ix() - p2.ix())); // the width of the
-		int hight = Math.abs((p1.iy() - p2.iy()));
-
-		setPixel(p1,v);
-		setPixel(p2,v);
+				int minX = Math.min(p1.ix(), p2.ix());
+				int minY = Math.min(p1.iy(), p2.iy());
+				int maxX = Math.max(p1.ix(), p2.ix());
+				int maxY = Math.max(p1.iy(), p2.iy());
+				
+				
+				int width = Math.abs((p1.ix() - p2.ix())); // the width of the
+				int hight = Math.abs((p1.iy() - p2.iy()));
 		
-		for (int i = 0; i <= hight; i++) {
-			for (int j = 0; j <= width; j++) {
-				if (i==j) {
-					setPixel(j, i, v);
-				}
-			}
-		}
+				setPixel(p1,v);
+				setPixel(p2,v);
+				
+				Point2D vector = new Point2D(1,1);
+				
+				for (int i = minX; i <= maxX; i++) {
+					for (int j = minX; j <= maxY; j++) {
+						p1.move(vector);
+							setPixel(j, i, v);
+						}
+					}
+				
+		// let say p1 (x0,y0), p2(x1,y1)
+//
+//		int distx = p2.ix()-p1.ix();
+//		int disty = p2.iy()-p1.iy();
+//
+//		int p = 2*disty-distx;
+//
+//		int x = p1.ix();
+//		int y = p1.iy();
+//
+//		while (x<p2.ix());
+//		if(p>=0) {
+//			setPixel(x, y,v);
+//			y++;
+//			p = p+2*disty-distx;
+//		}
+//		else {
+//			setPixel(x,y,v);  
+//			p=p+2*disty; 
+//			x++;  
+//		}
+
+
+		
 	}
+
 
 	@Override
 	/**
@@ -88,9 +119,35 @@ public class MyMap2D implements Map2D{
 	}
 
 	@Override
+	/**
+	 * This by dist function in {@link Point2D} class we will find the radius
+	 * each point in the nestend loop every point that is equal or less from the radius we will set this pixel
+	 *	we may need to create a new point in every loop
+	 */
 	public void drawCircle(Point2D p, double rad, int col) {
 		// TODO Auto-generated method stub
-
+		int radi = (int)rad; 
+		int N = 2*radi+1;
+		for (int i = 0; i < N; i++){
+	        for (int j = 0; j < N; j++){
+	            // Start from the left most corner point
+	        	Point2D pr = new Point2D (i-radi,j-radi);
+	        	if (p.ix()*pr.ix() + p.iy()*pr.iy() <= radi*radi+1 ) {
+	        		setPixel(pr, col);
+	        	}
+	        }
+		}
+//		Point2D topLeft = new Point2D(p.x()-rad,p.y()+rad);
+//		Point2D downRight= new Point2D(p.x()+rad,p.y()-rad);
+//
+//		for (int i = topLeft.iy(); i<= downRight.iy(); i++) {
+//			for (int j = topLeft.ix(); j<= downRight.ix(); j++) {
+//				Point2D pmid= new Point2D(j,i);
+//				if (p.distance(pmid)<=rad) {
+//					setPixel(pmid, col);
+//				}
+//			}			
+//		}
 	}
 
 	@Override

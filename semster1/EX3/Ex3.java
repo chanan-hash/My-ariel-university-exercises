@@ -63,7 +63,8 @@ public class Ex3 {
 		if(p.equals("Green")) {_color = Color.GREEN; }
 		if(p.equals("Red")) {_color = Color.RED; }
 		if(p.equals("Yellow")) {_color = Color.YELLOW; }
-
+		if (p.equals("Clear")) {_map.fill(Color.WHITE.getRGB());} // Adding to clear option for the map
+		
 		// Adding sizes
 		if(p.equals("20x20")) {init(20);}
 		if(p.equals("40x40")) {init(40);}
@@ -104,7 +105,19 @@ public class Ex3 {
 				prev_point = null;
 			}
 		}
+		
+		// circle
+		else if (_mode.equals("Circle")) {
+			if (prev_point == null) {
+				prev_point = p;
+			}
+			else {
+				_map.drawCircle(prev_point, prev_point.distance(p), col);
+				prev_point = null;
+			}
+		}
 
+		
 		if(_mode.equals("Fill")) {
 			_map.fill(p, col);
 			_mode = "none";
