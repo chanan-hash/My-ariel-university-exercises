@@ -112,7 +112,7 @@ public class Ex3 {
 				prev_point = p;
 			}
 			else {
-				_map.drawCircle(prev_point, prev_point.distance(p), col);
+				_map.drawCircle(prev_point, (int)prev_point.distance(p), col);
 				prev_point = null;
 			}
 		}
