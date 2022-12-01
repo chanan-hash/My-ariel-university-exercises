@@ -96,7 +96,7 @@ public class Ex3 {
 			}
 		}
 		// segment
-		else if (_mode.equals("Segmaent")) {
+		else if (_mode.equals("Segment")) {
 			if (prev_point == null) {
 				prev_point = p;
 			}
@@ -117,7 +117,17 @@ public class Ex3 {
 			}
 		}
 
-		
+		//Shortest path
+		else if (_mode.equals("ShortestPath")) {
+			if (prev_point == null) {
+				prev_point = p;
+			}
+			else {
+				_map.shortestPath(prev_point, p);
+				prev_point = null;
+			}
+		}
+
 		if(_mode.equals("Fill")) {
 			_map.fill(p, col);
 			_mode = "none";

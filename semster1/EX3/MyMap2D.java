@@ -49,43 +49,61 @@ public class MyMap2D implements Map2D{
 	 */
 	// This function is getting (x1,y1) (x2,y2) and a vector
 	public void drawSegment(Point2D p1, Point2D p2, int v) {
-		//				int minX = Math.min(p1.ix(), p2.ix());
-		//				int minY = Math.min(p1.iy(), p2.iy());
-		//				int maxX = Math.max(p1.ix(), p2.ix());
-		//				int maxY = Math.max(p1.iy(), p2.iy());
-		//				
-		// lets say p1 = (x1,y1) p2 = (x2,y2) 
-		//				int x = 0;
-		//				int y = 0;
-		//				int m = (p2.iy()-p1.iy())/(p2.ix()-p1.ix()); //slope
-		//		
-		//				for(x = p1.ix(); x<=p2.ix(); x++) {
-		//					y = (m*x+c); 					// the linear equation
-		//					setPixel(x, y, v);
-		//				}
-		// for slop m<0;
-		int p,dx,dy,x,y;
 
-		dx = p2.ix()-p1.ix();
-		dy = p2.iy()-p1.iy();
-
-		x = p1.ix();
-		y = p1.iy();
-		p = 2*dy-dx;
-
-		while (x<p2.ix()){
-			if(p>=0) {
-				setPixel(x, y,v);
-				y++;
-				p = p+2*dy-2*dx;
+//		// case 1 p1.iy = p2.iy --> we will run on x and color every point -- line
+//		if(p1.iy() == p2.iy()) {
+//			int minX = Math.min(p1.ix(), p2.ix());
+//			int distX = (int)Math.abs(p1.ix() - p2.ix());
+//			for (int i = 0; i<=distX; i++) {
+//				setPixel(i + minX,p1.iy(), v);
+//			}
+//		}
+//
+//		// case 2 p1.ix = p2.ix --> we will run on y and color every point -- line
+//		if(p1.ix() == p2.ix()) {
+//			int distY = (int)Math.abs(p1.iy() - p2.iy());
+//			int minY = Math.min(p1.iy(), p2.iy());
+//			for(int i = 0; i<=distY; i++) {
+//				setPixel(p1.ix(),i+minY,v);
+//			}
+//		}
+		
+		// add the source from the internet
+		int distX = (int)Math.abs(p1.ix() - p2.ix());
+		int distY = (int)Math.abs(p1.iy() - p2.iy());
+		
+		int sx = p2.x() < p1.x() ? 1 : -1;
+		int sy = p2.y() < p1.y() ? 1 : -1;
+		
+		int x0 = p2.ix();
+		int y0 = p2.iy();
+		int x1 = p1.ix();
+		int y1 = p1.iy();
+		
+		int err = distX - distY;
+		int e2;
+	
+		while(true) {
+			setPixel(x0,y0,v);
+			if(x0 == x1 && y0== y1) {
+				break;
 			}
-			else {
-				setPixel(x, y,v);
-				p=p+2*dy;
+			
+			e2 = 2*err;
+			if(e2>-distY) {
+				err = err-distY;
+				x0 = x0 + sx;
+ 			}
+			if(e2<distX) {
+				err = err + distX;
+				y0 = y0 +sy;
 			}
-			x++;
 		}
+	
+	
+	
 	}
+
 
 
 	@Override
@@ -122,7 +140,7 @@ public class MyMap2D implements Map2D{
 	 */
 	public void drawCircle(Point2D p, double rad, int col) {
 		// TODO Auto-generated method stub
-		
+
 		Point2D topLeft = new Point2D(p.x()-rad,p.y()+rad); //going with x backwards, and with y upwards
 		Point2D downRight= new Point2D(p.x()+rad,p.y()-rad); //going with x forward, and with y downwards
 
@@ -137,6 +155,9 @@ public class MyMap2D implements Map2D{
 	}
 
 	@Override
+	// all the attached points in the same color, draw in a new color
+	// Polygon
+	// if new_v != get.color --> set pixel(p,new_v)
 	public int fill(Point2D p, int new_v) {
 		// TODO Auto-generated method stub
 
@@ -153,11 +174,16 @@ public class MyMap2D implements Map2D{
 	public Point2D[] shortestPath(Point2D p1, Point2D p2) {
 		// TODO Auto-generated method stub
 		return null;
+		
+		
 	}
 
 	@Override
 	public int shortestPathDist(Point2D p1, Point2D p2) {
 		// TODO Auto-generated method stub
+		int count = 0;
+		
+		
 		return 0;
 	}
 
