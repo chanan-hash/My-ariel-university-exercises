@@ -127,11 +127,16 @@ public class Ex3 {
 				prev_point = null;
 			}
 		}
-
+		// Fill
 		if(_mode.equals("Fill")) {
 			_map.fill(p, col);
 			_mode = "none";
 		}
+		if(_mode.equals("Fill")) {
+			_map.fill(p.ix(),p.iy(), col);
+			_mode = "none";
+		}
+		// Game Of Life
 		if(_mode.equals("Gol")) {
 			_map.nextGenGol();	
 		}
