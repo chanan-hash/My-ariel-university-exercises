@@ -41,7 +41,12 @@ public class MyMap2DTest {
 	
 	}
 	
-	
-	
+	/**
+	 * Test for Game of life
+	 */
+	@Test
+	public void testGenGol() {
+		
+	}
 	
 }

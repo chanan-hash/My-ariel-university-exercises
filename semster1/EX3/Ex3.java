@@ -2,12 +2,15 @@ package Exe.EX3;
 
 import java.awt.Color;
 
-/**
- * This class is a simple "inter-layer" connecting (aka simplifing) the
+/*** This class is a simple "inter-layer" connecting (aka simplifing) the
  * StdDraw_Ex3 with the Map2D interface.
  * Written for 101 java course it uses simple static functions to allow a 
  * "Singleton-like" implementation.
  * You should change this class!
+ * 
+ * @author Chanan && Liat
+ * ID1: 
+ * ID2: 
  *
  */
 public class Ex3 {
@@ -130,10 +133,6 @@ public class Ex3 {
 		// Fill
 		if(_mode.equals("Fill")) {
 			_map.fill(p, col);
-			_mode = "none";
-		}
-		if(_mode.equals("Fill")) {
-			_map.fill(p.ix(),p.iy(), col);
 			_mode = "none";
 		}
 		// Game Of Life
