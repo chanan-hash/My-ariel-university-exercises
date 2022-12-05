@@ -170,6 +170,21 @@ public class MyMap2D implements Map2D{
 	// need to be fixed by conditions
 	@Override
 	public int fill(int x, int y, int new_v) {
+		boolean[][] visited = new boolean[][];//בגודל של המטריצה
+		Queue<int[]>q = new LinkedList<>();
+		q.add(new int[]{x,y});
+
+		while(!q.isEmpty()){
+			int[] current = q.poll();
+			currX = current[0];
+			currY = current[1];
+			// ולבדוק האם ביקרנו בצומת
+			if()//לבדוק אם הוא בפנים
+			visited[currX][currY] = true;
+			// draw the color
+			q.add(new int[]{x+1,y});
+
+		}
 		int old_pixel = getPixel(x, y);
 		if (old_pixel == new_v ) {return 0;}
 		setPixel(x, y,new_v);
