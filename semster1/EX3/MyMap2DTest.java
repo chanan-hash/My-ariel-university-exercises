@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class MyMap2DTest {
 	
-	private static  Map2D _map_test = null;
+	private static MyMap2D _map_test = null;
 	
 	@Test
 	/**
@@ -14,6 +14,7 @@ public class MyMap2DTest {
 	 */
 	
 	public void testRect() {
+		_map_test = new MyMap2D(20); //creating the object
 		Point2D p1 = new Point2D(1,2);
 		Point2D p2 = new Point2D(4,10);
 		int minX = Math.min(p1.ix(), p2.ix());
@@ -21,10 +22,9 @@ public class MyMap2DTest {
 		
 		int width = Math.abs((p1.ix() - p2.ix())); // the width of the
 		int hight = Math.abs((p1.iy() - p2.iy()));
-		_map_test.init(width, hight);
 		_map_test.drawRect(p1, p2, 1);
 		
-		int[][] tmp = new int[_map_test.getHeight()][_map_test.getWidth()];
+		int[][] tmp = new int [_map_test.getWidth()][_map_test.getHeight()];
 		for (int i = 0; i < _map_test.getHeight(); i++) {
 			for (int j = 0; j < _map_test.getWidth(); j++)  {
 				tmp[i][j] = _map_test.getPixel(i, j);  // deep copy for the color num
@@ -32,7 +32,6 @@ public class MyMap2DTest {
 		}
 		for (int i = 0; i <= hight; i++) {
 			for (int j = 0; j <= width; j++) {
-				System.out.println(tmp[i][j]);
 				assertEquals(tmp[j + minX][i + minY] , 1);
 			
 			}
@@ -41,8 +40,26 @@ public class MyMap2DTest {
 	
 	}
 	
+	//fill test
+	@Test
+	public void testFill() {
+		// creating new object
+		_map_test = new MyMap2D(20);
+		_map_test.fill(0, 0, 1);		
+//		int[][] temp = new int[20][20];
+		int [][] temp = _map_test.getMap(); // notice that we aren't changing anything
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j <20; j++)  {
+				temp[i][j] = _map_test.getPixel(i, j);  // deep copy for the color num
+			}
+		}
+		assertEquals(temp[1][1],1);
+	}
+
+	//TODO a predictable answer to see
 	/**
 	 * Test for Game of life
+	 * to create a an output of myself on a little map to know nextGen
 	 */
 	@Test
 	public void testGenGol() {
