@@ -128,9 +128,42 @@ public class MyMap2DTest {
 			}
 		}
 		assertEquals(temp[1][1],1);
+	
+		// drawing a circle and then use fill function to change its color, then we will use fill again to fill outside the circle
+		_map_test.fill(Color.WHITE.getRGB()); //clearing the map from every thing
+		_map_test.init(40, 40);  			 // magnify the map to get more accurate circle
+	
+		Point2D pc = new Point2D(17,21); 		// point of the center of the circle
+		Point2D pcr = new Point2D(25,21); 		// point of the distance for the radius
+		
+		int blue = Color.BLUE.getRGB();
+		int green = Color.GREEN.getRGB();
+		int yellow = Color.YELLOW.getRGB();
+		
+		double radius = pc.distance(pcr);
+		_map_test.drawCircle(pc,radius ,blue); //drawing blue circle
+		
+		_map_test.fill(pc, green); // changing the color to green
+		_map_test.fill(3, 4, yellow); // changing the rest of the map to yellow except from the cirlce 
+		
+		// checking the the color was changed
+		for (int i = 0; i < 40; i++) {
+			for (int j = 0; j <40; j++)  {
+				Point2D pm = new Point2D(i,j);
+				if((pc.distance(pm)<radius)) {
+					assertEquals(_map_test.getPixel(pm),green);
+				}
+				else {
+					assertEquals(_map_test.getPixel(pm),yellow);
+				}
+			}
+		}
+		
+		
 	}
+	
+	
 
-	//TODO a predictable answer to see
 	/**
 	 * Test for Game of life
 	 * to create a an output of myself on a little map to know nextGen
