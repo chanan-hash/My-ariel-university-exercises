@@ -1,13 +1,12 @@
 package Exe.EX3;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
+
 import java.util.Queue;
 
-import javax.management.RuntimeErrorException;
 
 
 /**
@@ -48,6 +47,14 @@ public class MyMap2D implements Map2D{
 		return this.getPixel(p.ix(),p.iy());
 	}
 
+	/**
+	 * for the testing I added a getters to get back the array of the map
+	 */
+	// getting the array of the map
+	public int[][] getMap(){
+		return this._map;		
+	} 
+
 	public void setPixel(int x, int y, int v) {_map[x][y] = v;}
 	public void setPixel(Point2D p, int v) { 
 		setPixel(p.ix(), p.iy(), v);
@@ -57,42 +64,11 @@ public class MyMap2D implements Map2D{
 	/**
 	 * For my self 2D Point class giving us an object of double values (x,y)
 	 *based on Bresenham's line idea.
+	 *
+	 * Was Based from https://www.sanfoundry.com/java-program-bresenham-line-algorithm/
 	 */
 	// This function is getting (x1,y1) (x2,y2) and a vector
 	public void drawSegment(Point2D p1, Point2D p2, int v) {
-
-		//		// case 1 p1.iy = p2.iy --> we will run on x and color every point -- line
-		//		if(p1.iy() == p2.iy()) {
-		//			int minX = Math.min(p1.ix(), p2.ix());
-		//			int distX = (int)Math.abs(p1.ix() - p2.ix());
-		//			for (int i = 0; i<=distX; i++) {
-		//				setPixel(i + minX,p1.iy(), v);
-		//			}
-		//		}
-		//
-		//		// case 2 p1.ix = p2.ix --> we will run on y and color every point -- line
-		//		if(p1.ix() == p2.ix()) {
-		//			int distY = (int)Math.abs(p1.iy() - p2.iy());
-		//			int minY = Math.min(p1.iy(), p2.iy());
-		//			for(int i = 0; i<=distY; i++) {
-		//				setPixel(p1.ix(),i+minY,v);
-		//			}
-		//		}
-		//		double eps = 0.0001;
-		//		int m = (p2.iy()-p1.iy())/(p2.ix()-p1.ix()); //the slope 
-		//		int minX = Math.min(p1.ix(), p2.ix());
-		//		int maxX = Math.max(p1.ix(), p2.ix());
-		//		int minY = Math.min(p1.iy(), p2.iy());
-		//		int maxY = Math.max(p1.iy(), p2.iy());
-		//
-		//		for(int i = 0; i<maxY; i++) {
-		//			for (int j = 0; j<maxX; j++) {
-		//				Point2D pm = new Point2D(j+minX,i+minY);
-		//				if(p2.iy()-pm.iy() == m*(p2.ix() - pm.ix())) {
-		//					setPixel(j+minX, i+minY,v);
-		//				}
-		//			}
-		//		}
 
 		//		TODO add the source from the internet
 		int distX = (int)Math.abs(p1.ix() - p2.ix());
@@ -107,7 +83,7 @@ public class MyMap2D implements Map2D{
 		int y1 = p1.iy();
 
 		int err = distX - distY; // the substract between the height and width giving us the diagonal in like a vector
-		int e2 = 0;
+		int e2 = 0;				// fixing slop error
 
 		while(true) {
 			setPixel(x0,y0,v);	// drawing the first point
@@ -132,16 +108,17 @@ public class MyMap2D implements Map2D{
 	/**
 	 * we will build a matrix from the point sub in abs 
 	 * those will be the matrix that will represent the rectangle 
+	 * 
 	 */
 	public void drawRect(Point2D p1, Point2D p2, int col) {
 		//TODO use range method link from Dovi
 		int minX = Math.min(p1.ix(), p2.ix());
 		int minY = Math.min(p1.iy(), p2.iy());
 
-		int width = Math.abs((p1.ix() - p2.ix())); // the width of the
-		int hight = Math.abs((p1.iy() - p2.iy()));
+		int width = Math.abs((p1.ix() - p2.ix())); // the width of the rectangle
+		int height = Math.abs((p1.iy() - p2.iy())); // the height of the rectangle
 
-		for (int i = 0; i <= hight; i++) {
+		for (int i = 0; i <= height; i++) {
 			for (int j = 0; j <= width; j++) {
 				if(i>=0 && i<getHeight()&& j>=0 &&j<getWidth()) { //to see we aren't going over the bounds
 					setPixel(j + minX, i + minY, col);
@@ -163,8 +140,6 @@ public class MyMap2D implements Map2D{
 		Point2D topLeft = new Point2D(p.x()-rad,p.y()+rad); //going with x backwards, and with y upwards
 		Point2D downRight= new Point2D(p.x()+rad,p.y()-rad); //going with x forward, and with y downwards
 
-
-		//TODO change to int
 		for (double i = topLeft.y(); i>= downRight.y(); i--) {
 			for (double j = topLeft.x(); j<= downRight.x(); j++) {  //with x going up, and with y going down
 				Point2D pmid= new Point2D(j,i); 					//setting new point for checking if to color it
@@ -184,7 +159,7 @@ public class MyMap2D implements Map2D{
 	public int fill(Point2D p, int new_v) {
 		return fill(p.ix(),p.iy(),new_v);
 	}
-	// maybe to change for a queue of points and not of ints
+	
 	@Override
 	public int fill(int x, int y, int new_v) {
 		int initColor = getPixel(x,y); 			// getting the color of the current pixel
@@ -204,12 +179,13 @@ public class MyMap2D implements Map2D{
 				q.add(new int[]{currX+1, currY});
 				q.add(new int[]{currX-1, currY});
 				q.add(new int[]{currX, currY+1});
-				q.add(new int[]{currX, currY-1});
+				q.add(new int[]{currX, currY-1});				
 			}
 		}
 
 		return 0;
 	}
+
 	protected void addPixelsToQue(Queue<int[]> que, int row, int col) {
 		for(int x = -1; x < 2; x++) {
 			for (int y = -1; y < 2; y++) { 	//searching the point near the One we're checking
@@ -222,257 +198,94 @@ public class MyMap2D implements Map2D{
 		}
 	}
 
-	// Checking if the point is out side of the map 
-	private boolean isOutSideTheMap(int x, int y) {
-		return x<0 || x>=getWidth() || y<0 || y>=getHeight();
-	}
 
-	public void updateNeighbors(int[][]visited, int i, int j, int distance) {
-		if(i>0) {
-			if(visited[i-1][j] == -1) {
-				visited[i-1][j] = distance;
-			}
-		}
-		if(i<visited.length-1) {
-			if(visited[i+1][j] == -1) {
-				visited[i+1][j] = distance;
-			}
-		}
-		if(j>0) {
-			if(visited[i][j-1] == -1) {
-				visited[i][j-1] = distance;
-			}
-		}
-		if(j<visited[i].length-1) {
-			if(visited[i][j+1] == -1) {
-				visited[i][j+1] = distance;
-			}
-		}
-
-
-	}
-
-	// connected to linked lists and Nodes
-	// BFS
-	@Override
+	/**
+	 * This function works a little same like fill function. 
+	 * BUT!!! here we have some interest in the points we've gone through, so we can find the shortest path
+	 */
 	public Point2D[] shortestPath(Point2D p1, Point2D p2) {
-		int src_color = getPixel(p1);
+
+		int src_color = getPixel(p1); //Source color, getting the color of the points to know where we can go through
 		int dst_color = getPixel(p2);
-		if(src_color!=dst_color) {
+
+		// Checking if the point are not in the same color 
+		if(src_color != dst_color) {
 			return null;
 		}
 
-		// interface of a list
-		//List<Point2D> path = new ArrayList<Point2D>();
-
+		// Checking if there is a distance at all
 		if(p1.close2equals(p2)) {
-			return new Point2D[0];
+			return new Point2D[]{p1};
 		}
 
-		int[][] visited = new int[getWidth()][getHeight()];
-		for(int i = 0; i<visited.length; i++ ) {
-			for(int j = 0; j<visited[i].length; j++ ) {
-				if(getPixel(i,j) == src_color) {	
-					visited[i][j] = -1 ;
-				} 
-				else {
-					visited[i][j] = -2 ; //can't go over
-				}	
+		// A boolean array to know if we've visited in that point
+		boolean[][] visited = new boolean[getWidth()][getHeight()];
+
+		//creating a queue from Point2D type, and this will be an linked list so we can go back over from where we've come
+		Queue<Point2D[]> qu = new LinkedList<Point2D[]>(); // each array represent the path
+		Point2D[] p_array = {p1}; // An Point2D array that will be the first point that will be add to the queue
+		qu.add(p_array);
+
+		while(!qu.isEmpty()) { //means we chave still point to go threw to till the end
+
+			// creating the path array
+			Point2D[] path = qu.poll(); // the current point from the queue, that is an array of Point2D, 
+			Point2D curren_point = path[path.length-1]; // the last place in the arrays we were in it
+			// we don't need to create a new point because POint2D class has a constructor that can copy a given point
+
+			if(visited[curren_point.ix()][curren_point.iy()] == true) {
+				continue; 				//means we've already been there
 			}
-		}
+			if(getPixel(curren_point) != src_color) { // if the neighbor is not in the same color, of p1.
+				continue;							  // means we can't go throughS there 
+			}
 
-		visited[p1.ix()][p1.iy()] = 0; // start
-		int index = 0;
-		boolean isDone = false;
-		boolean isFound = false;
-		while(!isDone) {
-			for(int i = 0; i<visited.length; i++ ) {
-				for(int j = 0; j<visited[i].length; j++ ) {
-					if(visited[i][j] == index) {
-						updateNeighbors(visited, i,j,index+1);
-						isFound = true;
-					}
+			visited[curren_point.ix()][curren_point.iy()] = true; // updating it to be visited
+			if (curren_point.ix() == p2.ix() && curren_point.iy() == p2.iy()) {
+				return path; 							// means we've got to the end
+			}
+
+			//going over the neighbors, to search which to put them
+			for(int row = -1; row <= 1; row++) {
+				for (int col = -1; col <= 1; col++) { 	//searching the point near the One we're checking
+					if(row!=0 || col!=0 && (row!=-1 && col!=-1)||(row!=1 && col!=1)&&(row!=-1 && col!=1)&&(row!=1 && col!=-1)) {  //checking that we aren't going form the diagonal and not out of the map
+						int x = curren_point.ix() + row;
+						int y = curren_point.iy() + col;
+						if (x>=0 && x<getWidth() && y>=0 && y<getHeight()) {
+							qu.add(copy_array_value(path,new Point2D(x,y))); //earasing the old path and adding the new array with the new point that we can go with
+																			// we couldn't keep going we need a new path
+						}
+					}	
 				}
 			}
-
-			if(!isFound) {
-				isDone = true;
-			}
-
-			if(visited[p2.ix()][p2.iy()] !=-1) {
-				isDone = true;	
-			}
-			index++; //going to the next distance
-			isFound = false; // for the next iteration
 		}
-
-		if(visited[p2.ix()][p2.iy()] ==-1) { //we coulnd't get to p2	
-			return null;
-		}
-
-		Point2D[] shortestPath = new Point2D[index]; //this is the length of the path
-		buildPath(visited, p2.ix(), p2.iy(), shortestPath);
-		return shortestPath;
-
-	}
-
-	public void buildPath(int visited[][], int i, int j, Point2D[] shortestPath) {
-		for(int x = 0; x<shortestPath.length; x++) {	
-			Point2D point = new Point2D(i,j);
-			shortestPath[shortestPath.length-1-x] = point;
-			Point2D neighbor = nextNeighbor(visited, i, j);
-			i = neighbor.ix();
-			j =	neighbor.iy();	
-		}
-	}
-
-	public Point2D nextNeighbor(int visited[][],int i, int j) {
-		if(i>0) {
-			if(visited[i][j] - visited[i-1][j] == 1 ) {
-				return new Point2D(i-1,j);
-			}
-		}
-		if(i<visited.length-1) {
-			if(visited[i][j] - visited[i+1][j] == 1 ) {
-				return new Point2D(i+1,j);
-			}
-		}
-		if(j>0) {
-			if(visited[i][j] - visited[i][j-1] == 1 ) {
-				return new Point2D(i,j-1);
-			}
-		}
-		if(j<visited[i].length-1) {
-			if(visited[i][j] - visited[i][j+1] == 1 ) {
-				return new Point2D(i,j+1);
-			}
-		}
-		throw new RuntimeException("Should not be here");
-	}
-
-	//drawing the 
-	public void drawShortestPath(Point2D p1, Point2D p2,int c) {
-		Point2D[] path = shortestPath(p1, p2);	
-		if (path !=null) {
-			for (Point2D point : path) {
-				setPixel(point, c);
-			}
-		}
+		return null; // we didn't have any path to go through
 	}
 	
+	
+	// Creating a new array with the new point we can go there, that will represent the path
+	// Like add function in Arkady's lesson
+	private Point2D[] copy_array_value(Point2D[] origin_p_arr, Point2D newPval) { // getting the old path and the new point to add
+		//Point2D[] temp = new Point2D[origin_p_arr.length + 1];
+		// deep copy of the old array
+		Point2D[] temp = Arrays.copyOf(origin_p_arr, origin_p_arr.length + 1);
+		
+		// adding the new point in the end of the array
+		temp[origin_p_arr.length] = newPval;
+		return temp;
+	}
+
+
+
 	@Override
 	// This function returns us the number of moves we had to do, to go from one point to another 
 	public int shortestPathDist(Point2D p1, Point2D p2) {
-		// checking if there is no distance between the points
-
-		//return the length from above
-
-		return -1;
-
-
-		//		//checking if they are in different colors
-		//		if(getPixel(p1) != getPixel(p2)) {
-		//			return -1;
-		//		}
-		//
-		//		// initialized some variables for the checking
-		//		int moveCount = 0;
-		//		int nodes_left_in_layer = 1;
-		//		int nodes_in_next_layer = 0;
-		//
-		//		boolean[][] visited = new boolean[getWidth()][getHeight()]; // boolean matrix to know if we've visited that pixel
-		//		Queue<int[]> qx= new LinkedList<int[]>(); //the queue will be an array of int of x value
-		//		Queue<int[]> qy= new LinkedList<int[]>(); //the queue will be an array of int of y value
-		//
-		//		// adding to every queue the first values of x & y from point 1
-		//		qx.add(new int[]{p1.ix()}); 
-		//		qy.add(new int[]{p1.iy()});
-		//
-		//		boolean reachedEnd = false;		// because it hadn't get to the end yet
-		//
-		//		while(!qx.isEmpty()) { 			// we can say while (qx.size > 0)
-		//			int[] currX = qx.poll();
-		//			int[] currY = qy.poll();
-		//
-		//			int x = currX[0]; 		//getting the x & y values
-		//			int y = currY[0];
-		//
-		//			if (_map[x][y] == _map[p2.ix()][p2.iy()]) { //we've got to the other point
-		//				reachedEnd = true;
-		//				break;
-		//			}
-		//
-		//			//exploreNeighbors(visited,x,y);
-		//			int [] vrx = {-1,1,0,0}; //vector direction for rows/x
-		//			int [] vcy = {0,0,1,-1}; //vector direction for columns/y
-		//			int vr = 0;
-		//			int vc = 0;
-		//
-		//			//checking the neighbors
-		//			for (int i = 0; i<4; i++) {
-		//				vr = x + vrx[i];
-		//				vc = y + vcy[i];
-		//
-		//				// checking the bounds
-		//				if (vr <0 || vc<0) {
-		//					continue;
-		//				}
-		//				if (visited[vr][vc] ) {
-		//					continue;
-		//				}
-		//				if (getPixel(vr, vc) != color) { //means that is blocked
-		//					continue;
-		//				}
-		//
-		//				// adding the four directions
-		//				qx.add(new int[]{vr});
-		//				qy.add(new int[]{vc});
-		//				visited[vr][vc] = true; // means we are visited the neighbors
-		//				nodes_in_next_layer++;
-		//			}
-		//
-		//			nodes_left_in_layer--;
-		//			if (nodes_left_in_layer == 0) {
-		//				nodes_left_in_layer = nodes_in_next_layer;
-		//				nodes_in_next_layer = 0;
-		//				moveCount++;
-		//			}
-		//		}
-		//		if (reachedEnd) { //if it is true
-		//			return moveCount;
-		//		}
-		//
-		//		return -1; // we couln't reached the end
-
-
-		/*
-	private void exploreNeighbors(boolean[][]visited,int row, int col) {
-		int [] vrx = {-1,1,0,0}; //vector direction for rows/x
-		int [] vcy = {0,0,1,-1}; //vector direction for columns/y
-		int vr = 0;
-		int vc = 0;
-
-		//chming the neighbors
-		for (int i = 0; i<4; i++) {
-			vr = row + vrx[i];
-			vc = col + vcy[i];
-
-			// checking hte bounds
-			if (vr <0 || vc<0) {
-				continue;
-			}
-			if (visited[vr][vc] ) {
-				continue;
-			}
-			if (getPixel(vr, vc) != Color.WHITE.getRGB()) { //means that is blocked
-				continue;
-			}
-
-			//TODO the rest of the function
-
+		Point2D[] path = shortestPath(p1, p2);
+		// checking if there is a path length;
+		if(path.length>-1) {
+			return path.length; //return the length from above
 		}
-	}
-		 */
+		return -1;
 	}
 
 
@@ -493,9 +306,9 @@ public class MyMap2D implements Map2D{
 				boolean is_currently_alive = tmp[i][j] != Color.WHITE.getRGB(); // if the point is not white
 				int num = 0;													// counter for the neighbors
 				for(int x = -1; x < 2; x++) {									// the grid around the point
-					for (int y = -1; y < 2; y++) { 	//searching the point near the One we're checking
-						if( x!=0 || y!=0) { 		// if they are both equal to 0, so we're in the middle
-							if(x+i > 0 && x+i < tmp.length && y+j > 0 && y+j < tmp[i].length &&
+					for (int y = -1; y < 2; y++) { 								//searching the point near the One we're checking
+						if(x!=0 || y!=0) { 									// if they are both equal to 0, so we're in the middle
+							if(x+i >= 0 && x+i < tmp.length && y+j >= 0 && y+j < tmp[i].length &&
 									tmp[x+i][y+j] != Color.WHITE.getRGB()) { 		// checking the place according to the point
 								num += 1;											// we have a colored neighbor
 							}
@@ -525,5 +338,9 @@ public class MyMap2D implements Map2D{
 	}
 
 
+	// Checking if the point is out side of the map, helps us for some of the function here
+	private boolean isOutSideTheMap(int x, int y) {
+		return x<0 || x>=getWidth() || y<0 || y>=getHeight();
+	}
 
 }
