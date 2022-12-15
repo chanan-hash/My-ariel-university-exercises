@@ -152,30 +152,50 @@ public class MyMap2D implements Map2D{
 	}
 
 	@Override
-	// all the attached points in the same color, draw in a new color
-	// Polygon
-	// if new_v != get.color --> set pixel(p,new_v)
-	// like the One below just from the point
+	/**
+	 * This function works like fill(x,y,v) but if can take point.
+	 * Actually it calling the other function and giving in the _x & _y values of the point
+	 */
 	public int fill(Point2D p, int new_v) {
 		return fill(p.ix(),p.iy(),new_v);
 	}
 
+	/**
+	 * This function is actually "fill polygon".
+	 * we need to fill in new color all the attached points in the same color, from 4 directions.
+	 * 
+	 * 1. First we will get the current color to check which point we can color
+	 * 2. After it we will create a boolean 2D matrix the size of the map.
+	 * 	  This will help us to check if we have visited that point already, to reduce the function actions.
+	 * 3. Then we will start adding all the neighbors for the given point to a queue.
+	 * 4. Then we will check each x & y values, that represent the point, in the queue if standing in the conditions to be colored 
+	 * 		a. yes --> so it will be colored in the new color
+	 * 		b. no --> continue to the next iteration
+	 */
 	@Override
 	public int fill(int x, int y, int new_v) {
-		int initColor = getPixel(x,y); 			// getting the color of the current pixel
-		boolean[][] visited = new boolean[getWidth()][getHeight()]; // boolean matrix to know if we've visited that pixel
-		Queue<int[]> q = new LinkedList<int[]>();	// creating the queue for to store the points/ each place will be an array with x and y, that represent the point
-		q.add(new int[]{x,y});						// adding the first point
-		while(!q.isEmpty()) {						// if the queue is empty --> means that we've finished
-			int [] current = q.poll();				// taking out the specific point
+		
+		int initColor = getPixel(x,y); 			// Getting the color of the current pixel.
+		
+		boolean[][] visited = new boolean[getWidth()][getHeight()]; // Boolean matrix to know if we've visited that pixel.
+		
+		Queue<int[]> q = new LinkedList<int[]>();	// Creating a queue to store the points. 
+													// Each place will be an array with x and y, that represent the point.
+		q.add(new int[]{x,y});						// Adding the first point
+		
+		while(!q.isEmpty()) {						// If the queue is empty --> means that we've finished
+			int [] current = q.poll();				// Taking out the specific point.
 			int currX = current[0];
 			int currY = current[1];
-			if (isOutSideTheMap(currX, currY) || visited[currX][currY] || getPixel(currX, currY) != initColor) { // don't need to be colored
+													// Checking if it not needs to be colored
+													// 1. Out of bound, 2. were visited, 3. Or in another color. That order is important!! 
+			if (isOutSideTheMap(currX, currY) || visited[currX][currY] || getPixel(currX, currY) != initColor) { 
 				continue;
 			}
-			visited[currX][currY] = true;			// updating the place to be true, means we've visited there
-			if (_map[currX][currY] == initColor) {	// checking if it needs to be colored
-				setPixel(currX,currY, new_v);		// adding the neighbors
+			
+			visited[currX][currY] = true;			// Updating the place to be true, means we've visited there
+			if (_map[currX][currY] == initColor) {	// Checking if it needs to be colored
+				setPixel(currX,currY, new_v);		// Adding the neighbors, to be checked in the next iteration
 				q.add(new int[]{currX+1, currY});
 				q.add(new int[]{currX-1, currY});
 				q.add(new int[]{currX, currY+1});
@@ -268,6 +288,26 @@ public class MyMap2D implements Map2D{
 	}
 
 
+	
+	/**
+	 * A little explanation on "Game of life":
+	 * The game goes only on white or black colors, black = alive, white = not alive.
+	 *
+	 * Over grid of 3X3 to know what will be in the next generation we have few rules:
+	 * 1. If you have less then 2 colored neighbors, you die from loneliness 
+	 * 2. If you have 2 colored neighbors, you are not changing. Doesn't matter if you are black or white
+	 * 3. IF you have 3 colored neighbors: 
+	 * 		a. If you are alive(=colored) so you stay as your self.
+	 * 		b. If you are not-alive(=uncolored) so you are being revived.
+	 * 4. If you have more then 3 colored neighbors you die from density
+	 * 
+	 * Explanation on the function:
+	 * 1. First we are copying the map to a temporary map, there we will check every point, not to affect the regular map
+	 * 2. Then we will go over the temp map, and check for every pixel the neighbors around him and count them
+	 * 3. Then according to the living neighbors and to the pixel it self (if he is colored or not), 
+	 * 	  in the original map, we will set this pixel with the right color.   
+	 */
+	
 	@Override
 	public void nextGenGol() {
 		// deep copy of the map, maybe to do it in another function
@@ -317,7 +357,9 @@ public class MyMap2D implements Map2D{
 	}
 
 
-	// Checking if the point is out side of the map, helps us for some of the function here
+	/**
+	 * This function helps us to check if a point is out of the map bounds, helps us for some of the function here. 
+	 */
 	private boolean isOutSideTheMap(int x, int y) {
 		return x<0 || x>=getWidth() || y<0 || y>=getHeight();
 	}
