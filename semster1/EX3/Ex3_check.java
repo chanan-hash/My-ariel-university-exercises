@@ -358,12 +358,101 @@ public class Ex3_check {
 
 	}
 	
-	
-	
-	
-	
-	
-	
 	*/
+
+
+/**
+ * protected void addPixelsToQue(Queue<int[]> que, int row, int col) {
+		for(int x = -1; x < 2; x++) {
+			for (int y = -1; y < 2; y++) { 	//searching the point near the One we're checking
+				if(x!=0 || y!=0 || (x!=-1 && y!=-1)||(x!=1 && y!=1)||(x!=-1 && y!=1)||(x!=1 && y!=-1)) { 		// if they are both equal to 0, so we're in the middle
+					if(!isOutSideTheMap(row + x, col + y)) {
+						que.add(new int[]{row+x, col+y});
+					}
+				}
+			}
+		}
+	}
+*/
+
+
+/**
+ * public Point2D[] shortestPath(Point2D p1, Point2D p2) {
+
+		int src_color = getPixel(p1); //Source color, getting the color of the points to know where we can go through
+		int dst_color = getPixel(p2);
+
+		// Checking if the point are not in the same color 
+		if(src_color != dst_color) {
+			return null;
+		}
+
+		// Checking if there is a distance at all
+		if(p1.close2equals(p2)) {
+			return new Point2D[]{p1};
+		}
+
+		// A boolean array to know if we've visited in that point
+		boolean[][] visited = new boolean[getWidth()][getHeight()];
+
+		//creating a queue from Point2D type, and this will be an linked list so we can go back over from where we've come
+		Queue<Point2D[]> qu = new LinkedList<Point2D[]>(); // each array represent the path
+		Point2D[] p_array = {p1}; // An Point2D array that will be the first point that will be add to the queue
+		qu.add(p_array);
+
+		while(!qu.isEmpty()) { //means we chave still point to go threw to till the end
+
+			// creating the path array
+			Point2D[] path = qu.poll(); // the current point from the queue, that is an array of Point2D, 
+			Point2D curren_point = path[path.length-1]; // the last place in the arrays we were in it
+			// we don't need to create a new point because POint2D class has a constructor that can copy a given point
+
+			if(visited[curren_point.ix()][curren_point.iy()] == true) {
+				continue; 				//means we've already been there
+			}
+			if(getPixel(curren_point) != src_color) { // if the neighbor is not in the same color, of p1.
+				continue;							  // means we can't go throughS there 
+			}
+
+			visited[curren_point.ix()][curren_point.iy()] = true; // updating it to be visited
+			if (curren_point.ix() == p2.ix() && curren_point.iy() == p2.iy()) {
+				return path; 							// means we've got to the end
+			}
+
+			//going over the neighbors, to search which to put them
+			for(int row = -1; row <= 1; row++) {
+				for (int col = -1; col <= 1; col++) { 	//searching the point near the One we're checking
+					if(row!=0 || col!=0 && (row!=-1 && col!=-1)||(row!=1 && col!=1)&&(row!=-1 && col!=1)&&(row!=1 && col!=-1)) {  //checking that we aren't going form the diagonal and not out of the map
+						int x = curren_point.ix() + row;
+						int y = curren_point.iy() + col;
+						if (x>=0 && x<getWidth() && y>=0 && y<getHeight()) {
+							qu.add(copy_array_value(path,new Point2D(x,y))); //earasing the old path and adding the new array with the new point that we can go with
+																			// we couldn't keep going we need a new path
+						}
+					}	
+				}
+			}
+		}
+		return null; // we didn't have any path to go through
+	}
+	
+	
+	// Creating a new array with the new point we can go there, that will represent the path
+	// Like add function in Arkady's lesson
+	private Point2D[] copy_array_value(Point2D[] origin_p_arr, Point2D newPval) { // getting the old path and the new point to add
+		//Point2D[] temp = new Point2D[origin_p_arr.length + 1];
+		// deep copy of the old array
+		Point2D[] temp = Arrays.copyOf(origin_p_arr, origin_p_arr.length + 1);
+		
+		// adding the new point in the end of the array
+		temp[origin_p_arr.length] = newPval;
+		return temp;
+	}
+
+
+ * 
+ * 
+ * 
+ */
 
 
