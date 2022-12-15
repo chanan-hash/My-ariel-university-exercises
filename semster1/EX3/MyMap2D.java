@@ -106,22 +106,28 @@ public class MyMap2D implements Map2D{
 
 	@Override
 	/**
-	 * we will build a matrix from the point sub in abs 
-	 * those will be the matrix that will represent the rectangle 
+	 * To create a rectangle in a matrix we need only 2 point. 
+	 * The to point will give us the width and height of the rectangle 
 	 * 
+	 * 1. We will find the minimum x & y values to know the times we need to run on the matrix.
+	 * 	  We won't run from point to point (in the end yes but in a different way).
+	 * 
+	 * 2. We will find the width and height of the rectangle.
+	 * 3. Then we will run from 0 till the width and height, and every point will add the min' values we've found.
+	 * 	  That how we will gwt the point we need, and color it
 	 */
 	public void drawRect(Point2D p1, Point2D p2, int col) {
-		//TODO use range method link from Dovi
-		int minX = Math.min(p1.ix(), p2.ix());
-		int minY = Math.min(p1.iy(), p2.iy());
+		
+		int minX = Math.min(p1.ix(), p2.ix()); // Minimum x 
+		int minY = Math.min(p1.iy(), p2.iy()); // Minimum y 
 
-		int width = Math.abs((p1.ix() - p2.ix())); // the width of the rectangle
-		int height = Math.abs((p1.iy() - p2.iy())); // the height of the rectangle
+		int width = Math.abs((p1.ix() - p2.ix())); // The width of the rectangle
+		int height = Math.abs((p1.iy() - p2.iy())); // The height of the rectangle
 
-		for (int i = 0; i <= height; i++) {
-			for (int j = 0; j <= width; j++) {
-				if(i>=0 && i<getHeight()&& j>=0 &&j<getWidth()) { //to see we aren't going over the bounds
-					setPixel(j + minX, i + minY, col);
+		for (int i = 0; i <= width ; i++) {
+			for (int j = 0; j <= height; j++) {
+				if(i>=0 && i<getWidth() && j>=0 &&j<getHeight()) { //Checking we aren't going over the map bounds
+					setPixel(i + minX, j + minY, col);
 				}
 			}
 		}
@@ -129,14 +135,18 @@ public class MyMap2D implements Map2D{
 
 	@Override
 	/**
-	 *	In math, every circle we can block in a square, so we will use this square to open the matrix we want
-	 *	we need to find the top-left corner og the square, and the down-right corner.
-	 *	then to check every point if the distance between the current point from the center is smaller then the radius
-	 *	if it is so we will color this pixel
+	 *	In math, every circle we can block in a square.
+	 *  We will use this square to open the matrix we want to run on.
+	 * 1. We need to find the top-left corner of the square, and the down-right corner.
+	 * 2. Top left = x-radius, y+radius.
+	 * 3. Down-right = x+radius, y-radius
+	 * 4. Then we'll run from top-left to down-right points, 
+	 *    and checking every point if the distance between it from the center is smaller then the radius.
+	 *    notation: not smaller-equal (<=), because then we will get a less nice circle
+	 *	5. If it is, we will color this pixel
 	 */
 	public void drawCircle(Point2D p, double rad, int col) {
-		// TODO Auto-generated method stub
-		// add condition
+		
 		Point2D topLeft = new Point2D(p.x()-rad,p.y()+rad); //going with x backwards, and with y upwards
 		Point2D downRight= new Point2D(p.x()+rad,p.y()-rad); //going with x forward, and with y downwards
 
@@ -209,6 +219,26 @@ public class MyMap2D implements Map2D{
 	/**
 	 * This function works a little same like fill function. 
 	 * BUT!!! here we have some interest in the points we've gone through, so we can find the shortest path
+	 *
+	 * 1. We will do first checking to know if there is a path
+	 * 2. We will check the colors of the to point, if there not equal, means the is no path
+	 * 3. Then we will check if there is a distance at all, maybe this is the same point
+	 *
+	 * Now we know that there maybe a path, so lets try to find it,
+	 * 
+	 * 4. We will create a boolean matrix to check if we've visited in that point already, to reduce checking
+	 * 5. Then we'll create a queue that will contains a 2DPoint array, and it will be a linked list type
+	 * 6. We'll add the first point (in 2DPoint array format) to the queue
+	 * 7. We'll create an array of points that will represent the path.
+	 * 8. While we have still point to check (means the queue is not empty) the loop will  run
+	 * 9. We'll poll from the queue, and check is last point if is suitable to put in the path
+	 * 10. Not suitable = have been visited, and not in the same color of the first point (means it is a "rock"/block)
+	 * 11. If it is equal to p2, we can return the path, because it means we've got to our point
+	 * 12. Else we will check the neighbors and add them to the old path till now and then to the queue
+	 * 
+	 * Notice: In every iteration we are destroying and creating new array,  
+	 * to change their size and to add points that we can/might go with them till we'll get to the end.
+	 * 
 	 */
 	public Point2D[] shortestPath(Point2D p1, Point2D p2) {
 		int src_color = getPixel(p1.ix(),p1.iy()); //Source color, getting the color of the points to know where we can go through
