@@ -7,13 +7,24 @@ import org.junit.jupiter.api.Test;
 
 public class MyMap2DTest {
 
+	// Creating the map object so we will be able to do the testing on it
 	private static MyMap2D _map_test = null;
+
+	// Colors for checking
+	int black = Color.BLACK.getRGB();
+	int blue = Color.BLUE.getRGB();
+	int white = Color.WHITE.getRGB();
+	int green = Color.GREEN.getRGB();
+	int yellow = Color.YELLOW.getRGB();
+
 
 	/**
 	 * Most of the tests here will go like that:
 	 * We will build the object of the map.
 	 * Then we will call the functions/methods on it
-	 * Then we will check that we've got the same value we have wanted 
+	 * Then we will check that we've got the same value we have wanted.
+	 * 
+	 * After it we will try to combine test, like to draw rectangle and then to fill it, then to draw short path, et...
 	 */
 
 	@Test
@@ -29,7 +40,7 @@ public class MyMap2DTest {
 		int distX = (int)Math.abs(p1.ix() - p2.ix());
 		int distY = (int)Math.abs(p1.iy() - p2.iy());
 
-		int sx = p2.x() < p1.x() ? 1 : -1;  // the stairs for going to the next point
+		int sx = p2.x() < p1.x() ? 1 : -1;  // The x slope for going to the next point
 		int sy = p2.y() < p1.y() ? 1 : -1;
 
 		int x0 = p2.ix();
@@ -37,12 +48,12 @@ public class MyMap2DTest {
 		int x1 = p1.ix();
 		int y1 = p1.iy();
 
-		int err = distX - distY; // the substract between the height and width giving us the diagonal in like a vector
-		int e2 = 0;				// fixing slop error
+		int err = distX - distY; // the subtract between the height and width giving us the diagonal in like a vector
+		int e2 = 0;				 // fixing slop error
 
 		while(true) {
 			assertEquals(_map_test.getPixel(x0, y0) ,6);	// checking if we are got the same value				
-			if(x0 == x1 && y0== y1) {  				// we got from one point to another
+			if(x0 == x1 && y0== y1) {  						// we got from one point to another
 				break;
 			}
 
@@ -66,7 +77,8 @@ public class MyMap2DTest {
 	 */
 	public void testRect() {
 		_map_test = new MyMap2D(20); //creating the object
-		_map_test.fill(Color.WHITE.getRGB()); //clearing the map from every thing
+		_map_test.fill(white); //clearing the map from every thing
+
 		Point2D p1 = new Point2D(1,2);
 		Point2D p2 = new Point2D(4,10);
 		int minX = Math.min(p1.ix(), p2.ix());
@@ -85,7 +97,6 @@ public class MyMap2DTest {
 		for (int i = 0; i <= hight; i++) {
 			for (int j = 0; j <= width; j++) {
 				assertEquals(tmp[j + minX][i + minY] , 1);
-
 			}
 		}
 
@@ -96,7 +107,8 @@ public class MyMap2DTest {
 		// TODO deep copy of the map because it changes it in the heap
 		// checking for regular circle 
 		_map_test = new MyMap2D(40);
-		_map_test.fill(Color.WHITE.getRGB()); //clearing the map from every thing
+		_map_test.fill(white); //clearing the map from every thing
+
 		Point2D p1 = new Point2D(13,15);
 		Point2D p2 = new Point2D(13,20);
 		int rad = (int)p1.distance(p2);
@@ -112,40 +124,37 @@ public class MyMap2DTest {
 		}
 	}
 
-	//fill test
+	//Fill test
 	@Test
 	public void testFill() {
-		// creating new object
-		_map_test = new MyMap2D(20);
-		_map_test.fill(Color.WHITE.getRGB()); //clearing the map from every thing
 
-		_map_test.fill(0, 0, 1);		
-		//		int[][] temp = new int[20][20];
+		_map_test = new MyMap2D(160); // Creating new object, checking on a big map that it working
+		_map_test.fill(white); 		//Clearing the map from every thing
+
+		_map_test.fill(0, 0, yellow);		
+
+		// TODO check here the assert + 160X160 check
 		int [][] temp = _map_test.getMap(); // notice that we aren't changing anything
-		for (int i = 0; i < 20; i++) {
-			for (int j = 0; j <20; j++)  {
+		for (int i = 0; i < 160; i++) {
+			for (int j = 0; j <160; j++)  {
 				temp[i][j] = _map_test.getPixel(i, j);  // deep copy for the color num
 			}
 		}
-		assertEquals(temp[1][1],1);
-	
+		assertEquals(temp[1][1],yellow);
+
 		// drawing a circle and then use fill function to change its color, then we will use fill again to fill outside the circle
-		_map_test.fill(Color.WHITE.getRGB()); //clearing the map from every thing
+		_map_test.fill(white); //clearing the map from every thing
 		_map_test.init(40, 40);  			 // magnify the map to get more accurate circle
-	
+
 		Point2D pc = new Point2D(17,21); 		// point of the center of the circle
 		Point2D pcr = new Point2D(25,21); 		// point of the distance for the radius
-		
-		int blue = Color.BLUE.getRGB();
-		int green = Color.GREEN.getRGB();
-		int yellow = Color.YELLOW.getRGB();
-		
+
 		double radius = pc.distance(pcr);
 		_map_test.drawCircle(pc,radius ,blue); //drawing blue circle
-		
+
 		_map_test.fill(pc, green); // changing the color to green
 		_map_test.fill(3, 4, yellow); // changing the rest of the map to yellow except from the cirlce 
-		
+
 		// checking the the color was changed
 		for (int i = 0; i < 40; i++) {
 			for (int j = 0; j <40; j++)  {
@@ -158,12 +167,87 @@ public class MyMap2DTest {
 				}
 			}
 		}
-		
-		
-	}
-	
-	
 
+
+	}
+
+	/**
+	 * This test will go like this:
+	 * 1. First we will check a standard short path without any "obstacles"/
+	 * 2. Then we will check case there no path (different colors or something is blocking the whole way).
+	 * 3. After it we'll add all kind of "obstacles" such as: points, segments, rectangles, etc...
+	 */
+	
+	@Test
+	public void testShortestPath() {
+		_map_test = new MyMap2D(20); // Creating new object
+		_map_test.fill(white); 		//Clearing the map from every thing
+
+		// Standard path
+		Point2D p1 = new Point2D(2.078125,0.9453125);
+		Point2D p2 = new Point2D(13.1328125,15.90625);
+
+		Point2D[] path = _map_test.shortestPath(p1,p2);
+		int dist = _map_test.shortestPathDist(p1, p2);
+
+		for(int i = 0 ; i<dist; i++) { 			// Here we're checking with the by shortestPathDist function
+			_map_test.setPixel(path[i], yellow);
+		}
+
+		for(int i = 0 ; i<path.length; i++) {	// Here we're checking with the by path's length function, to see if they are equal
+			assertEquals(_map_test.getPixel(path[i]), yellow);	
+		}
+		assertEquals(path.length, dist);
+		
+		// Case there no any path
+		_map_test.fill(white); // Clearing the map
+		
+		Point2D p3 = new Point2D(7.09765625,7.83984375);
+		Point2D p4 = new Point2D(2.05859375,2.01953125);
+		// Coloring the point in different colors
+		_map_test.setPixel(p3, blue);
+		_map_test.setPixel(p4, green);
+		
+		Point2D[] path2 = _map_test.shortestPath(p3,p4);
+		assertEquals(path2, null);
+		
+		_map_test.fill(white); // Clearing the map
+		_map_test.drawSegment(new Point2D(-0.03125,9.9296875), new Point2D(18.8359375,10.0078125), green);
+		
+		Point2D[] path3 = _map_test.shortestPath(new Point2D(6.0625,5.046875),new Point2D(10.8671875,12.9375));
+		assertEquals(path3, null);
+	
+		// Case there are "obstacles"
+		_map_test.fill(white); // Clearing the map so we can create obstacles
+		
+		_map_test.drawRect(new Point2D(3.0546875,16.9609375), new Point2D(11.1015625,11.0234375), blue); // Drawing blue rectangle
+		// drawing yellow segment
+		_map_test.drawSegment(new Point2D(14.0703125,17.078125), new Point2D(12.078125,6.0234375), yellow); 
+		_map_test.drawSegment(new Point2D(1.1015625,7.1953125), new Point2D(9.1484375,9.03125), yellow); 
+		_map_test.drawSegment(new Point2D(7.859375,6.921875), new Point2D(7.8984375,1.8828125), yellow);
+		
+		// Drawing green shortest path 
+		Point2D p5 = new Point2D(4.96875,3.9921875); 
+		Point2D p6 = new Point2D(12.078125,17.9765625);
+		
+		Point2D[] path4 = _map_test.shortestPath(p5,p6);
+		// Coloring it in green
+		int dist2 = _map_test.shortestPathDist(p5, p6);
+		
+		assertEquals(dist2, 22);
+		for(int i = 0; i<dist2; i++) {
+			_map_test.setPixel(path4[i], green);
+		}
+		// Now we will check that no changes in the obstacles colors happened, so we will know the path bypassed them  
+		assertEquals(_map_test.getPixel(new Point2D(11.1015625,11.0234375)), blue); // Down right rectangle color
+		assertEquals(_map_test.getPixel(new Point2D(12.078125,10.9453125)), green); // Our path 
+		assertEquals(_map_test.getPixel(new Point2D(13.0546875,10.90625)), yellow); // One of the yellow segments
+		assertEquals(_map_test.getPixel(new Point2D(9.109375,8.9140625)), yellow); //  One of the yellow segments
+		assertEquals(_map_test.getPixel(new Point2D(10.0078125,8.9140625)), green); // Our path
+			
+	}		
+	
+	
 	/**
 	 * Test for Game of life
 	 * to create a an output of myself on a little map to know nextGen
@@ -173,9 +257,7 @@ public class MyMap2DTest {
 	@Test
 	public void testGenGol() {
 		_map_test = new MyMap2D(10); // A grid 5X5;
-		int black = Color.BLACK.getRGB();
-		int blue = Color.BLUE.getRGB();
-		int white = Color.WHITE.getRGB();
+
 		_map_test.fill(white); //cleared the map from all another point form previous tests
 
 		//we will draw some point for start
