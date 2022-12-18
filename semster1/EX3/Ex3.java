@@ -1,6 +1,7 @@
 package Exe.EX3;
 
 import java.awt.Color;
+import java.util.Arrays;
 
 /*** This class is a simple "inter-layer" connecting (aka simplifing) the
  * StdDraw_Ex3 with the Map2D interface.
@@ -9,8 +10,8 @@ import java.awt.Color;
  * You should change this class!
  * 
  * @author Chanan && Liat
- * ID1: 
- * ID2: 
+ * ID1: 212736417 - Liat
+ * ID2: 209324102 - Chanan
  *
  */
 public class Ex3 {
@@ -56,7 +57,7 @@ public class Ex3 {
 		}		
 		StdDraw_Ex3.show();
 	}
-	
+
 	// Adding colors
 	public static void actionPerformed(String p) {
 		_mode = p;
@@ -66,39 +67,43 @@ public class Ex3 {
 		if(p.equals("Green")) {_color = Color.GREEN; }
 		if(p.equals("Red")) {_color = Color.RED; }
 		if(p.equals("Yellow")) {_color = Color.YELLOW; }
-		if (p.equals("Clear")) {_map.fill(Color.WHITE.getRGB());} // Adding to clear option for the map
-		
+		if(p.equals("Clear")) {_map.fill(Color.WHITE.getRGB());} // Adding to clear option for the map
+
 		// Adding sizes
 		if(p.equals("20x20")) {init(20);}
 		if(p.equals("40x40")) {init(40);}
 		if(p.equals("80x80")) {init(80);}
 		if(p.equals("160x160")) {init(160);}
-
+		p = null;
 		drawArray(_map);
 
 	}
 
-	//TODO function clear - every point on the map = null
+	static Point2D prev_point = null; // Will save points for every next drawing 
 
-	static Point2D prev_point = null; // will save points for every next drawing 
-	//This this is the drawing in the map
+	/**
+	 * This this is the drawing in the map. 
+	 * Not in every function we're doing "mode" = "none", so we can draw few rectangle or few circles.
+	 */
 	public static void mouseClicked(Point2D p) {
 		System.out.println(p);
 		int col = _color.getRGB();
 		if(_mode.equals("Point")) {
 			_map.setPixel(p,col );
 		}
-		// rectangle
+
+		// Rectangle
 		else if (_mode.equals("Rect")) {
-			if (prev_point == null) { 		//previous point 
+			if (prev_point == null) { 		// Previous point 
 				prev_point = p;
 			} 
 			else {
 				_map.drawRect(prev_point, p, col);
-				prev_point = null; 				// so we can draw from the beginning and not to continue the rectangle
+				prev_point = null; 					// So we can draw from the beginning and not to continue the rectangle
 			}
 		}
-		// segment
+
+		// Segment
 		else if (_mode.equals("Segment")) {
 			if (prev_point == null) {
 				prev_point = p;
@@ -108,8 +113,8 @@ public class Ex3 {
 				prev_point = null;
 			}
 		}
-		
-		// circle
+
+		// Circle
 		else if (_mode.equals("Circle")) {
 			if (prev_point == null) {
 				prev_point = p;
@@ -126,15 +131,27 @@ public class Ex3 {
 				prev_point = p;
 			}
 			else {
-				_map.shortestPath(prev_point, p);
-				prev_point = null;
+				Point2D[] shortestPath = _map.shortestPath(prev_point, p);
+				System.out.println(Arrays.toString(shortestPath));
+				if(shortestPath == null) {			
+					prev_point = null; 		// If there is no path, so restart the clicking point 
+				}
+				else {
+					int dist = _map.shortestPathDist(prev_point, p);
+					for(int i = 0 ; i<dist; i++) {
+						_map.setPixel(shortestPath[i], col);
+					}
+					prev_point = null;
+				}
 			}
 		}
+
 		// Fill
 		if(_mode.equals("Fill")) {
 			_map.fill(p, col);
 			_mode = "none";
 		}
+
 		// Game Of Life
 		if(_mode.equals("Gol")) {
 			_map.nextGenGol();	

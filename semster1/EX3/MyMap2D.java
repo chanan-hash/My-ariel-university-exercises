@@ -2,16 +2,20 @@ package Exe.EX3;
 
 import java.awt.Color;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
-
 import java.util.Queue;
 
 
 
 /**
  * This class implements the Map2D interface.
- * You should change (implement) this class as part of Ex3. */
+ * You should change (implement) this class as part of Ex3. 
+ * 
+ * @author Chanan && Liat
+ * ID1: 212736417 - Liat
+ * ID2: 209324102 - Chanan
+ * 
+ * */
 public class MyMap2D implements Map2D{
 	private int[][] _map;
 
@@ -62,41 +66,48 @@ public class MyMap2D implements Map2D{
 
 	@Override
 	/**
-	 * For my self 2D Point class giving us an object of double values (x,y)
-	 *based on Bresenham's line idea.
+	 * Based on Bresenham's line idea.
+	 * This algorithm is calculating the line step by step.
+	 * In each iteration we are checking which is the next pixel to go to.
+	 * And that how we draw the line
 	 *
+	 * The algorithm finds the closest point to the liner equation, so they will be the points to color
+	 * 
+	 * The main idea is each iteration to check if we need to move the point right or left, or up or down, 
+	 * depending on how far is from the slope of the big equation.
+	 * 
 	 * Was Based from https://www.sanfoundry.com/java-program-bresenham-line-algorithm/
+	 * A visual explanation of the algorithm https://www.youtube.com/watch?v=IDFB5CDpLDE&t=236s
 	 */
-	// This function is getting (x1,y1) (x2,y2) and a vector
 	public void drawSegment(Point2D p1, Point2D p2, int v) {
 
-		//		TODO add the source from the internet
-		int distX = (int)Math.abs(p1.ix() - p2.ix());
-		int distY = (int)Math.abs(p1.iy() - p2.iy());
+		int distX = (int)Math.abs(p1.ix() - p2.ix()); // Delta X
+		int distY = (int)Math.abs(p1.iy() - p2.iy()); // Delta Y
 
-		int sx = p2.x() < p1.x() ? 1 : -1;  // the stairs for going to the next point
-		int sy = p2.y() < p1.y() ? 1 : -1;
+		// Checking if to go right or left, up or down
+		int sx = p2.x() < p1.x() ? 1 : -1;  // X slope according to which point is higher
+		int sy = p2.y() < p1.y() ? 1 : -1;  // Y slope according to which point is higher
 
 		int x0 = p2.ix();
 		int y0 = p2.iy();
 		int x1 = p1.ix();
 		int y1 = p1.iy();
 
-		int err = distX - distY; // the substract between the height and width giving us the diagonal in like a vector
-		int e2 = 0;				// fixing slop error
+		int err = distX - distY; 
+		int e2 = 0;				// Decision variable, based on 2*(DeltaX - DeltaY), that will fix the slope error
 
 		while(true) {
-			setPixel(x0,y0,v);	// drawing the first point
-			if(x0 == x1 && y0== y1) {  // we got from one point to another
+			setPixel(x0,y0,v);	// Drawing the points
+			if(x0 == x1 && y0== y1) {  // Means we've got to the end point.
 				break;
 			}
 
-			e2 = 2*err;    //  
-			if(e2 > -distY) {
+			e2 = 2*err;      
+			if(e2 > -distY) { 		// Going right or left
 				err = err-distY;
 				x0 = x0 + sx; 
 			}
-			if(e2 < distX) {
+			if(e2 < distX) {		// Going up or down
 				err = err + distX;
 				y0 = y0 + sy;
 			}
@@ -117,7 +128,7 @@ public class MyMap2D implements Map2D{
 	 * 	  That how we will gwt the point we need, and color it
 	 */
 	public void drawRect(Point2D p1, Point2D p2, int col) {
-		
+
 		int minX = Math.min(p1.ix(), p2.ix()); // Minimum x 
 		int minY = Math.min(p1.iy(), p2.iy()); // Minimum y 
 
@@ -146,7 +157,7 @@ public class MyMap2D implements Map2D{
 	 *	5. If it is, we will color this pixel
 	 */
 	public void drawCircle(Point2D p, double rad, int col) {
-		
+
 		Point2D topLeft = new Point2D(p.x()-rad,p.y()+rad); //going with x backwards, and with y upwards
 		Point2D downRight= new Point2D(p.x()+rad,p.y()-rad); //going with x forward, and with y downwards
 
@@ -184,25 +195,25 @@ public class MyMap2D implements Map2D{
 	 */
 	@Override
 	public int fill(int x, int y, int new_v) {
-		
+
 		int initColor = getPixel(x,y); 			// Getting the color of the current pixel.
-		
+
 		boolean[][] visited = new boolean[getWidth()][getHeight()]; // Boolean matrix to know if we've visited that pixel.
-		
+
 		Queue<int[]> q = new LinkedList<int[]>();	// Creating a queue to store the points. 
-													// Each place will be an array with x and y, that represent the point.
+		// Each place will be an array with x and y, that represent the point.
 		q.add(new int[]{x,y});						// Adding the first point
-		
+
 		while(!q.isEmpty()) {						// If the queue is empty --> means that we've finished
 			int [] current = q.poll();				// Taking out the specific point.
 			int currX = current[0];
 			int currY = current[1];
-													// Checking if it not needs to be colored
-													// 1. Out of bound, 2. were visited, 3. Or in another color. That order is important!! 
+			// Checking if it not needs to be colored
+			// 1. Out of bound, 2. were visited, 3. Or in another color. That order is important!! 
 			if (isOutSideTheMap(currX, currY) || visited[currX][currY] || getPixel(currX, currY) != initColor) { 
 				continue;
 			}
-			
+
 			visited[currX][currY] = true;			// Updating the place to be true, means we've visited there
 			if (_map[currX][currY] == initColor) {	// Checking if it needs to be colored
 				setPixel(currX,currY, new_v);		// Adding the neighbors, to be checked in the next iteration
@@ -240,6 +251,7 @@ public class MyMap2D implements Map2D{
 	 * to change their size and to add points that we can/might go with them till we'll get to the end.
 	 * 
 	 */
+
 	public Point2D[] shortestPath(Point2D p1, Point2D p2) {
 		int src_color = getPixel(p1.ix(),p1.iy()); //Source color, getting the color of the points to know where we can go through
 		int dst_color = getPixel(p2.ix(),p2.iy());
@@ -257,28 +269,28 @@ public class MyMap2D implements Map2D{
 
 		// mean that there is path and the point in the same color
 		boolean[][] visited = new boolean[getWidth()][getHeight()]; // A boolean array to know if we've visited in that point
-		
+
 		Queue<Point2D[]> poqu = new LinkedList<Point2D[]>(); //poqu - point queue. A queue that will hold array of points that represent the path
 		Point2D [] arr = {p1};								// Creating a points array with the first point to start with 
 		poqu.add(arr);										// Adding it to the queue
-		
+
 		// creating the path array
 		while(!poqu.isEmpty()) {						// Means while we still have point to add 
 			Point2D[] path = poqu.poll();				// The current point from the queue, that is an array of Point2D and represent the path till now 	
 			Point2D cp = path[path.length - 1];			// Current point, the point that we will check itself and his neighbors if we can add it to the path
-			
+
 			if (visited[cp.ix()][cp.iy()]) { 			// If its true 
 				continue;								// Means we've already been there and continue to the next iteration.
 			}
 			if(getPixel(cp) != src_color) { // If the neighbor is not in the same color, of p1.
 				continue;					 // means we can't go throughS there 
 			}
-			
+
 			visited[cp.ix()][cp.iy()] = true;		// updating that we visited the current point
 			if (cp.ix() == p2.ix() && cp.iy()==p2.iy()) {	// if it equals to p2, mean we've got to the end, and can return the path
 				return path;								// Function equals/colseToEqual is not enough accurate for us here so we need to do it by ourselves
 			}
-			
+
 			//going over the neighbors, to search which to put them
 			for(int row = -1; row <=1; row++) {
 				for(int col=-1; col <=1; col++) {
@@ -303,9 +315,8 @@ public class MyMap2D implements Map2D{
 		temp[oldPath.length] = np; // we can make the oldPath to be a pointer to the temp array and return the oldPath with the added point 										
 		return temp;				//oldPath = temp; return oldPath
 	}
+
 	
-
-
 	@Override
 	// This function returns us the number of moves we had to do, to go from one point to another 
 	public int shortestPathDist(Point2D p1, Point2D p2) {
@@ -318,7 +329,7 @@ public class MyMap2D implements Map2D{
 	}
 
 
-	
+
 	/**
 	 * A little explanation on "Game of life":
 	 * The game goes only on white or black colors, black = alive, white = not alive.
@@ -337,7 +348,7 @@ public class MyMap2D implements Map2D{
 	 * 3. Then according to the living neighbors and to the pixel it self (if he is colored or not), 
 	 * 	  in the original map, we will set this pixel with the right color.   
 	 */
-	
+
 	@Override
 	public void nextGenGol() {
 		// deep copy of the map, maybe to do it in another function

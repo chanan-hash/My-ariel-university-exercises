@@ -209,13 +209,13 @@ public class MyMap2DTest {
 		_map_test.setPixel(p4, green);
 		
 		Point2D[] path2 = _map_test.shortestPath(p3,p4);
-		assertEquals(path2, null);
+		assertNull(path2,"");
 		
 		_map_test.fill(white); // Clearing the map
 		_map_test.drawSegment(new Point2D(-0.03125,9.9296875), new Point2D(18.8359375,10.0078125), green);
 		
 		Point2D[] path3 = _map_test.shortestPath(new Point2D(6.0625,5.046875),new Point2D(10.8671875,12.9375));
-		assertEquals(path3, null);
+		assertNull(path3, "");
 	
 		// Case there are "obstacles"
 		_map_test.fill(white); // Clearing the map so we can create obstacles
