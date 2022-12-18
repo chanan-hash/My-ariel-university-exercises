@@ -154,18 +154,18 @@ public class MyMap2D implements Map2D{
 	 * 4. Then we'll run from top-left to down-right points, 
 	 *    and checking every point if the distance between it from the center is smaller then the radius.
 	 *    notation: not smaller-equal (<=), because then we will get a less nice circle
-	 *	5. If it is, we will color this pixel
+	 * 5. If it is, we will color this pixel
 	 */
 	public void drawCircle(Point2D p, double rad, int col) {
 
-		Point2D topLeft = new Point2D(p.x()-rad,p.y()+rad); //going with x backwards, and with y upwards
-		Point2D downRight= new Point2D(p.x()+rad,p.y()-rad); //going with x forward, and with y downwards
+		Point2D topLeft = new Point2D(p.x()-rad,p.y()+rad); // Going with x backwards, and with y upwards
+		Point2D downRight= new Point2D(p.x()+rad,p.y()-rad); // Going with x forward, and with y downwards
 
 		for (double i = topLeft.y(); i>= downRight.y(); i--) {
-			for (double j = topLeft.x(); j<= downRight.x(); j++) {  //with x going up, and with y going down
-				Point2D pmid= new Point2D(j,i); 					//setting new point for checking if to color it
-				// we don't want the top of the square so only < radius, and not && <=
-				if (p.distance(pmid)<rad && i>0 && j>0 && (int)j<_map.length && i<_map[(int)j].length) { 	// write on the conditions, checking the bounds
+			for (double j = topLeft.x(); j<= downRight.x(); j++) {  // With x going up, and with y going down
+				Point2D pmid= new Point2D(j,i); 					// Setting new point for checking if to color it
+				// We don't want the top of the square so only < radius, and not <= radius
+				if (p.distance(pmid)<rad && i>0 && j>0 && (int)j<_map.length && i<_map[(int)j].length) { 	// Checking if it isn't out of bounds
 					setPixel((int)j,(int)i, col);
 				}
 			}			

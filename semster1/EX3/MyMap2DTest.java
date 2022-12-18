@@ -33,36 +33,37 @@ public class MyMap2DTest {
 		Point2D p1 = new Point2D(5,15);
 		Point2D p2 = new Point2D(8,8);
 
-		_map_test.drawSegment(p1, p2, 6); //drawing the segment according to number 6, just for checking
+		_map_test.drawSegment(p1, p2, 6); //Drawing the segment according to number 6, just for checking
 
 		// In the same way the Function have worked we will go over the map here and see if e've got the same value
 
-		int distX = (int)Math.abs(p1.ix() - p2.ix());
+		int distX = (int)Math.abs(p1.ix() - p2.ix()); // Delta X
 		int distY = (int)Math.abs(p1.iy() - p2.iy());
 
-		int sx = p2.x() < p1.x() ? 1 : -1;  // The x slope for going to the next point
-		int sy = p2.y() < p1.y() ? 1 : -1;
+		// Checking if to go right or left, up or down
+		int sx = p2.x() < p1.x() ? 1 : -1;  // X slope according to which point is higher
+		int sy = p2.y() < p1.y() ? 1 : -1;	// Y slope according to which point is higher
 
 		int x0 = p2.ix();
 		int y0 = p2.iy();
 		int x1 = p1.ix();
 		int y1 = p1.iy();
 
-		int err = distX - distY; // the subtract between the height and width giving us the diagonal in like a vector
-		int e2 = 0;				 // fixing slop error
+		int err = distX - distY; 
+		int e2 = 0;				 // Decision variable, based on 2*(DeltaX - DeltaY), that will fix the slope error
 
 		while(true) {
-			assertEquals(_map_test.getPixel(x0, y0) ,6);	// checking if we are got the same value				
-			if(x0 == x1 && y0== y1) {  						// we got from one point to another
+			assertEquals(_map_test.getPixel(x0, y0) ,6);	// Checking if we are got the same value				
+			if(x0 == x1 && y0== y1) {  						// Means we've got to the end point.
 				break;
 			}
 
 			e2 = 2*err;    //  
-			if(e2 > -distY) {
+			if(e2 > -distY) {			// Going right or left
 				err = err-distY;
 				x0 = x0 + sx; 
 			}
-			if(e2 < distX) {
+			if(e2 < distX) {			// Going up or down
 				err = err + distX;
 				y0 = y0 + sy;
 			}
