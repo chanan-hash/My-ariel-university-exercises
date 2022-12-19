@@ -83,7 +83,7 @@ public class Ex3 {
 
 	/**
 	 * This this is the drawing in the map. 
-	 * Not in every function we're doing "mode" = "none", so we can draw few rectangle or few circles.
+	 * Except from "Gol" in every function we're doing "mode" = "none", as the example jar file
 	 */
 	public static void mouseClicked(Point2D p) {
 		System.out.println(p);
@@ -94,12 +94,14 @@ public class Ex3 {
 
 		// Rectangle
 		else if (_mode.equals("Rect")) {
+			
 			if (prev_point == null) { 		// Previous point 
 				prev_point = p;
 			} 
 			else {
 				_map.drawRect(prev_point, p, col);
 				prev_point = null; 					// So we can draw from the beginning and not to continue the rectangle
+				_mode = "none";
 			}
 		}
 
@@ -111,6 +113,7 @@ public class Ex3 {
 			else {
 				_map.drawSegment(prev_point, p, col);
 				prev_point = null;
+				_mode = "none";
 			}
 		}
 
@@ -122,6 +125,7 @@ public class Ex3 {
 			else {
 				_map.drawCircle(prev_point, (int)prev_point.distance(p), col);
 				prev_point = null;
+				_mode = "none";
 			}
 		}
 
@@ -142,6 +146,7 @@ public class Ex3 {
 						_map.setPixel(shortestPath[i], col);
 					}
 					prev_point = null;
+					_mode = "none";
 				}
 			}
 		}
