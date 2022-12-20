@@ -13,12 +13,26 @@ public class Dog extends Animal{
 		super(); // turns to the default constructor
 		this.setType("regular");	
 	}
+	
+	public Dog(String type) {
+		super("dog",2);      // Turns to one of Animal constructor
+		this.type = type;
+	}
 
 	// constructor
 	public Dog(Dog d) {
 		super(d.getName(),d.getAge()); 	//super("n",3); --> turns to the first constructor
 		this.type = d.type;
 	}
+	
+	public Dog(String name, int age, String type) {
+		// we can access "name" and "age, because it extends animal
+		this.name = name;
+		this.age = age;
+		
+		this.type = type;
+	}
+	
 	
 	// copy constructor
 	public Dog(String type,Animal a) { // need to copy from Animal object
@@ -50,5 +64,10 @@ public class Dog extends Animal{
 		System.out.println("Whoof");
 	}
 	
+	// Class function to create dog
+	public static Dog createDog() {
+		Dog dog = new Dog("name", 1,"regular");
+		return dog;
+	}
 	
 }

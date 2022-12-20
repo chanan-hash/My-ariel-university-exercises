@@ -14,7 +14,7 @@ public class Animal {
 	public Animal(String name, int age) {
 		this.name = name;
 		this.age = age;
-		counter++;
+		Animal.counter++;
 	}
 
 	// Copy constructor
@@ -29,6 +29,12 @@ public class Animal {
 	public Animal() {
 		this.setName("name");
 		this.setAge(1);
+
+		/* Another option
+		 * 
+		 * this.name = "animal";
+		 * this.age = 1;
+		 */
 		counter++;
 	}		
 
@@ -61,6 +67,10 @@ public class Animal {
 	@Override
 	public String toString() {
 		return "Animal [name=" + name + ", age=" + age + "]";
+	}
+	
+	public static int returnCounter() {
+		return counter;
 	}
 
 }
