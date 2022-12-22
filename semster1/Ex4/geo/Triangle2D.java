@@ -8,6 +8,8 @@ package Exe.Ex4.geo;
  */
 public class Triangle2D implements GeoShapeable{
 
+	// I think we need 3 point, and to draw a segment from eac point to another, or the dist between them
+	
 	@Override
 	public boolean contains(Point2D ot) {
 		// TODO Auto-generated method stub

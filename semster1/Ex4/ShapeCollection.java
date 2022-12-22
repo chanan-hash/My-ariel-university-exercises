@@ -30,8 +30,8 @@ public class ShapeCollection implements ShapeCollectionable{
 	@Override
 	public GUI_Shapeable removeElementAt(int i) {
 		//////////add your code below ///////////
-		_shapes.remove(i); // using remove from array list
-		return null;
+		// using remove from array list
+		return _shapes.remove(i); 
 		//////////////////////////////////////////
 	}
 

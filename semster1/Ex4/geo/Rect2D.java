@@ -9,7 +9,7 @@ package Exe.Ex4.geo;
 public class Rect2D implements GeoShapeable {
 
 	// Like Ex3 the creation of the rectangle will be by axis
-	// maybe like is stddarw
+	// maybe like is stdDraw
 	// public static void rectangle(double x, double y, double halfWidth, double halfHeight) {
 
 	private double x;
@@ -113,10 +113,54 @@ public class Rect2D implements GeoShapeable {
 
 	}
 
+	// helps draw; 
 	@Override
 	public Point2D[] getPoints() {
-		// TODO Auto-generated method stub
-		return null;
+		Point2D[] ans = new Point2D[1];
+		ans[0] =new Point2D(this.p);
+		//ans[1] = new Point2D(ans[0].x()+this.halfWidth*2, ans[0].y()+this.halfHeight*2);
+		return ans;
+			}
+
+	// Getters and setters
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public double getHalfWidth() {
+		return halfWidth;
+	}
+
+	public void setHalfWidth(double halfWidth) {
+		this.halfWidth = halfWidth;
+	}
+
+	public double getHalfHeight() {
+		return halfHeight;
+	}
+
+	public void setHalfHeight(double halfHeight) {
+		this.halfHeight = halfHeight;
+	}
+
+	public Point2D getP() {
+		return p;
+	}
+
+	public void setP(Point2D p) {
+		this.p = p;
 	}
 
 }

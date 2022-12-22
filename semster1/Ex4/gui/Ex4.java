@@ -11,6 +11,8 @@ import Exe.Ex4.geo.Circle2D;
 import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Polygon2D;
+import Exe.Ex4.geo.Rect2D;
+import Exe.Ex4.geo.Segment2D;
 
 /**
  * 
@@ -28,11 +30,11 @@ public class Ex4 implements Ex4_GUI{
 	private  boolean _fill = false;
 	private  String _mode = "";
 	private  Point2D _p1;
-	
+
 	private  static Ex4 _winEx4 = null;
-	
+
 	private Ex4() {
-			init(null);
+		init(null);
 	}
 	public void init(ShapeCollectionable s) {
 		if(s==null) {_shapes = new ShapeCollection();}
@@ -55,17 +57,19 @@ public class Ex4 implements Ex4_GUI{
 		}
 		return _winEx4;
 	}
-	
+
 	public void drawShapes() {
 		StdDraw_Ex4.clear();
-			for(int i=0;i<_shapes.size();i++) {
-				GUI_Shapeable sh = _shapes.get(i);
-				
-				drawShape(sh);
-			}
-			if(_gs!=null) {drawShape(_gs);}
+		for(int i=0;i<_shapes.size();i++) {
+			GUI_Shapeable sh = _shapes.get(i);
+
+			drawShape(sh);
+		}
+		if(_gs!=null) {drawShape(_gs);}
 		StdDraw_Ex4.show();
 	}
+
+	// here we are declaring which to to some operations like fill
 	private static void drawShape(GUI_Shapeable g) {
 		StdDraw_Ex4.setPenColor(g.getColor());
 		if(g.isSelected()) {StdDraw_Ex4.setPenColor(Color.gray);}
@@ -82,8 +86,29 @@ public class Ex4 implements Ex4_GUI{
 				StdDraw_Ex4.circle(cen.x(), cen.y(), rad);
 			}
 		}
-		
+		// Trying to draw rectangle
+		if(gs instanceof Rect2D) {
+			Rect2D rec = (Rect2D)gs;
+			Point2D pc = rec.getPoints()[0];
+			if(isFill) {
+				StdDraw_Ex4.filledRectangle(pc.x(), pc.y(), rec.getHalfWidth(), rec.getHalfHeight());
+			}
+			else { 
+				StdDraw_Ex4.rectangle(pc.x(), pc.y(), rec.getHalfWidth(), rec.getHalfHeight());
+			}		
+		}
+
+		// Trying to draw the segment
+		if(gs instanceof Segment2D) {
+			Segment2D seg = (Segment2D)gs;
+			Point2D p0 = seg.getPoints()[0];
+			Point2D p1 = seg.getPoints()[0];
+			StdDraw_Ex4.line(p0.x(), p0.y(), p1.x(), p1.y());
+
+		}		
 	}
+
+
 	private void setColor(Color c) {
 		for(int i=0;i<_shapes.size();i++) {
 			GUI_Shapeable s = _shapes.get(i);
@@ -112,15 +137,18 @@ public class Ex4 implements Ex4_GUI{
 		if(p.equals("Fill")) {_fill = true; setFill();}
 		if(p.equals("Empty")) {_fill = false; setFill();}
 		if(p.equals("Clear")) {_shapes.removeAll();}
-	
-		
+
+
 		drawShapes();
-		
+
 	}
 
-	
+	// Drawing the actually shape
 	public void mouseClicked(Point2D p) {
 		System.out.println("Mode: "+_mode+"  "+p);
+
+
+		// drawing a circle
 		if(_mode.equals("Circle")) {
 			if(_gs==null) {
 				_p1 = new Point2D(p);
@@ -133,22 +161,53 @@ public class Ex4 implements Ex4_GUI{
 				_p1 = null;
 			}
 		}
-			if(_mode.equals("Move")) {
-				if(_p1==null) {_p1 = new Point2D(p);}
-				else {
-					_p1 = new Point2D(p.x()-_p1.x(), p.y()-_p1.y());
-					move();
-					_p1 = null;
-				}
+
+		// drawing a rectangle
+		if(_mode.equals("Rect")) {
+			if(_gs==null) {
+				_p1 = new Point2D(p);
 			}
-	
+			else {
+				_gs.setColor(_color);
+				_gs.setFilled(_fill);
+				_shapes.add(_gs);
+				_gs = null;
+				_p1 = null;
+			}
+
+		}
+
+		//Segment
+		if(_mode.equals("Segment")) {
+			if(_gs==null) {
+				_p1 = new Point2D(p);
+			}
+			else {
+				_gs.setColor(_color);
+				_gs.setFilled(_fill);
+				_shapes.add(_gs);
+				_gs = null;
+				_p1 = null;
+			}
+
+		}
+
+		if(_mode.equals("Move")) {
+			if(_p1==null) {_p1 = new Point2D(p);}
+			else {
+				_p1 = new Point2D(p.x()-_p1.x(), p.y()-_p1.y());
+				move();
+				_p1 = null;
+			}
+		}
+
 		if(_mode.equals("Point")) {
 			select(p);
 		}
-	
+
 		drawShapes();
 	}
-	
+
 	private void select(Point2D p) {
 		for(int i=0;i<_shapes.size();i++) {
 			GUI_Shapeable s = _shapes.get(i);
@@ -167,23 +226,40 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 	}
-	
+
 	public void mouseRightClicked(Point2D p) {
 		System.out.println("right click!");
-	
+
 	}
+
+	
+	// Drawing from the second click
 	public void mouseMoved(MouseEvent e) {
 		if(_p1!=null) {
 			double x1 = StdDraw_Ex4.mouseX();
 			double y1 = StdDraw_Ex4.mouseY();
 			GeoShapeable gs = null;
-		//	System.out.println("M: "+x1+","+y1);
+			//	System.out.println("M: "+x1+","+y1);
 			Point2D p = new Point2D(x1,y1);
 			if(_mode.equals("Circle")) {
 				double r = _p1.distance(p);
 				gs = new Circle2D(_p1,r);
 			}
-	
+
+			// Drawing rectangle
+			if(_mode.equals("Rect")) {
+				double w = Math.abs(_p1.x()-p.x());
+				double h = Math.abs(_p1.y()-p.y());
+
+				gs = new Rect2D(_p1.x(),_p1.y(),w/2,h/2);
+
+			}
+
+			// Drawing the segment
+			if(_mode.equals("Segment")) {
+				gs = new Segment2D(_p1.x(),_p1.y(), p.x(),p.y());
+			}
+
 			_gs = new GUIShape(gs,false, Color.pink, 0);
 			drawShapes();
 		}
