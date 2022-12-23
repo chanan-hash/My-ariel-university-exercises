@@ -46,7 +46,7 @@ public class Circle2D implements GeoShapeable{
 	@Override
 	public Point2D[] getPoints() {
 		Point2D[] ans = new Point2D[2];
-		ans[0] =new Point2D(this._center);
+		ans[0] = new Point2D(this._center);
 		ans[1] = new Point2D(ans[0].x(), ans[0].y()+this._radius);
 		return ans;
 	}

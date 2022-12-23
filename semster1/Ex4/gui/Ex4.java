@@ -89,12 +89,16 @@ public class Ex4 implements Ex4_GUI{
 		// Trying to draw rectangle
 		if(gs instanceof Rect2D) {
 			Rect2D rec = (Rect2D)gs;
-			Point2D pc = rec.getPoints()[0];
+			Point2D[] arr = rec.getPoints();
+			Point2D p1 = arr[0];
+			Point2D p2 = arr[1];
+			double w = Math.abs(p1.x() - p2.x());
+			double h = Math.abs(p1.y() - p2.y());
 			if(isFill) {
-				StdDraw_Ex4.filledRectangle(pc.x(), pc.y(), rec.getHalfWidth(), rec.getHalfHeight());
+				StdDraw_Ex4.filledRectangle(p2.x(), p2.y(), w/2, h/2);
 			}
 			else { 
-				StdDraw_Ex4.rectangle(pc.x(), pc.y(), rec.getHalfWidth(), rec.getHalfHeight());
+				StdDraw_Ex4.rectangle(p2.x(), p2.y(), w/2, h/2);
 			}		
 		}
 
@@ -102,7 +106,7 @@ public class Ex4 implements Ex4_GUI{
 		if(gs instanceof Segment2D) {
 			Segment2D seg = (Segment2D)gs;
 			Point2D p0 = seg.getPoints()[0];
-			Point2D p1 = seg.getPoints()[0];
+			Point2D p1 = seg.getPoints()[1];
 			StdDraw_Ex4.line(p0.x(), p0.y(), p1.x(), p1.y());
 
 		}		
@@ -138,6 +142,7 @@ public class Ex4 implements Ex4_GUI{
 		if(p.equals("Empty")) {_fill = false; setFill();}
 		if(p.equals("Clear")) {_shapes.removeAll();}
 
+		// to add the other actions
 
 		drawShapes();
 
@@ -247,11 +252,12 @@ public class Ex4 implements Ex4_GUI{
 			}
 
 			// Drawing rectangle
+			
 			if(_mode.equals("Rect")) {
-				double w = Math.abs(_p1.x()-p.x());
-				double h = Math.abs(_p1.y()-p.y());
-
-				gs = new Rect2D(_p1.x(),_p1.y(),w/2,h/2);
+				double w = _p1.x() - p.x();
+				double h = _p1.y() - p.y();
+				
+				gs = new Rect2D(p.x(),p.y(), w/2,h/2);
 
 			}
 
