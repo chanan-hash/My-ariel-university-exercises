@@ -10,21 +10,21 @@ package Exe.Ex4.geo;
 public class Circle2D implements GeoShapeable{
 	private Point2D _center;
 	private double _radius;
-	
+
 	public Circle2D(Point2D cen, double rad) {
 		this._center = new Point2D(cen);	// So 
 		this._radius = rad;
 	}
 	public double getRadius() {return this._radius;}
-	 @Override
-	    public String toString()
-	    { return _center.toString()+", "+_radius;}
+	@Override
+	public String toString()
+	{ return _center.toString()+", "+_radius;}
 	@Override
 	public boolean contains(Point2D ot) {
 		double dist = ot.distance(this._center);
 		return dist<=this._radius;
 	}
-	
+
 	@Override
 	public double area() {
 		double ans = Math.PI * Math.pow(this._radius, 2);
@@ -53,14 +53,31 @@ public class Circle2D implements GeoShapeable{
 	@Override
 	public void scale(Point2D center, double ratio) {
 		//////////add your code below ///////////
-	
-		//////////////////////////////////////////
-	}
-	@Override
-	public void rotate(Point2D center, double angleDegrees) {
-		//////////add your code below ///////////
-		
+		// if the object contains the center point --> if it is a circle
+		if(this.contains(center)) {
+			this._radius *= ratio; // we are changing the radius, so we will make the circle big or small
+		}
 		//////////////////////////////////////////
 	}
 
+	@Override
+	public void rotate(Point2D center, double angleDegrees) {
+		//////////add your code below ///////////
+		// Calculate the sine and cosine of the rotation angle 
+		if(this.contains(center)) {
+			double cosAngle = Math.cos(angleDegrees * Math.PI / 180.0);
+			double sinAngle = Math.sin(angleDegrees * Math.PI / 180.0);
+
+			// Calculate the rotated center point
+			double x = center.x() + (this._center.x() - center.x()) * cosAngle - (this._center.y() - center.y()) * sinAngle;
+			double y = center.y() + (this._center.x() - center.x()) * sinAngle + (this._center.y() - center.y()) * cosAngle;
+			Point2D rotatedCenterPoint = new Point2D(x, y);
+
+			// Set the rotated center point and keep the radius unchanged
+			this._center = rotatedCenterPoint;
+		}
+	}
+	//////////////////////////////////////////
 }
+
+

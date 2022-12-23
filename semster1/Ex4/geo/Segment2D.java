@@ -8,43 +8,42 @@ package Exe.Ex4.geo;
  *
  */
 public class Segment2D implements GeoShapeable{
-	
+
 	// the segment is built from 2 points, or x0 y0 ,x1 y1
 	private Point2D p0; 
 	private Point2D p1; 
 	private double m;	// the slope
 	private double n;  	// y = mx + n
-	
+
 	// regular constructor
 	public Segment2D(Point2D p0, Point2D p1) {
 		this.p0 = new Point2D(p0);
 		this.p1 = new Point2D(p1);
 		this.m = (p1.y()-p0.y())/(p1.x()-p0.x()); // the slope
-		
+
 		//p1.y() = m*p1.x() + n
 		//-n + p1.y = m*p1.x
 		//-n = m*p1.x - p1.y / * -1
 		this.n =-m * p1.x() + p1.y();
 	}
-	
+
 	public Segment2D(double x0,double y0 ,double x1 ,double y1) {
 		this.p0 = new Point2D(x0,y0);
 		this.p1 = new Point2D(x1,y1);
 		this.m = (p1.y()-p0.y())/(p1.x()-p0.x()); // the slope
 		this.n =-m * p1.x() + p1.y();
 	}
-	
+
 	@Override
 	public boolean contains(Point2D ot) {
 		// TODO Auto-generated method stub
 		// maybe to put in the equation  
 		// if the distance between the points and the given point will be equals to the big distance, or less than en epsilon
-		double eps = 0.01;
+		double eps = 0.001;
 		double dist = p0.distance(p1);
-		boolean isContains = (p0.distance(ot) + p1.distance(ot) == dist);
-		// we can also do --> double distOt= (p0.distance(ot) + p1.distance(ot)); 
-		// if (Math.abs(distOt-dist)<eps)){ return true;}
-		return isContains;
+		
+		double distOt= (p0.distance(ot) + p1.distance(ot)); 
+		return Math.abs(distOt-dist)<eps;
 	}
 
 	@Override
@@ -78,13 +77,17 @@ public class Segment2D implements GeoShapeable{
 	@Override
 	public void scale(Point2D center, double ratio) {
 		// TODO Auto-generated method stub
-		
+		// The distance is effectign on the size
+		if(this.contains(center)) {
+			double dist = p0.distance(p1);
+			dist *= ratio;
+		}
 	}
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	// The points that helps as to draw
@@ -94,7 +97,6 @@ public class Segment2D implements GeoShapeable{
 		ans[0] = new Point2D(this.p0);
 		ans[1] = new Point2D(this.p1);
 		return ans;
-	
 	}
-	
+
 }

@@ -108,10 +108,22 @@ public class Ex4 implements Ex4_GUI{
 			Point2D p0 = seg.getPoints()[0];
 			Point2D p1 = seg.getPoints()[1];
 			StdDraw_Ex4.line(p0.x(), p0.y(), p1.x(), p1.y());
+		}
 
-		}		
+
+		if(gs instanceof Polygon2D) {
+			Polygon2D pol = (Polygon2D)gs;
+			Point2D[] parr = pol.getPoints(); // initial the arr
+
+			double[] xarr = new double[parr.length], yarr = new double[parr.length];
+			for(int i = 0; i<parr.length; i++) {
+				xarr[i] = parr[i].x();
+				yarr[i] = parr[i].y();
+			}
+			StdDraw_Ex4.polygon(xarr, yarr);
+		}
+
 	}
-
 
 	private void setColor(Color c) {
 		for(int i=0;i<_shapes.size();i++) {
@@ -197,6 +209,21 @@ public class Ex4 implements Ex4_GUI{
 
 		}
 
+
+		if(_mode.equals("Polygon")) {
+			if(_gs==null) {
+				_p1 = new Point2D(p);
+			}
+			else {
+				_gs.setColor(_color);
+				_gs.setFilled(_fill);
+				_shapes.add(_gs);
+				_gs = null;
+				_p1 = null;
+			}
+
+		}
+
 		if(_mode.equals("Move")) {
 			if(_p1==null) {_p1 = new Point2D(p);}
 			else {
@@ -210,6 +237,44 @@ public class Ex4 implements Ex4_GUI{
 			select(p);
 		}
 
+
+		// Scale mode
+		// making it smaller
+		// TODO need also to move it with the scale like in the mode
+		if(_mode.equals("Scale_90%")){
+			_p1 = new Point2D(p);
+			for(int i=0;i<_shapes.size();i++) {
+				GUI_Shapeable s = _shapes.get(i);
+				GeoShapeable g = s.getShape();
+				if(s.isSelected() && g!=null) {
+					g.scale(_p1, 0.9);
+				}
+			}
+		}
+		// Making it bigger
+		if(_mode.equals("Scale_110%")){
+			_p1 = new Point2D(p);
+			for(int i=0;i<_shapes.size();i++) {
+				GUI_Shapeable s = _shapes.get(i);
+				GeoShapeable g = s.getShape();
+				if(s.isSelected() && g!=null) {
+					g.scale(_p1, 1.1);
+				}
+			}
+		}
+
+		// rotate function
+		if(_mode.equals("Rotate")){
+			_p1 = new Point2D(p);
+			for(int i=0;i<_shapes.size();i++) {
+				GUI_Shapeable s = _shapes.get(i);
+				GeoShapeable g = s.getShape();
+				if(s.isSelected() && g!=null) {
+					double angleDegrees = Math.atan2(p.y() - _p1.y(), p.x() - _p1.x()) * 180.0 / Math.PI;
+					g.rotate(_p1, angleDegrees);
+				}
+			}
+		}
 		drawShapes();
 	}
 
@@ -237,8 +302,9 @@ public class Ex4 implements Ex4_GUI{
 
 	}
 
-	
+
 	// Drawing from the second click
+	// building the shape, and up is drawing
 	public void mouseMoved(MouseEvent e) {
 		if(_p1!=null) {
 			double x1 = StdDraw_Ex4.mouseX();
@@ -249,14 +315,15 @@ public class Ex4 implements Ex4_GUI{
 			if(_mode.equals("Circle")) {
 				double r = _p1.distance(p);
 				gs = new Circle2D(_p1,r);
+				
 			}
 
 			// Drawing rectangle
-			
+
 			if(_mode.equals("Rect")) {
 				double w = _p1.x() - p.x();
 				double h = _p1.y() - p.y();
-				
+
 				gs = new Rect2D(p.x(),p.y(), w/2,h/2);
 
 			}
@@ -266,10 +333,16 @@ public class Ex4 implements Ex4_GUI{
 				gs = new Segment2D(_p1.x(),_p1.y(), p.x(),p.y());
 			}
 
+			if(_mode.equals("Polygon")) {
+				gs = new Polygon2D();
+				//first
+			}
+
 			_gs = new GUIShape(gs,false, Color.pink, 0);
 			drawShapes();
 		}
 	}
+	
 	@Override
 	public ShapeCollectionable getShape_Collection() {
 		// TODO Auto-generated method stub
