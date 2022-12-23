@@ -94,26 +94,20 @@ public class GUIShape implements GUI_Shapeable{
 	public void setShape(GeoShapeable g) {
 		// TODO Auto-generated method stub
 		if(g instanceof Rect2D) {
-			
+			this._g = (Rect2D)g;
 		}
 		if(g instanceof Circle2D) {
-			
-		}
-		if(g instanceof Point2D) {
-			
+			this._g = (Circle2D)g;	
 		}
 		if(g instanceof Polygon2D) {
-			
+			this._g = (Polygon2D)g;
 		}
 		if(g instanceof Triangle2D) {
-			
+			this._g = (Triangle2D)g;			
 		}
 		if(g instanceof Segment2D) {
+			this._g = (Segment2D)g;
 			
 		}
-		if(g instanceof Rect2D) {
-			
-		}
-
 	}
 }

@@ -11,6 +11,28 @@ public class Segment2D implements GeoShapeable{
 
 	// the segment is built from 2 points, or x0 y0 ,x1 y1
 	private Point2D p0; 
+	public Point2D getP0() {
+		return p0;
+	}
+
+	// getters and setters
+	public void setP0(Point2D p0) {
+		this.p0 = new Point2D(p0);
+	}
+
+	public Point2D getP1() {
+		return p1;
+	}
+
+	public void setP1(Point2D p1) {
+		this.p1 = new Point2D(p1);
+	}
+
+	@Override
+	public String toString() {
+		return "Segment2D [p0=" + p0 + ", p1=" + p1 + ", m=" + m + ", n=" + n + "]";
+	}
+
 	private Point2D p1; 
 	private double m;	// the slope
 	private double n;  	// y = mx + n

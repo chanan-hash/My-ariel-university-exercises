@@ -9,6 +9,11 @@ package Exe.Ex4.geo;
 public class Triangle2D implements GeoShapeable{
 
 	// I think we need 3 point, and to draw a segment from eac point to another, or the dist between them
+	private Point2D p1; 
+	private Point2D p2; 
+	private Point2D p3; 
+	
+	// we can create a polygon with three point
 	
 	@Override
 	public boolean contains(Point2D ot) {
@@ -25,19 +30,53 @@ public class Triangle2D implements GeoShapeable{
 	@Override
 	public double perimeter() {
 		// TODO Auto-generated method stub
-		return 0;
+		double peri = p1.distance(p2) + p1.distance(p3) + p2.distance(p3);
+		
+		return peri;
 	}
 
 	@Override
 	public void move(Point2D vec) {
-		// TODO Auto-generated method stub
-		
+		p1.move(vec);
+		p2.move(vec);
+		p3.move(vec);
 	}
 
+	// A copy constructor
 	@Override
 	public GeoShapeable copy() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	// getters and setters
+	public Point2D getP1() {
+		return p1;
+	}
+
+	public void setP1(Point2D p1) {
+		this.p1 = new Point2D(p1);
+	}
+
+	public Point2D getP2() {
+		return p2;
+	}
+
+	public void setP2(Point2D p2) {
+		this.p2 = new Point2D(p2);
+	}
+
+	public Point2D getP3() {
+		return p3;
+	}
+
+	public void setP3(Point2D p3) {
+		this.p3 = new Point2D(p3);
+	}
+
+	@Override
+	public String toString() {
+		return "Triangle2D [p1=" + p1 + ", p2=" + p2 + ", p3=" + p3 + "]";
 	}
 
 	@Override
@@ -54,7 +93,13 @@ public class Triangle2D implements GeoShapeable{
 
 	@Override
 	public Point2D[] getPoints() {
-		// TODO Auto-generated method stub
+		// or to do it with a polygon
+		
+		Point2D[] tri = new Point2D[3]; 
+		tri[0] = new Point2D(this.p1);
+		tri[1] = new Point2D(this.p2);
+		tri[2] = new Point2D(this.p3);
+		
 		return null;
 	}
 	

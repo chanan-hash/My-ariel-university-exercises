@@ -335,7 +335,8 @@ public class Ex4 implements Ex4_GUI{
 
 			if(_mode.equals("Polygon")) {
 				gs = new Polygon2D();
-				//first
+				// Adding the _p1 --> first point
+				// Adding every time the new p
 			}
 
 			_gs = new GUIShape(gs,false, Color.pink, 0);
