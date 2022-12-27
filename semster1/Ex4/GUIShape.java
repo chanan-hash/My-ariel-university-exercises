@@ -77,7 +77,7 @@ public class GUIShape implements GUI_Shapeable{
 	}
 	@Override
 	public String toString() {
-		return null;
+		return _g.toString();
 	}
 	private void init(String[] ww) {
 
