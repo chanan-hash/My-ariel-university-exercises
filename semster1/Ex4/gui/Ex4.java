@@ -13,6 +13,7 @@ import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Polygon2D;
 import Exe.Ex4.geo.Rect2D;
 import Exe.Ex4.geo.Segment2D;
+import Exe.Ex4.geo.ShapeComp;
 import Exe.Ex4.geo.Triangle2D;
 
 /**
@@ -31,7 +32,7 @@ public class Ex4 implements Ex4_GUI{
 	private  boolean _fill = false;
 	private  String _mode = "";
 	private  Point2D _p1;
-
+	private Polygon2D polygon = null;
 	private  static Ex4 _winEx4 = null;
 
 	private Ex4() {
@@ -117,31 +118,39 @@ public class Ex4 implements Ex4_GUI{
 		if(gs instanceof Triangle2D) {
 			Triangle2D tri = (Triangle2D)gs;
 
+//			Point2D [] arr = tri.getPoints();
+//
+//			Point2D p1 = tri.getPoints()[0];
+//			Point2D p2 = tri.getPoints()[1];
+//			Point2D p3 = tri.getPoints()[2];
+//			
+
 			double[] xArr = {tri.getPoints()[0].x(),tri.getPoints()[1].x(),tri.getPoints()[2].x()};
 			double[] yArr = {tri.getPoints()[0].y(),tri.getPoints()[1].y(),tri.getPoints()[2].y()};
+
 			if(isFill) {
 				StdDraw_Ex4.filledPolygon(xArr, yArr);
 			}
 			else {
-				StdDraw_Ex4.polygon(xArr, yArr);
+				StdDraw_Ex4.polygon(xArr, yArr);				
 			}
+		}
 
-			// A polygon
-			if(gs instanceof Polygon2D) {
-				Polygon2D pol = (Polygon2D)gs;
-				Point2D[] parr = pol.getPoints(); // initial the arr
+		// A polygon
+		if(gs instanceof Polygon2D) {
+			Polygon2D pol = (Polygon2D)gs;
+			Point2D[] parr = pol.getPoints(); // initial the arr
 
-				double[] xarr = new double[parr.length], yarr = new double[parr.length];
-				for(int i = 0; i<parr.length; i++) {
-					xarr[i] = parr[i].x();
-					yarr[i] = parr[i].y();
-				}
-				if(isFill) {
-					StdDraw_Ex4.filledPolygon(xarr, yarr);
-				}
-				else {
-					StdDraw_Ex4.polygon(xarr, yarr);
-				}
+			double[] xarr = new double[parr.length], yarr = new double[parr.length];
+			for(int i = 0; i<parr.length; i++) {
+				xarr[i] = parr[i].x();
+				yarr[i] = parr[i].y();
+			}
+			if(isFill) {
+				StdDraw_Ex4.filledPolygon(xarr, yarr);
+			}
+			else {
+				StdDraw_Ex4.polygon(xarr, yarr);
 			}
 		}
 
@@ -175,10 +184,20 @@ public class Ex4 implements Ex4_GUI{
 		if(p.equals("Fill")) {_fill = true; setFill();}
 		if(p.equals("Empty")) {_fill = false; setFill();}
 		if(p.equals("Clear")) {_shapes.removeAll();}
-		//		if(p.equals("ByArea")) {_shapes.sort(null);}
 
+		// Calling the sorts
+		if(p.equals("ByArea")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_Area));}
+		if(p.equals("ByAntiArea")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_Anti_Area));}
+		if(p.equals("ByPerimeter")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_Perimeter));}
+		if(p.equals("ByAntiPerimeter")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_Anti_Perimeter));}
+		if(p.equals("ByTag")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_Tag));}
+		if(p.equals("ByAntiTag")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_Anti_Tag));}
+		if(p.equals("ByToString")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_toString));}
+		if(p.equals("ByAntiToString")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_Anti_toString));}
 
-		// to add the other actions
+		// Save&load
+		if(p.equals("Save")) {_shapes.save("path");}
+		if(p.equals("Load")) {_shapes.load("path");}
 
 		drawShapes();
 
@@ -187,7 +206,6 @@ public class Ex4 implements Ex4_GUI{
 	// Drawing the actually shape
 	public void mouseClicked(Point2D p) {
 		System.out.println("Mode: "+_mode+"  "+p);
-
 
 		// drawing a circle
 		if(_mode.equals("Circle")) {
@@ -367,14 +385,21 @@ public class Ex4 implements Ex4_GUI{
 				gs = new Segment2D(_p1.x(),_p1.y(), p.x(),p.y());
 			}
 
+			if(_mode.equals("Triangle")) {
+
+				gs = new Triangle2D(_p1,p,p);
+			}		
+			
 			if(_mode.equals("Polygon")) {
-				if(_gs == null && gs==null) {
-					gs = new Polygon2D(_p1);
-				}else if(_gs.getShape() instanceof Polygon2D)
-				{
-					gs = _gs.getShape();
+				if(_gs == null && polygon==null) {
+					polygon = new Polygon2D(_p1);
+
 				}
-				((Polygon2D)gs).add(p);
+				else {
+					polygon.addPoint(p);
+					gs = polygon;
+				}
+				//((Polygon2D)gs).add(p);
 				// Adding every time the new p
 			}
 
