@@ -192,7 +192,32 @@ public class ShapeCollection implements ShapeCollectionable{
 	public Rect2D getBoundingBox() {
 		Rect2D ans = null;
 		//////////add your code below ///////////
-
+//		ArrayList<Double> xies = new ArrayList<Double>();//for the x
+//		ArrayList<Double> yies = new ArrayList<Double>();////for the y
+//		for (int i = 0; i < gui.size()-1; i++) {
+//			GeoShape shape = gui.get(i).getShape();
+//			if(shape instanceof Circle2D) {
+//				double rad = ((Circle2D) shape).getRadius();//all the 4 points
+//				xies.add(shape.centerOfMass().x()+rad);
+//				xies.add(shape.centerOfMass().x()-rad);
+//				yies.add(shape.centerOfMass().y()+rad);
+//				yies.add(shape.centerOfMass().y()-rad);
+//			}
+//			else {
+//				Point2D[] points =new Point2D[3]; //contain all the points of the shapes
+//				points =shape.getPoints();
+//				for (int j = 0; j < points.length; j++) {
+//					xies.add(points[j].x());
+//					yies.add(points[j].y());
+//				}
+//			}
+//		}
+//		Collectionss.sort(xies);
+//		Collections.sort(yies);
+//		Point2D min = new Point2D(xies.get(0), yies.get(0));//min point
+//		Point2D max = new Point2D(xies.get(xies.size()-1), yies.get(yies.size()-1));//max point
+//		Rect2D rectBB =new Rect2D(min, max);
+//		return rectBB;//the BoundingBox
 
 		//////////////////////////////////////////
 		return ans;

@@ -7,11 +7,6 @@ package Exe.Ex4.geo;
  *
  */
 public class Rect2D implements GeoShapeable {
-
-	// Like Ex3 the creation of the rectangle will be by axis
-	// maybe like is stdDraw
-	// public static void rectangle(double x, double y, double halfWidth, double halfHeight) {
-
 	// need to have min and max points
 	private Point2D _p1;
 	private Point2D _p2;
@@ -23,11 +18,28 @@ public class Rect2D implements GeoShapeable {
 		this._p2 = new Point2D(p2);
 	}
 
-	public Rect2D(double x0, double y0, double width, double height) {
-		this._p1 = new Point2D(x0, y0);
-		this._p2 = new Point2D(x0 + width, y0 +height);
+	/**
+	 * 	public Rect2D(Point2D p1, Point2D p2) {
+		// We don't want a pointer to the object, but rather to create a new object as the given point
+//		this.topRight = new Point2D(p1);
+//		this._bottomLeft = new Point2D(p2);
+		this.setCorners(p1, p2);
+	
 	}
 
+	private void setCorners(Point2D p1, Point2D p2) {
+		if(p1.y()> p2.y()) {
+			this.topRight = new Point2D(p1);
+			this._bottomLeft = new Point2D(p2);
+		}
+		else {
+			this.topRight = new Point2D(p2);
+			this._bottomLeft = new Point2D(p1);
+		}
+	}
+	 * @return
+	 */
+	
 	public double getWidth() {
 		return Math.abs(this._p1.x() - this._p2.x()); 
 	}
@@ -39,14 +51,15 @@ public class Rect2D implements GeoShapeable {
 // adding who is p Min and who is p Max for the function underneath	
 	@Override
 	public boolean contains(Point2D ot) {
-		// Two way, or to put it in a Point2D array and to do binary search, or loop and regular search
-		// mabye if a rectangle woth new point, is area is smaller
+		
+		int minX = Math.min(_p1.ix(), _p2.ix()); // Minimum x 
+		int minY = Math.min(_p1.iy(), _p2.iy()); // Minimum y 
+		
+		int maxX = Math.max(_p1.ix(), _p2.ix()); // Minimum x 
+		int maxY = Math.max(_p1.iy(), _p2.iy()); // Minimum y 
+		
+		return (ot.x() >= minX && ot.x() <= maxX && ot.y() >= minY && ot.y() <=maxY);
 
-		if (ot.x() >= this._p1.x() && ot.x() <= this._p2.x() && ot.y() >= this._p1.y() && ot.y() <= this._p2.y()) { 
-			return true;
-		}
-		return false;		
-		// Starting from the regular  
 	}
 
 	@Override
@@ -118,7 +131,7 @@ public class Rect2D implements GeoShapeable {
 	}
 
 	/**
-	 * Computes the center of mass of this shape, this will helps us to draw the Rect'
+	 * Computes the center of mass of this shape, this will helps us to draw the Rect' with StdDraw
 	 */
 	public Point2D centerOfMass() {
 		return new Point2D(Math.abs(((this._p1.x()+this._p2.x())/2)),Math.abs((this._p1.y()+this._p2.y())/2));

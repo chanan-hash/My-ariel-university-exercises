@@ -23,7 +23,7 @@ public class Polygon2DTest {
 		Point2D[] parr2 = new Point2D[6];
 		for (int i = 0; i<parr2.length;i++) {
 			parr2[i] = new Point2D(i,0);
-			polygon_test.add(parr2[i]);
+			//polygon_test.add(parr2[i]);
 		}
 		
 		parr = polygon_test.getPoints();
