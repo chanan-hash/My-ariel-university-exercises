@@ -75,12 +75,21 @@ public class GUIShape implements GUI_Shapeable{
 		GUI_Shapeable cp = new GUIShape(this);
 		return cp;
 	}
-	@Override
-	public String toString() {
-		return _g.toString();
-	}
+	
+	// maybe to add the whole class to string
+//	@Override
+//	public String toString() {
+//		return _g.toString();
+//	}
+	
+	// maybe will help for saving 
 	private void init(String[] ww) {
 
+	}
+	@Override
+	public String toString() {
+		return "GUIShape [_g=" + _g + ", _fill=" + _fill + ", _color=" + _color + ", _tag=" + _tag + ", _isSelected="
+				+ _isSelected + "]";
 	}
 	@Override
 	public boolean isSelected() {
@@ -107,7 +116,6 @@ public class GUIShape implements GUI_Shapeable{
 		}
 		if(g instanceof Segment2D) {
 			this._g = (Segment2D)g;
-			
 		}
 	}
 }

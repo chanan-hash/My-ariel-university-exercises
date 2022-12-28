@@ -32,8 +32,11 @@ public class Ex4 implements Ex4_GUI{
 	private  boolean _fill = false;
 	private  String _mode = "";
 	private  Point2D _p1;
+	private  Point2D _p2; // helping us to draw the triangle	
 	private Polygon2D polygon = null;
 	private  static Ex4 _winEx4 = null;
+
+	//private static int tag = 0;
 
 	private Ex4() {
 		init(null);
@@ -77,6 +80,7 @@ public class Ex4 implements Ex4_GUI{
 		if(g.isSelected()) {StdDraw_Ex4.setPenColor(Color.gray);}
 		GeoShapeable gs = g.getShape();
 		boolean isFill = g.isFilled();
+
 		if(gs instanceof Circle2D) {
 			Circle2D c = (Circle2D)gs;
 			Point2D cen = c.getPoints()[0];
@@ -98,6 +102,8 @@ public class Ex4 implements Ex4_GUI{
 			double h = Math.abs(p1.y() - p2.y());
 			double centerX = rec.centerOfMass().x();
 			double centerY = rec.centerOfMass().y();
+
+
 			if(isFill) {
 				StdDraw_Ex4.filledRectangle(centerX, centerY, w/2, h/2);
 			}
@@ -117,14 +123,7 @@ public class Ex4 implements Ex4_GUI{
 		// Based on fill polygon but with only three points
 		if(gs instanceof Triangle2D) {
 			Triangle2D tri = (Triangle2D)gs;
-
-//			Point2D [] arr = tri.getPoints();
-//
-//			Point2D p1 = tri.getPoints()[0];
-//			Point2D p2 = tri.getPoints()[1];
-//			Point2D p3 = tri.getPoints()[2];
-//			
-
+			
 			double[] xArr = {tri.getPoints()[0].x(),tri.getPoints()[1].x(),tri.getPoints()[2].x()};
 			double[] yArr = {tri.getPoints()[0].y(),tri.getPoints()[1].y(),tri.getPoints()[2].y()};
 
@@ -195,8 +194,42 @@ public class Ex4 implements Ex4_GUI{
 		if(p.equals("ByToString")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_toString));}
 		if(p.equals("ByAntiToString")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_Anti_toString));}
 
+		if(p.equals("None")) {
+			for(int i=0;i<_shapes.size();i++) {
+				GUI_Shapeable s = _shapes.get(i);
+				s.setSelected(false);
+			}
+		}
+
+		if(p.equals("All")) {
+			for(int i=0;i<_shapes.size();i++) {
+				GUI_Shapeable s = _shapes.get(i);
+				s.setSelected(true);
+			}
+		}
+
+		if(p.equals("Anti")) {
+			for(int i=0;i<_shapes.size();i++) {
+				GUI_Shapeable s = _shapes.get(i);
+				if(s.isSelected()) {
+					s.setSelected(false);
+				}
+				else {
+					s.setSelected(true);
+				}
+			}
+
+		}
+
+		if(p.equals("Info")) {
+			String str = getInfo();
+			System.out.println(str);
+		}
+
 		// Save&load
-		if(p.equals("Save")) {_shapes.save("path");}
+		//		if(p.equals("Save")) {_shapes.save("path");}
+		if(p.equals("Save")) {StdDraw_Ex4.save("path");;}
+
 		if(p.equals("Load")) {_shapes.load("path");}
 
 		drawShapes();
@@ -251,10 +284,13 @@ public class Ex4 implements Ex4_GUI{
 
 		}
 
-		// trying to draw triangle
+		// draw triangle
 		if(_mode.equals("Triangle")) {
 			if(_gs==null) {
 				_p1 = new Point2D(p);
+			}
+			else if (_p2==null) {
+				_p2 = new Point2D(p);
 			}
 			else {
 				_gs.setColor(_color);
@@ -262,6 +298,7 @@ public class Ex4 implements Ex4_GUI{
 				_shapes.add(_gs);
 				_gs = null;
 				_p1 = null;
+				_p2 = null;
 			}
 
 		}
@@ -293,6 +330,16 @@ public class Ex4 implements Ex4_GUI{
 		if(_mode.equals("Point")) {
 			select(p);
 		}
+
+		// need to be changed		
+		if(_mode.equals("Remove")) {
+			_shapes.removeElementAt(_gs.getTag());
+		}
+
+		if(_mode.equals("Copy")) {
+			_shapes.copy();
+		}
+
 
 
 		// Scale mode
@@ -372,7 +419,6 @@ public class Ex4 implements Ex4_GUI{
 			if(_mode.equals("Circle")) {
 				double r = _p1.distance(p);
 				gs = new Circle2D(_p1,r);
-
 			}
 
 			// Drawing rectangle
@@ -386,14 +432,18 @@ public class Ex4 implements Ex4_GUI{
 			}
 
 			if(_mode.equals("Triangle")) {
+				// need to thing on the next click
+				if(_p2 != null) {
+					gs = new Triangle2D(_p1,_p2,p);
+				}
+				else {
+					gs = new Segment2D(_p1,p);
+				}
+			}
 
-				gs = new Triangle2D(_p1,p,p);
-			}		
-			
 			if(_mode.equals("Polygon")) {
 				if(_gs == null && polygon==null) {
 					polygon = new Polygon2D(_p1);
-
 				}
 				else {
 					polygon.addPoint(p);
@@ -415,6 +465,8 @@ public class Ex4 implements Ex4_GUI{
 	}
 	@Override
 	public void show() {show(Ex4_Const.DIM_SIZE); }
+
+	// Maybe to add more qualities 
 	@Override
 	public String getInfo() {
 		// TODO Auto-generated method stub
