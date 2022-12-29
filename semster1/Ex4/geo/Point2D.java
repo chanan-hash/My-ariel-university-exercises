@@ -91,14 +91,39 @@ public class Point2D{
 	
 	/////////////////////// You should implement the methods below ///////////////////////////
 	public void scale(Point2D cen, double ratio) {
-		//////////add your code below ///////////
+		double newPx = cen.x() + (this._x - cen.x())*ratio;
+		double newPy = cen.y() + (this._y - cen.x())*ratio;
 		
-		/////////////////////////////////////////
+		// Updating the point
+		this._x = newPx;
+		this._y = newPy;
+		
 	}
+	
 	public void rotate(Point2D cen, double angleDegrees) {
-		//////////add your code below ///////////
 		
-		/////////////////////////////////////////
+	// Means we're in the same point so there no need to be changed	
+	if(angleDegrees % 360 == 0 || cen.x() == this._x && cen.y() == this._y) {
+		return;
+		}	
+	else {
+		// To make it a number instead of a degree
+		double angleRad = Math.toRadians(angleDegrees);
+		double cosAngle = Math.cos(angleDegrees);
+		double sinAngle = Math.sin(angleDegrees);
+	
+	
+		double newX = this._x - cen.x();
+		double newY = this._y - cen.x();
+		
+		// updating to the new x,y values
+	
+		this._x = newX * cosAngle - newY*sinAngle + cen.x();
+		this._y = newY * sinAngle + newX*cosAngle + cen.y();
+		
+	}
+		
+		
 	}
    
 }
