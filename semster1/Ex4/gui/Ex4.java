@@ -1,6 +1,10 @@
 package Exe.Ex4.gui;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+
+import javax.swing.JFileChooser;
 
 import Exe.Ex4.Ex4_Const;
 import Exe.Ex4.GUIShape;
@@ -228,7 +232,24 @@ public class Ex4 implements Ex4_GUI{
 
 		// Save&load
 		//		if(p.equals("Save")) {_shapes.save("path");}
-		if(p.equals("Save")) {StdDraw_Ex4.save("path");;}
+		if(p.equals("Save")) {
+			//https://www.codejava.net/java-se/swing/show-simple-open-file-dialog-using-jfilechooser
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+			int result = fileChooser.showSaveDialog(StdDraw_Ex4.getFrame());
+			
+			if (result == JFileChooser.APPROVE_OPTION) {
+
+				try {
+					fileChooser.getSelectedFile().getAbsoluteFile().createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				_shapes.save(fileChooser.getSelectedFile().getPath());
+			}
+			
+			}
 
 		if(p.equals("Load")) {_shapes.load("path");}
 
