@@ -10,12 +10,16 @@ public class Rect2D implements GeoShapeable {
 	// need to have min and max points
 	private Point2D _p1;
 	private Point2D _p2;
-
+	private Point2D _p3;
+	private Point2D _p4;
+	
 	//	 Regular constructor
 	public Rect2D(Point2D p1, Point2D p2) {
 		// We don't want a pointer to the object, but rather to create a new object as the given point
 		this._p1 = new Point2D(p1);
 		this._p2 = new Point2D(p2);
+		this._p3 = new Point2D(p1.x(), p2.y());
+		this._p4 = new Point2D(p2.x(), p1.y());
 	}
 
 	/**
@@ -52,13 +56,13 @@ public class Rect2D implements GeoShapeable {
 	@Override
 	public boolean contains(Point2D ot) {
 		
-		int minX = Math.min(_p1.ix(), _p2.ix()); // Minimum x 
-		int minY = Math.min(_p1.iy(), _p2.iy()); // Minimum y 
+		double minX = Math.min(_p1.x(), _p2.x()); // Minimum x 
+		double minY = Math.min(_p1.y(), _p2.y()); // Minimum y 
 		
-		int maxX = Math.max(_p1.ix(), _p2.ix()); // Minimum x 
-		int maxY = Math.max(_p1.iy(), _p2.iy()); // Minimum y 
+		double maxX = Math.max(_p1.x(), _p2.x()); // Minimum x 
+		double maxY = Math.max(_p1.y(), _p2.y()); // Minimum y 
 		
-		return (ot.x() >= minX && ot.x() <= maxX && ot.y() >= minY && ot.y() <=maxY);
+		return ((ot.x() >= minX && ot.x() <= maxX && ot.y() >= minY && ot.y() <=maxY));
 
 	}
 
@@ -88,6 +92,7 @@ public class Rect2D implements GeoShapeable {
 		// TODO Auto-generated method stub
 		_p1.move(vec);
 		_p2.move(vec);
+		
 	}
 
 
@@ -105,22 +110,16 @@ public class Rect2D implements GeoShapeable {
 
 	@Override
 	public void scale(Point2D center, double ratio) {
-		// TODO Auto-generated method stub
-		// the width and height are effecting the size
-		if(this.contains(center)) {
-			double width = getWidth();
-			double height = getHeight();
-
-			width *= ratio;
-			height *= ratio;
-
-		}
+		this._p1.scale(center,ratio);
+		this._p2.scale(center,ratio);
 	}
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
 		// TODO Auto-generated method stub
-
+		for (int i = 0; i < getPoints().length; i++) {
+			this.getPoints()[i].rotate(this.getPoints()[i],angleDegrees);
+		}
 	}
 
 	// Getters and setters
