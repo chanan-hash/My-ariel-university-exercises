@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class Polygon2D implements GeoShapeable{
 	static final int INCREASE_SIZE = 5;  
 
-	
+
 	private ArrayList<Point2D> arrayOfPoints = new ArrayList<Point2D>();
 	//int pointsAmt = 0;
 
@@ -23,11 +23,27 @@ public class Polygon2D implements GeoShapeable{
 		arrayOfPoints.add(p);
 	}
 
+	public Polygon2D(ArrayList<Point2D> points) {
+		this.arrayOfPoints = points;
+	}
+
+
+	// Going over by loop and adding to the String the points
+	@Override
+	public String toString() {
+		String res = "Polygon2D";
+		for (Point2D point : arrayOfPoints) {
+			res += "," + point;
+		}
+		return res;
+	}
+
+
 	// copy constructor
 	public Polygon2D(Polygon2D poly) {
 		this.arrayOfPoints = (ArrayList<Point2D>) poly.arrayOfPoints.clone();
 	}
-	
+
 	public void addPoint(Point2D p) {
 		arrayOfPoints.add(p);
 	}
@@ -35,16 +51,16 @@ public class Polygon2D implements GeoShapeable{
 	@Override
 	public boolean contains(Point2D ot) {
 		// checking first if it colsetoeqauls to the points array
-//		for(int i = 0; i<pointsAmt;i++) {
-//			if (points[i].close2equals(ot, 0.001)) {
-//				return true;
-//			}			
-//			//return false;
-//		}
-//		// ray casting algorithm
-////		return false;
-//		return checkInside(points,pointsAmt, ot);	
-	return false;
+		//		for(int i = 0; i<pointsAmt;i++) {
+		//			if (points[i].close2equals(ot, 0.001)) {
+		//				return true;
+		//			}			
+		//			//return false;
+		//		}
+		//		// ray casting algorithm
+		////		return false;
+		//		return checkInside(points,pointsAmt, ot);	
+		return false;
 	}
 
 	@Override
@@ -55,33 +71,43 @@ public class Polygon2D implements GeoShapeable{
 
 	@Override
 	public double perimeter() {
-		// TODO Auto-generated method stub
-		return 0;
+		// calculating the dist between every points and adding it to a perimeter sum
+		double peri = 0;
+		for (int i = 0; i < arrayOfPoints.size() - 1; i++) {
+			peri += arrayOfPoints.get(i).distance(arrayOfPoints.get(i + 1));
+		}
+		peri += arrayOfPoints.get(arrayOfPoints.size() - 1).distance(arrayOfPoints.get(0));
+		return peri;
 	}
 
 	@Override
 	public void move(Point2D vec) {
-		// TODO Auto-generated method stub
-		// loop on the point array and move func'
+
+		for (Point2D point : arrayOfPoints) {
+			point.move(vec);
+		}
 	}
 
 	@Override
 	public GeoShapeable copy() {
-		// TODO Auto-generated method stub
-		
+
 		return new Polygon2D(this);
 	}
 
 	@Override
 	public void scale(Point2D center, double ratio) {
 		// TODO Auto-generated method stub
-
+		for (Point2D point : arrayOfPoints) {
+			point.scale(center, ratio);
+		}
 	}
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
 		// TODO Auto-generated method stub
-
+		for (Point2D point : arrayOfPoints) {
+			point.scale(center, angleDegrees);
+		}
 	}
 
 	@Override
@@ -113,7 +139,9 @@ public class Polygon2D implements GeoShapeable{
 	}
 
 
-
+	/**
+	 * was taken from
+	 * https://www.geeksforgeeks.org/how-to-check-if-a-given-point-lies-inside-a-polygon/amp/
 	public boolean isIntersect(Segment2D l1, Segment2D l2){ 
 
 		// Four direction for two lines and points of other line
@@ -169,7 +197,7 @@ public class Polygon2D implements GeoShapeable{
 			// poly
 
 			Segment2D side = new Segment2D(poly[i],poly[(i + 1) % n] );
-			
+
 			if (isIntersect(side, exline)) {
 				// If side is intersects exline
 
@@ -186,22 +214,22 @@ public class Polygon2D implements GeoShapeable{
 		// When count is odd
 		return (count%2==1);
 	}
+	 */
 
-
-// from the my git hub before the changes, the whokl class
+	// from the my git hub before the changes, the whokl class
 	/**
 	 * package Exe.Ex4.geo;
 import java.awt.geom.*;
 import java.util.Arrays;
 
 /**
- * This class represents a 2D polygon, as in https://en.wikipedia.org/wiki/Polygon
- * This polygon can be assumed to be simple in terms of area and contains.
- * 
- * You should update this class!
- * @author boaz.benmoshe
- *
- 
+	 * This class represents a 2D polygon, as in https://en.wikipedia.org/wiki/Polygon
+	 * This polygon can be assumed to be simple in terms of area and contains.
+	 * 
+	 * You should update this class!
+	 * @author boaz.benmoshe
+	 *
+
 public class Polygon2D implements GeoShapeable{
 	static final int INCREASE_SIZE = 5;  
 
@@ -364,7 +392,7 @@ public class Polygon2D implements GeoShapeable{
 			// poly
 
 			Segment2D side = new Segment2D(poly[i],poly[(i + 1) % n] );
-			
+
 			if (isIntersect(side, exline)) {
 				// If side is intersects exline
 
@@ -386,5 +414,5 @@ public class Polygon2D implements GeoShapeable{
 
 }
 	 */
-	
+
 }
