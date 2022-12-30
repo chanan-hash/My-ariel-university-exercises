@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 
@@ -37,7 +39,10 @@ public class Ex4 implements Ex4_GUI{
 	private  String _mode = "";
 	private  Point2D _p1;
 	private  Point2D _p2; // helping us to draw the triangle	
-	private Polygon2D polygon = null;
+	//private Polygon2D polygon = null;
+
+	private ArrayList<Point2D> polygon = null;
+
 	private  static Ex4 _winEx4 = null;
 
 	//private static int tag = 0;
@@ -127,7 +132,7 @@ public class Ex4 implements Ex4_GUI{
 		// Based on fill polygon but with only three points
 		if(gs instanceof Triangle2D) {
 			Triangle2D tri = (Triangle2D)gs;
-			
+
 			double[] xArr = {tri.getPoints()[0].x(),tri.getPoints()[1].x(),tri.getPoints()[2].x()};
 			double[] yArr = {tri.getPoints()[0].y(),tri.getPoints()[1].y(),tri.getPoints()[2].y()};
 
@@ -237,7 +242,7 @@ public class Ex4 implements Ex4_GUI{
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 			int result = fileChooser.showSaveDialog(StdDraw_Ex4.getFrame());
-			
+
 			if (result == JFileChooser.APPROVE_OPTION) {
 
 				try {
@@ -248,8 +253,8 @@ public class Ex4 implements Ex4_GUI{
 				}
 				_shapes.save(fileChooser.getSelectedFile().getPath());
 			}
-			
-			}
+
+		}
 
 		if(p.equals("Load")) {_shapes.load("path");}
 
@@ -327,14 +332,16 @@ public class Ex4 implements Ex4_GUI{
 		// trying to draw a polygon
 		if(_mode.equals("Polygon")) {
 			if(_gs==null) {
+				polygon = new ArrayList<Point2D>();
 				_p1 = new Point2D(p);
+				polygon.add(_p1);
 			}
 			else {
 				_gs.setColor(_color);
 				_gs.setFilled(_fill);
 				_shapes.add(_gs);
 				_gs = null;
-				_p1 = null;
+				_p1 = p;
 			}
 
 		}
@@ -352,16 +359,19 @@ public class Ex4 implements Ex4_GUI{
 			select(p);
 		}
 
-		// need to be changed		
+		// Removing all the selected
 		if(_mode.equals("Remove")) {
-			_shapes.removeElementAt(_gs.getTag());
+			for (int i = _shapes.size() - 1; i >= 0; --i) {  
+				GUI_Shapeable s = _shapes.get(i);            
+				if (s.isSelected()) {                        
+					_shapes.removeElementAt(i);             
+				}
+			}
 		}
 
 		if(_mode.equals("Copy")) {
 			_shapes.copy();
 		}
-
-
 
 		// Scale mode
 		// making it smaller
@@ -372,7 +382,7 @@ public class Ex4 implements Ex4_GUI{
 				GUI_Shapeable s = _shapes.get(i);
 				GeoShapeable g = s.getShape();
 				if(s.isSelected() && g!=null) {
-					g.scale(_p1, 0.9);
+					g.scale(p, 0.9);
 				}
 			}
 		}
@@ -383,12 +393,28 @@ public class Ex4 implements Ex4_GUI{
 				GUI_Shapeable s = _shapes.get(i);
 				GeoShapeable g = s.getShape();
 				if(s.isSelected() && g!=null) {
-					g.scale(_p1, 1.1);
+					g.scale(p, 1.1);
 				}
 			}
 		}
 
+		//		if (_mode.equals("Scale_90%")) {
+		//            for (int i = 0; i < _shapes.size(); i++) {
+		//                if (_shapes.get(i).isSelected()) {
+		//                    _shapes.get(i).getShape().scale(p, 0.9);
+		//                }
+		//            }
+		//        }
+		//        if (_mode.equals("Scale_110%")) {
+		//            for (int i = 0; i < _shapes.size(); i++) {
+		//                if (_shapes.get(i).isSelected()) {
+		//                    _shapes.get(i).getShape().scale(p, 1.1);
+		//                }
+		//            }
+		//        }
+
 		// rotate function
+		// the angle is 0.0, need to be fixed
 		if(_mode.equals("Rotate")){
 			_p1 = new Point2D(p);
 			for(int i=0;i<_shapes.size();i++) {
@@ -396,7 +422,7 @@ public class Ex4 implements Ex4_GUI{
 				GeoShapeable g = s.getShape();
 				if(s.isSelected() && g!=null) {
 					double angleDegrees = Math.atan2(p.y() - _p1.y(), p.x() - _p1.x()) * 180.0 / Math.PI;
-					g.rotate(_p1, angleDegrees);
+					g.rotate(p, angleDegrees);
 				}
 			}
 		}
@@ -462,17 +488,33 @@ public class Ex4 implements Ex4_GUI{
 				}
 			}
 
-			if(_mode.equals("Polygon")) {
-				if(_gs == null && polygon==null) {
-					polygon = new Polygon2D(_p1);
+			if(_mode.equals("Polygon")){
+				if (_p2 == null){
+					gs = new Segment2D(_p1, p);
+				}else{
+					gs = new Polygon2D(new ArrayList<>(List.of(_p1, _p2, p)));
 				}
-				else {
-					polygon.addPoint(p);
-					gs = polygon;
-				}
-				//((Polygon2D)gs).add(p);
-				// Adding every time the new p
+
 			}
+			//			if(_mode.equals("Polygon")) {
+			//				if(_gs == null) {
+			//					polygon.add(_p1);
+			//				}
+			//				while(_p1!=null) {
+			//					polygon.add(p);
+			//				}
+			//				gs = new Polygon2D(polygon);
+			//				
+			//				if(_gs == null && polygon==null) {
+			//					polygon = new Polygon2D(_p1);
+			//				}
+			//				else {
+			//					polygon.addPoint(p);
+			//					gs = polygon;
+			//				}
+			//				//((Polygon2D)gs).add(p);
+			// Adding every time the new p
+
 
 			_gs = new GUIShape(gs,false, Color.pink, 0);
 			drawShapes();
