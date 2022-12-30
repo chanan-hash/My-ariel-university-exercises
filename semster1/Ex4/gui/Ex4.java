@@ -39,9 +39,8 @@ public class Ex4 implements Ex4_GUI{
 	private  String _mode = "";
 	private  Point2D _p1;
 	private  Point2D _p2; // helping us to draw the triangle	
-	//private Polygon2D polygon = null;
 
-	private ArrayList<Point2D> polygon = null;
+	private ArrayList<Point2D> polygon = null; // will help us to draw the polygon
 
 	private  static Ex4 _winEx4 = null;
 
@@ -336,12 +335,17 @@ public class Ex4 implements Ex4_GUI{
 				_p1 = new Point2D(p);
 				polygon.add(_p1);
 			}
+			else if(_p2 == null) {
+				_p2 = new Point2D(p);
+				polygon.add(_p2);
+			}
 			else {
 				_gs.setColor(_color);
 				_gs.setFilled(_fill);
 				_shapes.add(_gs);
 				_gs = null;
-				_p1 = p;
+				_p1 = new Point2D(p);
+				_p2 = new Point2D(p);
 			}
 
 		}
@@ -488,33 +492,27 @@ public class Ex4 implements Ex4_GUI{
 				}
 			}
 
-			if(_mode.equals("Polygon")){
-				if (_p2 == null){
+			if(_mode.equals("Polygon")){	
+				if (_p1!= null){
 					gs = new Segment2D(_p1, p);
-				}else{
-					gs = new Polygon2D(new ArrayList<>(List.of(_p1, _p2, p)));
+				}
+				else if(_p2!=null) {
+					gs = new Triangle2D(_p1,_p2,p);
+				}
+				else{
+					polygon.add(p);
+					gs = new Polygon2D(polygon);
 				}
 
-			}
-			//			if(_mode.equals("Polygon")) {
-			//				if(_gs == null) {
-			//					polygon.add(_p1);
-			//				}
-			//				while(_p1!=null) {
-			//					polygon.add(p);
-			//				}
-			//				gs = new Polygon2D(polygon);
-			//				
-			//				if(_gs == null && polygon==null) {
-			//					polygon = new Polygon2D(_p1);
-			//				}
-			//				else {
-			//					polygon.addPoint(p);
-			//					gs = polygon;
-			//				}
-			//				//((Polygon2D)gs).add(p);
-			// Adding every time the new p
+				// creating a few triangles
+				
+//				if (_p2 == null){
+//					gs = new Segment2D(_p1, p);
+//				}else{
+//					gs = new Polygon2D(new ArrayList<>(List.of(_p1, _p2, p)));
+//				}
 
+			}
 
 			_gs = new GUIShape(gs,false, Color.pink, 0);
 			drawShapes();
