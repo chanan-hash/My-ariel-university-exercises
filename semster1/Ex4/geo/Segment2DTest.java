@@ -21,7 +21,7 @@ class Segment2DTest {
 		assertEquals(true, is);
 		assertNotEquals(true, isNot);
 		
-		double peri = 2.236067977; // sqrt of 5
+		double peri = (2.236067977)*2; // sqrt of 5
 		assertEquals(seg.perimeter(), peri,0.01);		
 		
 		seg.move(p3);

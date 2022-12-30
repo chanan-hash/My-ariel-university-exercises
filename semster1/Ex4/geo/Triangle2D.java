@@ -85,13 +85,17 @@ public class Triangle2D implements GeoShapeable{
 	@Override
 	public void scale(Point2D center, double ratio) {
 		// TODO Auto-generated method stub
-
+		this.p1.scale(center,ratio);
+		this.p2.scale(center,ratio);
+		this.p3.scale(center,ratio);
 	}
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
 		// TODO Auto-generated method stub
-
+		for (int i = 0; i < getPoints().length; i++) {
+			this.getPoints()[i].rotate(this.getPoints()[i],angleDegrees);
+		}
 	}
 
 	@Override

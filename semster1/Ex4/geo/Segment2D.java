@@ -81,7 +81,7 @@ public class Segment2D implements GeoShapeable{
 	public double perimeter() {
 		// TODO Auto-generated method stub
 		// I think it is just the distance between the 2 points
-		return p0.distance(p1);
+		return p0.distance(p1)*2;
 	}
 
 	@Override
@@ -101,17 +101,15 @@ public class Segment2D implements GeoShapeable{
 	@Override
 	public void scale(Point2D center, double ratio) {
 		// TODO Auto-generated method stub
-		// The distance is effectign on the size
-		if(this.contains(center)) {
-			double dist = p0.distance(p1);
-			dist *= ratio;
-		}
+		this.p0.scale(center, ratio);
+		this.p1.scale(center, ratio);		
 	}
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
 		// TODO Auto-generated method stub
-
+		this.p0.rotate(center, angleDegrees);
+		this.p1.rotate(center, angleDegrees);		
 	}
 
 	// The points that helps as to draw

@@ -22,34 +22,18 @@ public class Rect2D implements GeoShapeable {
 		this._p4 = new Point2D(p2.x(), p1.y());
 	}
 
-	/**
-	 * 	public Rect2D(Point2D p1, Point2D p2) {
-		// We don't want a pointer to the object, but rather to create a new object as the given point
-//		this.topRight = new Point2D(p1);
-//		this._bottomLeft = new Point2D(p2);
-		this.setCorners(p1, p2);
-	
-	}
-
-	private void setCorners(Point2D p1, Point2D p2) {
-		if(p1.y()> p2.y()) {
-			this.topRight = new Point2D(p1);
-			this._bottomLeft = new Point2D(p2);
-		}
-		else {
-			this.topRight = new Point2D(p2);
-			this._bottomLeft = new Point2D(p1);
-		}
-	}
-	 * @return
-	 */
-	
 	public double getWidth() {
-		return Math.abs(this._p1.x() - this._p2.x()); 
+		double minX = Math.min(_p1.x(), _p2.x()); // Minimum x 
+		double maxX = Math.max(_p1.x(), _p2.x()); // Minimum x 
+		
+		return Math.abs(maxX - minX); 
 	}
 
 	public double getHeight() {
-		return Math.abs(this._p1.y() - this._p2.y()); 
+		double minY = Math.min(_p1.y(), _p2.y()); // Minimum y 
+		double maxY = Math.max(_p1.y(), _p2.y()); // Minimum y 
+		
+		return Math.abs(maxY - minY); 
 	}
 
 // adding who is p Min and who is p Max for the function underneath	
@@ -112,6 +96,8 @@ public class Rect2D implements GeoShapeable {
 	public void scale(Point2D center, double ratio) {
 		this._p1.scale(center,ratio);
 		this._p2.scale(center,ratio);
+		//	double width = getWidth()*ratio;
+		//double height = getHeight()*ratio;
 	}
 
 	@Override
@@ -151,5 +137,22 @@ public class Rect2D implements GeoShapeable {
 	public void set_p2(Point2D _p2) {
 		this._p2 = new Point2D(_p2);
 	}
+
+	public Point2D get_p3() {
+		return _p3;
+	}
+
+	public void set_p3(Point2D _p3) {
+		this._p3 = new Point2D(_p3);
+	}
+
+	public Point2D get_p4() {
+		return _p4;
+	}
+
+	public void set_p4(Point2D _p4) {
+		this._p4 = new Point2D(_p4);
+	}
+
 
 }
