@@ -88,7 +88,7 @@ public class GUIShape implements GUI_Shapeable{
 	}
 	@Override
 	public String toString() {
-		return "GUIShape [_g=" + _g + ", _fill=" + _fill + ", _color=" + _color + ", _tag=" + _tag + ", _isSelected="
+		return "GUIShape [_g=" + _g + ", _fill=" + _fill + ", _color=" + _color.getRGB() + ", _tag=" + _tag + ", _isSelected="
 				+ _isSelected + "]";
 	}
 	@Override
