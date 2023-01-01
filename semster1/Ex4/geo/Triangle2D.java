@@ -79,7 +79,7 @@ public class Triangle2D implements GeoShapeable{
 
 	@Override
 	public String toString() {
-		return "Triangle2D [p1=" + p1 + ", p2=" + p2 + ", p3=" + p3 + "]";
+		return "Triangle2D," + p1 + "," + p2 + "," + p3;
 	}
 
 	@Override

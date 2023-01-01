@@ -31,7 +31,7 @@ public class Circle2D implements GeoShapeable{
 
 	@Override
 	public String toString() {
-		return "Circle2D [_center=" + _center + ", _radius=" + _radius + "]";
+		return "Circle2D," + _center + "," + _radius;
 	}
 
 	@Override

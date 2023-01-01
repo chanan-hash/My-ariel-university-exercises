@@ -79,7 +79,6 @@ public class Rect2D implements GeoShapeable {
 		
 	}
 
-
 	@Override
 	// A copy constructor
 	public GeoShapeable copy() {
@@ -89,7 +88,7 @@ public class Rect2D implements GeoShapeable {
 
 	@Override
 	public String toString() {
-		return "Rect2D [_p1=" + this._p1 + ", _p2=" + this._p2 + "]";
+		return "Rect2D," + this._p1 + "," + this._p2 + "," + this._p3 + "," + this._p4;
 	}
 
 	@Override
