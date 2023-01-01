@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -14,7 +15,6 @@ import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Rect2D;
 import Exe.Ex4.geo.Segment2D;
 import Exe.Ex4.geo.Triangle2D;
-import Exe.Ex4.geo.Polygon2D;
 
 
 /**
@@ -94,25 +94,36 @@ public class ShapeCollection implements ShapeCollectionable{
 		//////////////////////////////////////////
 	}
 
+	/**
+	 * This function works by using IO library, and saving the info of the shapes by their toString
+	 */
 	@Override
-	public void save(String file) {
+	public void save(String file_path) {
 		//////////add your code below ///////////
 
-		// to think if we need to write that is a txt file
+
 		try {
-			FileWriter	file_Write = new FileWriter(file); 	
+			FileWriter file_Write = new FileWriter(file_path);
 			for(int i = 0; i<_shapes.size(); i++) {
-				file_Write.write((_shapes.get(i).toString()+ "\n"));
+				file_Write.write((_shapes.get(i).toString()+ "\n")); 
 			}	
 			file_Write.close();
-
-		}catch(Exception e) {
+		}catch(IOException e) {
 			e.printStackTrace();
 		}
 		//////////////////////////////////////////
 	}
 
-	// TODO to check how the info is save --> what is the order
+
+	/**
+	 * This function is reading the toString and making them to the shapes according to this order
+	 * 0. GUIShape
+	 * 1. color
+	 * 2. is filled
+	 * 3. tag
+	 * 4. Geoshapeble
+	 * 5. the info - point and radius
+	 */
 
 	@Override
 	public void load(String file) {
@@ -158,8 +169,8 @@ public class ShapeCollection implements ShapeCollectionable{
 					p2 = new Point2D(x2,y2);
 					gs = new Rect2D(p1, p2);
 				}
-				
-				else if (info[4].compareTo("Segment") == 0) {
+
+				else if (info[4].compareTo("Segment2D") == 0) {
 					double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
 
 					x1=Double.parseDouble(info[5]);
@@ -171,15 +182,24 @@ public class ShapeCollection implements ShapeCollectionable{
 					p1 =new Point2D(x1,y1);
 					p2 = new Point2D(x2,y2);
 					gs = new Segment2D(p1, p2);
-
-					
 				}
+				else if (info[4].compareTo("Triangle2D") == 0) {
+					double x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
+					x1=Double.parseDouble(info[5]);
+					y1=Double.parseDouble(info[6]);
+					x2=Double.parseDouble(info[7]);
+					y2=Double.parseDouble(info[8]);
+					x3=Double.parseDouble(info[9]);
+					y3=Double.parseDouble(info[10]);
 
+					Point2D p1, p2, p3;
+					p1 =new Point2D(x1,y1);
+					p2 = new Point2D(x2,y2);
+					p3 = new Point2D(x3,y3);
 
-
+					gs = new Triangle2D(p1, p2, p3);
+				}
 			}
-
-
 		}
 		// notice maybe there are another exception such as trying to read uncorrect file
 		catch(FileNotFoundException e){
@@ -188,36 +208,37 @@ public class ShapeCollection implements ShapeCollectionable{
 
 		//////////////////////////////////////////
 	}
+	
 	@Override
 	public Rect2D getBoundingBox() {
 		Rect2D ans = null;
 		//////////add your code below ///////////
-//		ArrayList<Double> xies = new ArrayList<Double>();//for the x
-//		ArrayList<Double> yies = new ArrayList<Double>();////for the y
-//		for (int i = 0; i < gui.size()-1; i++) {
-//			GeoShape shape = gui.get(i).getShape();
-//			if(shape instanceof Circle2D) {
-//				double rad = ((Circle2D) shape).getRadius();//all the 4 points
-//				xies.add(shape.centerOfMass().x()+rad);
-//				xies.add(shape.centerOfMass().x()-rad);
-//				yies.add(shape.centerOfMass().y()+rad);
-//				yies.add(shape.centerOfMass().y()-rad);
-//			}
-//			else {
-//				Point2D[] points =new Point2D[3]; //contain all the points of the shapes
-//				points =shape.getPoints();
-//				for (int j = 0; j < points.length; j++) {
-//					xies.add(points[j].x());
-//					yies.add(points[j].y());
-//				}
-//			}
-//		}
-//		Collectionss.sort(xies);
-//		Collections.sort(yies);
-//		Point2D min = new Point2D(xies.get(0), yies.get(0));//min point
-//		Point2D max = new Point2D(xies.get(xies.size()-1), yies.get(yies.size()-1));//max point
-//		Rect2D rectBB =new Rect2D(min, max);
-//		return rectBB;//the BoundingBox
+		//		ArrayList<Double> xies = new ArrayList<Double>();//for the x
+		//		ArrayList<Double> yies = new ArrayList<Double>();////for the y
+		//		for (int i = 0; i < gui.size()-1; i++) {
+		//			GeoShape shape = gui.get(i).getShape();
+		//			if(shape instanceof Circle2D) {
+		//				double rad = ((Circle2D) shape).getRadius();//all the 4 points
+		//				xies.add(shape.centerOfMass().x()+rad);
+		//				xies.add(shape.centerOfMass().x()-rad);
+		//				yies.add(shape.centerOfMass().y()+rad);
+		//				yies.add(shape.centerOfMass().y()-rad);
+		//			}
+		//			else {
+		//				Point2D[] points =new Point2D[3]; //contain all the points of the shapes
+		//				points =shape.getPoints();
+		//				for (int j = 0; j < points.length; j++) {
+		//					xies.add(points[j].x());
+		//					yies.add(points[j].y());
+		//				}
+		//			}
+		//		}
+		//		Collectionss.sort(xies);
+		//		Collections.sort(yies);
+		//		Point2D min = new Point2D(xies.get(0), yies.get(0));//min point
+		//		Point2D max = new Point2D(xies.get(xies.size()-1), yies.get(yies.size()-1));//max point
+		//		Rect2D rectBB =new Rect2D(min, max);
+		//		return rectBB;//the BoundingBox
 
 		//////////////////////////////////////////
 		return ans;

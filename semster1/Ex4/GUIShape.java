@@ -86,11 +86,15 @@ public class GUIShape implements GUI_Shapeable{
 	private void init(String[] ww) {
 
 	}
-	@Override
 	public String toString() {
-		return "GUIShape [_g=" + _g + ", _fill=" + _fill + ", _color=" + _color.getRGB() + ", _tag=" + _tag + ", _isSelected="
-				+ _isSelected + "]";
+		return "GUIShape," + _color.getRGB() +"," + _fill + "," + _tag + "," +_g;
 	}
+	
+//	@Override
+//	public String toString() {
+//		return "GUIShape [_g=" + _g + ", _fill=" + _fill + ", _color=" + _color.getRGB() + ", _tag=" + _tag + ", _isSelected="
+//				+ _isSelected + "]";
+//	}
 	@Override
 	public boolean isSelected() {
 		return this._isSelected;
