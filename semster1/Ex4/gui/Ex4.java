@@ -255,8 +255,20 @@ public class Ex4 implements Ex4_GUI{
 
 		}
 
-		if(p.equals("Load")) {_shapes.load("path");}
+		// will be similar to the save
+		if(p.equals("Load")) {
+			JFileChooser fileChooser = new JFileChooser();
+			int result = fileChooser.showOpenDialog(StdDraw_Ex4.getFrame());
+			if (result == JFileChooser.APPROVE_OPTION) {
+				try {
+					fileChooser.getSelectedFile().getAbsoluteFile().createNewFile(); // need to be fixed
+				} catch (IOException e) {
 
+					e.printStackTrace();
+				}
+				_shapes.load(fileChooser.getSelectedFile().getPath());
+			}
+		}
 		drawShapes();
 
 	}
@@ -496,21 +508,18 @@ public class Ex4 implements Ex4_GUI{
 				if (_p1!= null){
 					gs = new Segment2D(_p1, p);
 				}
-				else if(_p2!=null) {
-					gs = new Triangle2D(_p1,_p2,p);
-				}
 				else{
 					polygon.add(p);
 					gs = new Polygon2D(polygon);
 				}
 
 				// creating a few triangles
-				
-//				if (_p2 == null){
-//					gs = new Segment2D(_p1, p);
-//				}else{
-//					gs = new Polygon2D(new ArrayList<>(List.of(_p1, _p2, p)));
-//				}
+
+				//				if (_p2 == null){
+				//					gs = new Segment2D(_p1, p);
+				//				}else{
+				//					gs = new Polygon2D(new ArrayList<>(List.of(_p1, _p2, p)));
+				//				}
 
 			}
 
