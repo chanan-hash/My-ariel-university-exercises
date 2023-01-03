@@ -40,11 +40,9 @@ public class Ex4 implements Ex4_GUI{
 	private  Point2D _p1;
 	private  Point2D _p2; // helping us to draw the triangle	
 
-	private ArrayList<Point2D> polygon = null; // will help us to draw the polygon
+	private ArrayList<Point2D> polygon = new ArrayList<Point2D>(); // will help us to draw the polygon
 
 	private  static Ex4 _winEx4 = null;
-
-	//private static int tag = 0;
 
 	private Ex4() {
 		init(null);
@@ -340,24 +338,14 @@ public class Ex4 implements Ex4_GUI{
 
 		}
 
-		// trying to draw a polygon
+		//Drawing a polygon adding each time the points to the array-list
 		if(_mode.equals("Polygon")) {
 			if(_gs==null) {
-				polygon = new ArrayList<Point2D>();
+				polygon.add(p);
 				_p1 = new Point2D(p);
-				polygon.add(_p1);
-			}
-			else if(_p2 == null) {
-				_p2 = new Point2D(p);
-				polygon.add(_p2);
 			}
 			else {
-				_gs.setColor(_color);
-				_gs.setFilled(_fill);
-				_shapes.add(_gs);
-				_gs = null;
-				_p1 = new Point2D(p);
-				_p2 = new Point2D(p);
+				polygon.add(p);
 			}
 
 		}
@@ -414,21 +402,6 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 
-		//		if (_mode.equals("Scale_90%")) {
-		//            for (int i = 0; i < _shapes.size(); i++) {
-		//                if (_shapes.get(i).isSelected()) {
-		//                    _shapes.get(i).getShape().scale(p, 0.9);
-		//                }
-		//            }
-		//        }
-		//        if (_mode.equals("Scale_110%")) {
-		//            for (int i = 0; i < _shapes.size(); i++) {
-		//                if (_shapes.get(i).isSelected()) {
-		//                    _shapes.get(i).getShape().scale(p, 1.1);
-		//                }
-		//            }
-		//        }
-
 		// rotate function
 		// the angle is 0.0, need to be fixed
 		if(_mode.equals("Rotate")){
@@ -464,9 +437,29 @@ public class Ex4 implements Ex4_GUI{
 		}
 	}
 
+	
+	// The right click will help us to stop the polygon
 	public void mouseRightClicked(Point2D p) {
 		System.out.println("right click!");
+		if (_gs!=null) {
+			if(_mode.equals("Polygon")) {
+				_gs.setColor(_color);
+				_gs.setFilled(_fill);
+				_shapes.add(_gs);
+				_gs = null;
+				_p1 = null;
+				polygon = new ArrayList<Point2D>();
 
+				drawShapes();
+			}
+			if(_mode.equals("Circle") || _mode.equals("Rect" )||_mode.equals("Triangle" ) || _mode.equals("Segment")) {
+				_gs = null;
+				_p1 = null;
+				
+			}
+		}
+		
+		
 	}
 
 
@@ -505,22 +498,10 @@ public class Ex4 implements Ex4_GUI{
 			}
 
 			if(_mode.equals("Polygon")){	
-				if (_p1!= null){
-					gs = new Segment2D(_p1, p);
-				}
-				else{
-					polygon.add(p);
-					gs = new Polygon2D(polygon);
-				}
-
-				// creating a few triangles
-
-				//				if (_p2 == null){
-				//					gs = new Segment2D(_p1, p);
-				//				}else{
-				//					gs = new Polygon2D(new ArrayList<>(List.of(_p1, _p2, p)));
-				//				}
-
+				ArrayList<Point2D> temp = polygon;
+				temp.add(p);
+				gs = new Polygon2D(temp);
+				temp.remove(p); // Because we don't need it more
 			}
 
 			_gs = new GUIShape(gs,false, Color.pink, 0);
