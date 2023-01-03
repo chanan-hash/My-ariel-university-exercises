@@ -373,10 +373,27 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 
+		// Copying the shape according to a place we want to copy it
 		if(_mode.equals("Copy")) {
-			_shapes.copy();
-		}
+			if (_p1== null) {
+				_p1= new Point2D(p);
+			}
+			
+			else{	
+				Point2D moveVector = new Point2D(p.x() - _p1.x(), p.y() - _p1.y());
+				for (int i = 0; i < _shapes.size(); ++i) {
+					GUI_Shapeable s = _shapes.get(i);
+					GeoShapeable g = s.getShape();
+					if (s.isSelected() && g != null) {
+						GUI_Shapeable copy = s.copy();
+						copy.getShape().move(moveVector);
+						_shapes.add(copy);
+					}
 
+					_p1 = null;
+				}
+			}
+		}
 		// Scale mode
 		// making it smaller
 		// TODO need also to move it with the scale like in the mode
@@ -405,16 +422,37 @@ public class Ex4 implements Ex4_GUI{
 		// rotate function
 		// the angle is 0.0, need to be fixed
 		if(_mode.equals("Rotate")){
-			_p1 = new Point2D(p);
-			for(int i=0;i<_shapes.size();i++) {
-				GUI_Shapeable s = _shapes.get(i);
-				GeoShapeable g = s.getShape();
-				if(s.isSelected() && g!=null) {
-					double angleDegrees = Math.atan2(p.y() - _p1.y(), p.x() - _p1.x()) * 180.0 / Math.PI;
-					g.rotate(p, angleDegrees);
-				}
+			if(_p1 == null) {
+				_p1 = new Point2D(p);
 			}
+			else {
+				GeoShapeable [] geo = getSelect();
+				for (int i = 0; i<geo.length; i++ ) {
+					double angleDegrees = Math.atan2(p.y() - _p1.y(), p.x() - _p1.x());
+					if(angleDegrees<0) {
+						angleDegrees += 2*Math.PI;
+					}
+					geo[i].rotate(_p1, angleDegrees);
+				}
+
+			}
+			_p1 = null;
 		}
+		//			else {
+		//				for(int i=0;i<_shapes.size();i++) {
+		//					GUI_Shapeable s = _shapes.get(i);
+		//					GeoShapeable g = s.getShape();
+		//					if(s.isSelected() && g!=null) {
+		//						double angleDegrees = Math.atan2(p.y() - _p1.y(), p.x() - _p1.x());
+		//						if(angleDegrees<0) {
+		//							angleDegrees += 2*Math.PI;
+		//						}
+		//						g.rotate(_p1, angleDegrees);
+		//					}
+		//				}
+		//			}
+
+
 		drawShapes();
 	}
 
@@ -437,7 +475,7 @@ public class Ex4 implements Ex4_GUI{
 		}
 	}
 
-	
+
 	// The right click will help us to stop the polygon
 	public void mouseRightClicked(Point2D p) {
 		System.out.println("right click!");
@@ -455,11 +493,11 @@ public class Ex4 implements Ex4_GUI{
 			if(_mode.equals("Circle") || _mode.equals("Rect" )||_mode.equals("Triangle" ) || _mode.equals("Segment")) {
 				_gs = null;
 				_p1 = null;
-				
+
 			}
 		}
-		
-		
+
+
 	}
 
 
@@ -528,4 +566,23 @@ public class Ex4 implements Ex4_GUI{
 		}
 		return ans;
 	}
+
+	/**
+	 * A function that helps us with the rotate to get the selected point
+	 */
+
+	private GeoShapeable[] getSelect() {
+		ArrayList<GeoShapeable> geo = new ArrayList<GeoShapeable>();
+
+		for (int i = 0; i<_shapes.size(); i++) {
+			GUI_Shapeable gs = _shapes.get(i);
+			if(gs.isSelected()) {
+				geo.add(gs.getShape());
+			}
+		}
+		return geo.toArray(new GeoShapeable[0]);
+	}
+
+
 }
+
