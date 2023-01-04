@@ -108,17 +108,17 @@ public class Point2D{
 		}	
 		else {
 			// To make it a number instead of a degree
-			double angleRad = Math.toRadians(angleDegrees);
-			double cosAngle = Math.cos(angleRad);
-			double sinAngle = Math.sin(angleRad);
+//			double angleRad = Math.toRadians(angleDegrees);
+//			double cosAngle = Math.cos(angleRad);
+//			double sinAngle = Math.sin(angleRad);
 
-			double newX = this._x - cen.x();
-			double newY = this._y - cen.x();
+			double newX = (this._x - cen.x()) * Math.cos(angleDegrees) - (_y- cen.y()) * Math.sin(angleDegrees) + cen.x(); 
+			double newY = (this._x - cen.x()) * Math.sin(angleDegrees) + (_y- cen.y()) * Math.cos(angleDegrees) + cen.y(); 
 
 			// updating to the new x,y values
 
-			this._x = newX * cosAngle - newY*sinAngle + cen.x();
-			this._y = newY * sinAngle + newX*cosAngle + cen.y();
+			this._x = newX;
+			this._y = newY;
 		}
 	}
 

@@ -379,7 +379,8 @@ public class Ex4 implements Ex4_GUI{
 				_p1= new Point2D(p);
 			}
 			
-			else{	
+			else{
+				
 				Point2D moveVector = new Point2D(p.x() - _p1.x(), p.y() - _p1.y());
 				for (int i = 0; i < _shapes.size(); ++i) {
 					GUI_Shapeable s = _shapes.get(i);
@@ -403,7 +404,7 @@ public class Ex4 implements Ex4_GUI{
 				GUI_Shapeable s = _shapes.get(i);
 				GeoShapeable g = s.getShape();
 				if(s.isSelected() && g!=null) {
-					g.scale(p, 0.9);
+					g.scale(_p1, 0.9);
 				}
 			}
 		}
@@ -414,7 +415,7 @@ public class Ex4 implements Ex4_GUI{
 				GUI_Shapeable s = _shapes.get(i);
 				GeoShapeable g = s.getShape();
 				if(s.isSelected() && g!=null) {
-					g.scale(p, 1.1);
+					g.scale(_p1, 1.1);
 				}
 			}
 		}
@@ -426,33 +427,21 @@ public class Ex4 implements Ex4_GUI{
 				_p1 = new Point2D(p);
 			}
 			else {
-				GeoShapeable [] geo = getSelect();
-				for (int i = 0; i<geo.length; i++ ) {
-					double angleDegrees = Math.atan2(p.y() - _p1.y(), p.x() - _p1.x());
-					if(angleDegrees<0) {
-						angleDegrees += 2*Math.PI;
+				Point2D vecRo = _p1.vector(p); // The vector gives us the subtraction between them
+				double angleRadians = Math.atan2(vecRo.y(), vecRo.x());
+		        double angle =  Math.toDegrees(angleRadians);
+				
+				double angleRo = angle;
+				for (int i = 0; i < _shapes.size(); ++i) {
+					GUI_Shapeable s = _shapes.get(i);
+					GeoShapeable g = s.getShape();
+					if (s.isSelected() && g != null) {
+						g.rotate(_p1, angleRo);
+						_p1 = null;
 					}
-					geo[i].rotate(_p1, angleDegrees);
 				}
-
 			}
-			_p1 = null;
 		}
-		//			else {
-		//				for(int i=0;i<_shapes.size();i++) {
-		//					GUI_Shapeable s = _shapes.get(i);
-		//					GeoShapeable g = s.getShape();
-		//					if(s.isSelected() && g!=null) {
-		//						double angleDegrees = Math.atan2(p.y() - _p1.y(), p.x() - _p1.x());
-		//						if(angleDegrees<0) {
-		//							angleDegrees += 2*Math.PI;
-		//						}
-		//						g.rotate(_p1, angleDegrees);
-		//					}
-		//				}
-		//			}
-
-
 		drawShapes();
 	}
 
@@ -493,7 +482,6 @@ public class Ex4 implements Ex4_GUI{
 			if(_mode.equals("Circle") || _mode.equals("Rect" )||_mode.equals("Triangle" ) || _mode.equals("Segment")) {
 				_gs = null;
 				_p1 = null;
-
 			}
 		}
 
@@ -566,23 +554,6 @@ public class Ex4 implements Ex4_GUI{
 		}
 		return ans;
 	}
-
-	/**
-	 * A function that helps us with the rotate to get the selected point
-	 */
-
-	private GeoShapeable[] getSelect() {
-		ArrayList<GeoShapeable> geo = new ArrayList<GeoShapeable>();
-
-		for (int i = 0; i<_shapes.size(); i++) {
-			GUI_Shapeable gs = _shapes.get(i);
-			if(gs.isSelected()) {
-				geo.add(gs.getShape());
-			}
-		}
-		return geo.toArray(new GeoShapeable[0]);
-	}
-
 
 }
 

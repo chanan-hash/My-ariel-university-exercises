@@ -69,9 +69,8 @@ public class Circle2D implements GeoShapeable{
 	// need to be checked
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
-		for (int i = 0; i < getPoints().length; i++) {
-			this.getPoints()[i].rotate(this.getPoints()[i],angleDegrees);
-		}
+		this._center.rotate(center, angleDegrees);
+
 	}
 }
 

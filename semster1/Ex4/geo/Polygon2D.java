@@ -27,65 +27,62 @@ public class Polygon2D implements GeoShapeable{
 	// Going over by loop and adding to the String the points
 	@Override
 	public String toString() {
-		String res = "Polygon2D,";
+		String res = "Polygon2D";
 		for (Point2D point : arrayOfPoints) {
 			res += "," + point;
 		}
 		return res;
 	}
 
+	/**
+	 * This function is based on rat's casting algorithm.
+	 * 1. You take a point, and "draw" a line from it to the right as much as we can/
+	 * 2. If it intersects the polygon in odd number --> means it inside
+	 * 3. Else if it intersects the polygon in even number --> means it outside
+	 */
 	@Override
 	public boolean contains(Point2D ot) {
-		// checking first if it colsetoeqauls to the points array
-		//		for(int i = 0; i<pointsAmt;i++) {
-		//			if (points[i].close2equals(ot, 0.001)) {
-		//				return true;
-		//			}			
-		//			//return false;
-		//		}
-		//		// ray casting algorithm
-		////		return false;
-		//		return checkInside(points,pointsAmt, ot);	
-		return false;
+		int i, j;
+		boolean result = false;
+		for (i = 0, j = arrayOfPoints.size() - 1; i < arrayOfPoints.size(); j = i++) {
+			if ((arrayOfPoints.get(i).y() > ot.y()) != (arrayOfPoints.get(j).y() > ot.y()) &&
+					(ot.x() < (arrayOfPoints.get(j).x() - arrayOfPoints.get(i).x()) * (ot.y() - arrayOfPoints.get(i).y()) / (arrayOfPoints.get(j).y() - arrayOfPoints.get(i).y()) + arrayOfPoints.get(i).x())) {
+				result = !result;
+			}
+		}
+		return result;
+	
 	}
 
+	/**
+	 * As Boaz wrote we're working on a simple polygon, and not an intersection one 
+	 */
 	@Override
 	public double area() {
-		// TODO Auto-generated method stub
-		return 0;
+		double area = 0;
+		for (int i = 0; i < arrayOfPoints.size(); i++) {
+			Point2D p1 = arrayOfPoints.get(i);
+			Point2D p2 = arrayOfPoints.get((i + 1) % arrayOfPoints.size());
+			area += (p1.x() * p2.y()) - (p1.y() * p2.x());
+		}
+		return Math.abs(area / 2);
+
 	}
 
+	/**
+	 * The method is checking the distance between each point in the polygon and add them to the perimeter variable.
+	 */
 	@Override
 	public double perimeter() {
 		// calculating the dist between every points and adding it to a perimeter sum
-		double peri = 0;
-		for (int i = 0; i < arrayOfPoints.size() - 1; i++) {
-			peri += arrayOfPoints.get(i).distance(arrayOfPoints.get(i + 1));
+		// The order of inserting the points is important
+		double perimeter = 0;
+		for (int i = 0; i < arrayOfPoints.size(); i++) {
+			Point2D p1 = arrayOfPoints.get(i);
+			Point2D p2 = arrayOfPoints.get((i + 1) % arrayOfPoints.size());
+			perimeter += p1.distance(p2);
 		}
-		peri += arrayOfPoints.get(arrayOfPoints.size() - 1).distance(arrayOfPoints.get(0));
-		return peri;
-		
-		/*
-		 * double ans = 0;
-
-		if (kodkod==null || kodkod.size()==1) {return 0;}
-
-		Point2D p1, p2;
-
-		for (int i=0; i<kodkod.size()-1; i++) {
-			p1 = new Point2D(kodkod.get(i));
-			p2 = new Point2D(kodkod.get(i+1));
-			double dist = p1.distance(p2);
-			ans += dist;
-		}
-
-		p1 = kodkod.getFirst();
-		p2 = kodkod.getLast();
-		double dist = p1.distance(p2);
-		ans += dist;
-
-		return ans;
-		 */
+		return perimeter;
 	}
 
 	@Override
@@ -110,9 +107,8 @@ public class Polygon2D implements GeoShapeable{
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
-		// TODO Auto-generated method stub
 		for (Point2D point : arrayOfPoints) {
-			point.scale(center, angleDegrees);
+			point.rotate(center, angleDegrees);
 		}
 	}
 

@@ -95,16 +95,18 @@ public class Rect2D implements GeoShapeable {
 	public void scale(Point2D center, double ratio) {
 		this._p1.scale(center,ratio);
 		this._p2.scale(center,ratio);
-		//	double width = getWidth()*ratio;
-		//double height = getHeight()*ratio;
+		this._p3.scale(center, ratio);
+		this._p4.scale(center, ratio);
+		
 	}
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
-		// TODO Auto-generated method stub
-		for (int i = 0; i < getPoints().length; i++) {
-			this.getPoints()[i].rotate(this.getPoints()[i],angleDegrees);
-		}
+		this._p1.rotate(center, angleDegrees);
+		this._p2.rotate(center, angleDegrees);
+		this._p3.rotate(center, angleDegrees);
+		this._p4.rotate(center, angleDegrees);
+
 	}
 
 	// Getters and setters
@@ -121,6 +123,8 @@ public class Rect2D implements GeoShapeable {
 		return new Point2D(Math.abs(((this._p1.x()+this._p2.x())/2)),Math.abs((this._p1.y()+this._p2.y())/2));
 	}
 
+	
+	//Getters & Setters
 	public Point2D get_p1() {
 		return _p1;
 	}

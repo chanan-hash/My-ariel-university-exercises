@@ -14,8 +14,8 @@ public class Segment2D implements GeoShapeable{
 	private Point2D p1; 
 	private double m;	// the slope
 	private double n;  	// y = mx + n
-	
-	
+
+
 	public Point2D getP0() {
 		return p0;
 	}
@@ -58,56 +58,49 @@ public class Segment2D implements GeoShapeable{
 		this.n =-m * p1.x() + p1.y();
 	}
 
+	/**
+	 * If the distance between the points and the given point will be equals to the big distance, or less than en epsilon	
+	 */
 	@Override
 	public boolean contains(Point2D ot) {
-		// TODO Auto-generated method stub
-		// maybe to put in the equation  
-		// if the distance between the points and the given point will be equals to the big distance, or less than en epsilon
 		double eps = 0.001;
 		double dist = p0.distance(p1);
-		
+
 		double distOt= (p0.distance(ot) + p1.distance(ot)); 
 		return Math.abs(distOt-dist)<eps;
 	}
 
 	@Override
 	public double area() {
-		// TODO Auto-generated method stub
 		// line dosen't have area
 		return 0;
 	}
 
 	@Override
 	public double perimeter() {
-		// TODO Auto-generated method stub
-		// I think it is just the distance between the 2 points
+		// Because we can surround the segment from both sides, its perimeter is the dist*2 
 		return p0.distance(p1)*2;
 	}
 
 	@Override
 	public void move(Point2D vec) {
-		// TODO Auto-generated method stub
 		p0.move(vec);
 		p1.move(vec);
 	}
 
-	// Copy constructor
 	@Override
 	public GeoShapeable copy() {
-		// TODO Auto-generated method stub
 		return new Segment2D(p0, p1);
 	}
 
 	@Override
 	public void scale(Point2D center, double ratio) {
-		// TODO Auto-generated method stub
 		this.p0.scale(center, ratio);
 		this.p1.scale(center, ratio);		
 	}
 
 	@Override
 	public void rotate(Point2D center, double angleDegrees) {
-		// TODO Auto-generated method stub
 		this.p0.rotate(center, angleDegrees);
 		this.p1.rotate(center, angleDegrees);		
 	}

@@ -76,25 +76,16 @@ public class GUIShape implements GUI_Shapeable{
 		return cp;
 	}
 	
-	// maybe to add the whole class to string
-//	@Override
-//	public String toString() {
-//		return _g.toString();
-//	}
-	
 	// maybe will help for saving 
 	private void init(String[] ww) {
 
 	}
+	
+	@Override
 	public String toString() {
 		return "GUIShape," + _color.getRGB() +"," + _fill + "," + _tag + "," +_g;
 	}
 	
-//	@Override
-//	public String toString() {
-//		return "GUIShape [_g=" + _g + ", _fill=" + _fill + ", _color=" + _color.getRGB() + ", _tag=" + _tag + ", _isSelected="
-//				+ _isSelected + "]";
-//	}
 	@Override
 	public boolean isSelected() {
 		return this._isSelected;
