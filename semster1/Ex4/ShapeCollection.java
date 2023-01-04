@@ -123,9 +123,7 @@ public class ShapeCollection implements ShapeCollectionable{
 			// Read the file
 			String line;
 			while ((line = bufferedReader.readLine()) != null) {
-
-				
-				
+				_shapes.add(new GUIShape(line));
 			}
 
 			// Close the file
