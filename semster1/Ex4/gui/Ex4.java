@@ -244,8 +244,8 @@ public class Ex4 implements Ex4_GUI{
 
 				try {
 					fileChooser.getSelectedFile().getAbsoluteFile().createNewFile();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
+				} 
+				catch (IOException e) {
 					e.printStackTrace();
 				}
 				_shapes.save(fileChooser.getSelectedFile().getPath());
