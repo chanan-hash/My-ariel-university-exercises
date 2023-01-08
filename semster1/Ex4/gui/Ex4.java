@@ -38,7 +38,7 @@ public class Ex4 implements Ex4_GUI{
 	private  boolean _fill = false;
 	private  String _mode = "";
 	private  Point2D _p1;
-	private  Point2D _p2; // helping us to draw the triangle	
+	private  Point2D _p2; // helping us to draw the triangle, and for the rotate function	
 
 	private ArrayList<Point2D> polygon = new ArrayList<Point2D>(); // will help us to draw the polygon
 
@@ -80,13 +80,17 @@ public class Ex4 implements Ex4_GUI{
 		StdDraw_Ex4.show();
 	}
 
-	// here we are declaring which to to some operations like fill
+	/**
+	 * This function is actually getting the points and draw the shapes from all its qualities --> kind of shape, filled, color, etc...
+	 *	All of the drawing is according to stddraw class
+	 */
 	private static void drawShape(GUI_Shapeable g) {
 		StdDraw_Ex4.setPenColor(g.getColor());
 		if(g.isSelected()) {StdDraw_Ex4.setPenColor(Color.gray);}
-		GeoShapeable gs = g.getShape();
+		GeoShapeable gs = g.getShape(); // The shape
 		boolean isFill = g.isFilled();
 
+		// Drawing circle
 		if(gs instanceof Circle2D) {
 			Circle2D c = (Circle2D)gs;
 			Point2D cen = c.getPoints()[0];
@@ -98,27 +102,22 @@ public class Ex4 implements Ex4_GUI{
 				StdDraw_Ex4.circle(cen.x(), cen.y(), rad);
 			}
 		}
-		// Trying to draw rectangle
+		
+		// Drawing rectangle
 		if(gs instanceof Rect2D) {
 			Rect2D rec = (Rect2D)gs;
-			Point2D[] arr = rec.getPoints();
-			Point2D p1 = arr[0];
-			Point2D p2 = arr[1];
-			double w = Math.abs(p1.x() - p2.x());
-			double h = Math.abs(p1.y() - p2.y());
-			double centerX = rec.centerOfMass().x();
-			double centerY = rec.centerOfMass().y();
-
-
-			if(isFill) {
-				StdDraw_Ex4.filledRectangle(centerX, centerY, w/2, h/2);
+			
+			// We are Drawing the rectangle like a polygon so we can rotate it normally
+			double[] xArr = new double[] { rec.get_p1().x(), rec.get_p2().x(), rec.get_p3().x(), rec.get_p4().x() };
+			double[] yArr = new double[] { rec.get_p1().y(), rec.get_p2().y(), rec.get_p3().y(), rec.get_p4().y() };
+			if (isFill) {
+				StdDraw_Ex4.filledPolygon(xArr, yArr);
+			} else {
+				StdDraw_Ex4.polygon(xArr, yArr);
 			}
-			else { 
-				StdDraw_Ex4.rectangle(centerX, centerY, w/2, h/2);
-			}		
 		}
 
-		// Trying to draw the segment
+		// Drawing segment
 		if(gs instanceof Segment2D) {
 			Segment2D seg = (Segment2D)gs;
 			Point2D p0 = seg.getPoints()[0];
@@ -126,7 +125,7 @@ public class Ex4 implements Ex4_GUI{
 			StdDraw_Ex4.line(p0.x(), p0.y(), p1.x(), p1.y());
 		}
 
-		// Based on fill polygon but with only three points
+		//Drawing triangle. Based on polygon but with only three points
 		if(gs instanceof Triangle2D) {
 			Triangle2D tri = (Triangle2D)gs;
 
@@ -141,7 +140,7 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 
-		// A polygon
+		// Drawing polygon polygon
 		if(gs instanceof Polygon2D) {
 			Polygon2D pol = (Polygon2D)gs;
 			Point2D[] parr = pol.getPoints(); // initial the arr
@@ -178,6 +177,9 @@ public class Ex4 implements Ex4_GUI{
 		}
 	}
 
+	/**
+	 * The action performed like color and sorting
+	 */
 	public void actionPerformed(String p) {
 		_mode = p;
 		if(p.equals("Blue")) {_color = Color.BLUE; setColor(_color);}
@@ -200,6 +202,7 @@ public class Ex4 implements Ex4_GUI{
 		if(p.equals("ByToString")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_toString));}
 		if(p.equals("ByAntiToString")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_Anti_toString));}
 
+		// Making all the shapes that are has been drawn to be unselected
 		if(p.equals("None")) {
 			for(int i=0;i<_shapes.size();i++) {
 				GUI_Shapeable s = _shapes.get(i);
@@ -207,6 +210,7 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 
+		// Making all the shapes that are has been drawn to be selected
 		if(p.equals("All")) {
 			for(int i=0;i<_shapes.size();i++) {
 				GUI_Shapeable s = _shapes.get(i);
@@ -214,6 +218,7 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 
+		// Making all the shapes that are has been drawn to be unselected if they are selected now, and the opposite
 		if(p.equals("Anti")) {
 			for(int i=0;i<_shapes.size();i++) {
 				GUI_Shapeable s = _shapes.get(i);
@@ -226,14 +231,20 @@ public class Ex4 implements Ex4_GUI{
 			}
 
 		}
-
+		
+		// Getting all the info about the shape (name, color, isFilled, point values) .That info we are using for saving
 		if(p.equals("Info")) {
 			String str = getInfo();
 			System.out.println(str);
 		}
-
+		
+		/**
+		 * The save&load are using the stddDrawFrame and fileChooser to select the place were to save/read the file
+		 * and calling save and load function that we've built
+		 * Save - saving the toString
+		 * Load - reading the toString and deciding how to create the shape 
+		 */
 		// Save&load
-		//		if(p.equals("Save")) {_shapes.save("path");}
 		if(p.equals("Save")) {
 			//https://www.codejava.net/java-se/swing/show-simple-open-file-dialog-using-jfilechooser
 			JFileChooser fileChooser = new JFileChooser();
@@ -253,7 +264,7 @@ public class Ex4 implements Ex4_GUI{
 
 		}
 
-		// will be similar to the save
+		// Similar to the save
 		if(p.equals("Load")) {
 			JFileChooser fileChooser = new JFileChooser();
 			int result = fileChooser.showOpenDialog(StdDraw_Ex4.getFrame());
@@ -267,15 +278,18 @@ public class Ex4 implements Ex4_GUI{
 				_shapes.load(fileChooser.getSelectedFile().getPath());
 			}
 		}
-		drawShapes();
+		
+		drawShapes(); // Drawing them actually
 
 	}
 
-	// Drawing the actually shape
+	/**
+	 *  The first mouse clicking that starting to draw the shape
+	 */
 	public void mouseClicked(Point2D p) {
 		System.out.println("Mode: "+_mode+"  "+p);
 
-		// drawing a circle
+		// Drawing a circle
 		if(_mode.equals("Circle")) {
 			if(_gs==null) {
 				_p1 = new Point2D(p);
@@ -289,7 +303,7 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 
-		// drawing a rectangle
+		// Drawing a rectangle
 		if(_mode.equals("Rect")) {
 			if(_gs==null) {
 				_p1 = new Point2D(p);
@@ -304,7 +318,7 @@ public class Ex4 implements Ex4_GUI{
 
 		}
 
-		//Segment
+		// Drawing a Segment
 		if(_mode.equals("Segment")) {
 			if(_gs==null) {
 				_p1 = new Point2D(p);
@@ -319,7 +333,7 @@ public class Ex4 implements Ex4_GUI{
 
 		}
 
-		// draw triangle
+		// Drawing a triangle
 		if(_mode.equals("Triangle")) {
 			if(_gs==null) {
 				_p1 = new Point2D(p);
@@ -338,7 +352,7 @@ public class Ex4 implements Ex4_GUI{
 
 		}
 
-		//Drawing a polygon adding each time the points to the array-list
+		// Drawing a polygon adding each time the points to the array-list
 		if(_mode.equals("Polygon")) {
 			if(_gs==null) {
 				polygon.add(p);
@@ -363,7 +377,7 @@ public class Ex4 implements Ex4_GUI{
 			select(p);
 		}
 
-		// Removing all the selected
+		// Removing all the selected shapes
 		if(_mode.equals("Remove")) {
 			for (int i = _shapes.size() - 1; i >= 0; --i) {  
 				GUI_Shapeable s = _shapes.get(i);            
@@ -381,7 +395,7 @@ public class Ex4 implements Ex4_GUI{
 			
 			else{
 				
-				Point2D moveVector = new Point2D(p.x() - _p1.x(), p.y() - _p1.y());
+				Point2D moveVector = new Point2D(p.x() - _p1.x(), p.y() - _p1.y()); // The place where to copy it
 				for (int i = 0; i < _shapes.size(); ++i) {
 					GUI_Shapeable s = _shapes.get(i);
 					GeoShapeable g = s.getShape();
@@ -395,9 +409,9 @@ public class Ex4 implements Ex4_GUI{
 				}
 			}
 		}
+		
 		// Scale mode
 		// making it smaller
-		// TODO need also to move it with the scale like in the mode
 		if(_mode.equals("Scale_90%")){
 			_p1 = new Point2D(p);
 			for(int i=0;i<_shapes.size();i++) {
@@ -408,6 +422,7 @@ public class Ex4 implements Ex4_GUI{
 				}
 			}
 		}
+		
 		// Making it bigger
 		if(_mode.equals("Scale_110%")){
 			_p1 = new Point2D(p);
@@ -420,28 +435,26 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 
-		// rotate function
-		// the angle is 0.0, need to be fixed
-		if(_mode.equals("Rotate")){
-			if(_p1 == null) {
+		// Rotate function
+		if (_mode.equals("Rotate")) {
+			if (_p1 == null) {
 				_p1 = new Point2D(p);
-			}
+			} 
 			else {
-				Point2D vecRo = _p1.vector(p); // The vector gives us the subtraction between them
-				double angleRadians = Math.atan2(vecRo.y(), vecRo.x());
-		        double angle =  Math.toDegrees(angleRadians);
+				_p2 = new Point2D(p);
 				
-				double angleRo = angle;
-				for (int i = 0; i < _shapes.size(); ++i) {
+				for (int i = 0; i < _shapes.size(); i++) {
 					GUI_Shapeable s = _shapes.get(i);
 					GeoShapeable g = s.getShape();
 					if (s.isSelected() && g != null) {
-						g.rotate(_p1, angleRo);
-						_p1 = null;
+						g.rotate(_p1, Math.toDegrees(_p1.angleFromPoints(_p2)));
 					}
 				}
+				_p1 = null;
+				_p2 = null;
 			}
 		}
+		
 		drawShapes();
 	}
 
@@ -463,7 +476,7 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 	}
-
+	
 
 	// The right click will help us to stop the polygon
 	public void mouseRightClicked(Point2D p) {
@@ -502,10 +515,13 @@ public class Ex4 implements Ex4_GUI{
 				double r = _p1.distance(p);
 				gs = new Circle2D(_p1,r);
 			}
-
+			
+			// We are doing it by four points so we will draw a polygon that will be a rectangle
 			// Drawing rectangle
 			if(_mode.equals("Rect")) {
-				gs = new Rect2D(_p1,p);
+				Point2D p2 = new Point2D(p.x(), _p1.y());
+				Point2D p4 = new Point2D(_p1.x(), p.y());
+				gs = new Rect2D(_p1,p2,p,p4);
 			}
 
 			// Drawing the segment

@@ -90,36 +90,45 @@ public class Point2D{
 	}
 
 	/////////////////////// You should implement the methods below ///////////////////////////
+	
+	/**
+	 * To change the size of a shape according to it points, we need to change their place so it will give us a new shape
+	 * The size is depends on the ratio
+	 * 
+	 * The X value of the point will be the cen.x + the vector of them * the ratio
+	 * The Y value will be the same but with y 
+	 */
 	public void scale(Point2D cen, double ratio) {
 		double newPx = cen.x() + (this._x - cen.x())*ratio;
-		double newPy = cen.y() + (this._y - cen.x())*ratio;
+		double newPy = cen.y() + (this._y - cen.y())*ratio;
 
 		// Updating the point
 		this._x = newPx;
 		this._y = newPy;
-
 	}
 
+	/**
+	 * We are changing the point [lace according to the angle that opens between them
+	 * x--> goes with cos
+	 * y--> goes with sin
+	 */
+	
+	// giving us the angle between two segments, based on trigonometry
+	public double angleFromPoints(Point2D pAngle) {
+		double dx = pAngle.x() - this._x;
+		double dy = pAngle.y() - this._y;
+		return Math.atan2(dy, dx);
+	}
+	
 	public void rotate(Point2D cen, double angleDegrees) {
-
-		// Means we're in the same point so there no need to be changed	
-		if(angleDegrees % 360 == 0 || cen.x() == this._x && cen.y() == this._y) {
-			return;
-		}	
-		else {
-			// To make it a number instead of a degree
-//			double angleRad = Math.toRadians(angleDegrees);
-//			double cosAngle = Math.cos(angleRad);
-//			double sinAngle = Math.sin(angleRad);
-
-			double newX = (this._x - cen.x()) * Math.cos(angleDegrees) - (_y- cen.y()) * Math.sin(angleDegrees) + cen.x(); 
-			double newY = (this._x - cen.x()) * Math.sin(angleDegrees) + (_y- cen.y()) * Math.cos(angleDegrees) + cen.y(); 
-
-			// updating to the new x,y values
-
-			this._x = newX;
-			this._y = newY;
-		}
+		double rad = Math.toRadians(angleDegrees); // We need a real value so we are converting the degree to radians
+		
+		double newAngle = rad + cen.angleFromPoints(this);
+		double radius = this.distance(cen);
+		
+		// Updating the values of the point
+		this._x = cen.x() + (radius * Math.cos(newAngle));
+		this._y = cen.y() + (radius * Math.sin(newAngle));
 	}
-
+	
 }

@@ -45,9 +45,6 @@ public class Segment2D implements GeoShapeable{
 		this.p1 = new Point2D(p1);
 		this.m = (p1.y()-p0.y())/(p1.x()-p0.x()); // the slope
 
-		//p1.y() = m*p1.x() + n
-		//-n + p1.y = m*p1.x
-		//-n = m*p1.x - p1.y / * -1
 		this.n =-m * p1.x() + p1.y();
 	}
 
@@ -70,18 +67,21 @@ public class Segment2D implements GeoShapeable{
 		return Math.abs(distOt-dist)<eps;
 	}
 
+	// Line dosen't have area
 	@Override
 	public double area() {
-		// line dosen't have area
 		return 0;
 	}
 
+	// Because we can surround the segment from both sides, its perimeter is the dist*2 
 	@Override
 	public double perimeter() {
-		// Because we can surround the segment from both sides, its perimeter is the dist*2 
 		return p0.distance(p1)*2;
 	}
 
+	/**
+	 * Based on the the function from Point2D class
+	 */
 	@Override
 	public void move(Point2D vec) {
 		p0.move(vec);
@@ -92,7 +92,10 @@ public class Segment2D implements GeoShapeable{
 	public GeoShapeable copy() {
 		return new Segment2D(p0, p1);
 	}
-
+	
+	/**
+	 * The scale and the rotate here are based on those function in Point2D class
+	 */
 	@Override
 	public void scale(Point2D center, double ratio) {
 		this.p0.scale(center, ratio);
@@ -113,5 +116,5 @@ public class Segment2D implements GeoShapeable{
 		ans[1] = new Point2D(this.p1);
 		return ans;
 	}
-
+	
 }

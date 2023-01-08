@@ -13,16 +13,16 @@ import Exe.Ex4.GUI_Shapeable;
  *
  */
 public class ShapeComp implements Comparator<GUI_Shapeable>{
-	//////////add your code below ///////////
-	
-	
 	public static final Comparator<GUI_Shapeable> CompByToString = new ShapeComp(Ex4_Const.Sort_By_toString);
 	
 	private int _flag;
 	public ShapeComp(int flag) {
-		_flag = flag;
-		
+		_flag = flag;	
 	}
+	
+	/**
+	 * We are using the comperator of every class, Double, Integer, String to build the comperator
+	 */
 	@Override
 	public int compare(GUI_Shapeable o1, GUI_Shapeable o2) {
 		if (o1 == null || o2== null) {return 0;}
@@ -30,10 +30,7 @@ public class ShapeComp implements Comparator<GUI_Shapeable>{
 		if(_flag == Ex4_Const.Sort_By_toString) {
 			ans = o1.toString().compareTo(o2.toString());
 		}	
-		//////////add your code below ///////////
 
-		// we are using the comperator of every class, Double, Integer, String
-		
 		else if(_flag == Ex4_Const.Sort_By_Anti_toString) {
 			ans = o1.toString().compareTo(o2.toString()) *-1;
 		}
@@ -67,36 +64,3 @@ public class ShapeComp implements Comparator<GUI_Shapeable>{
 	}
 
 }
-
-/**
- * double a1=-1, a2 = -1;
-		GeoShape s1 = o1.getShape(), s2 = o2.getShape();
-		int ans =0;
-		if(_flag == Ex4_Const.Sort_By_Area) {
-			a1 = s1.area();
-			a2 = s2.area();
-		}
-		if(_flag == Ex4_Const.Sort_By_Anti_Area) {
-			a2 = s1.area();
-			a1 = s2.area();
-		}
-		if(_flag == Ex4_Const.Sort_By_Perimeter) {
-			a1 = s1.perimeter();
-			a2 = s2.perimeter();
-		}
-		if(_flag == Ex4_Const.Sort_By_Anti_Perimeter) {
-			a2 = s1.perimeter();
-			a1 = s2.perimeter();
-		}
-		if(_flag == Ex4_Const.Sort_By_Tag) {
-			a1 = o1.getTag();
-			a2 = o2.getTag();
-		}
-		if(_flag == Ex4_Const.Sort_By_Anti_Tag) {
-			a2 = o1.getTag();
-			a1 = o2.getTag();
-		}
-		if(a1>a2) {ans=1;}
-		if(a1<a2) {ans=-1;
- */
-

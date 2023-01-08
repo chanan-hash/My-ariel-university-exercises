@@ -39,14 +39,11 @@ public class ShapeCollection implements ShapeCollectionable{
 	public GUI_Shapeable removeElementAt(int i) {
 		// using remove from array list
 		return _shapes.remove(i); 
-		//////////////////////////////////////////
 	}
 
 	@Override
 	public void addAt(GUI_Shapeable s, int i) {
-		//////////add your code below ///////////
 		_shapes.add(i, s); // From arrays list functions
-		//////////////////////////////////////////
 	}
 	@Override
 	public void add(GUI_Shapeable s) {
@@ -58,29 +55,23 @@ public class ShapeCollection implements ShapeCollectionable{
 	@Override
 	public ShapeCollectionable copy() {
 		// Based on deep copy but according to the conditions of the classes
-
 		ShapeCollection copy_shapes= new ShapeCollection();
 		for (int i = 0; i<_shapes.size()-1; i++) {
-			GeoShapeable g = _shapes.get(i).getShape().copy(); // copying the shapes qualities
+			GeoShapeable g = _shapes.get(i).getShape().copy(); // Copying the shapes qualities
 			GUIShape guiSh = new GUIShape(g,_shapes.get(i).isFilled(),_shapes.get(i).getColor(), _shapes.get(i).getTag());
 			copy_shapes.add(guiSh);
 		}
-
 		return copy_shapes;
 	}
 
 	@Override
 	public void sort(Comparator<GUI_Shapeable> comp) {
-		//////////add your code below ///////////
 		_shapes.sort(comp);
-		//////////////////////////////////////////
 	}
 
 	@Override
 	public void removeAll() {
-		//////////add your code below ///////////
-		_shapes.removeAll(_shapes); // using remove from arrayslist
-		//////////////////////////////////////////
+		_shapes.removeAll(_shapes); // Using remove from arrayslist
 	}
 
 	/**
@@ -98,7 +89,6 @@ public class ShapeCollection implements ShapeCollectionable{
 		catch(IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 
@@ -208,86 +198,4 @@ public class ShapeCollection implements ShapeCollectionable{
 		}
 		return ans;
 	}
-
-	/**
-	 * File _file =  new File(file);
-		try {
-			Scanner sc = new Scanner(_file);
-			while(sc.hasNextLine()) {
-				String[] info = sc.nextLine().split(","); // to get every info in saperate
-
-				Color color = new Color(Integer.parseInt(info[1])) ; // maybe we will need get color and then parse int
-				boolean fill = Boolean.parseBoolean(info[2]);		// as above with get fill
-				int tag = Integer.parseInt(info[3]);
-
-				GeoShapeable gs = null;
-				Point2D p =new Point2D(0,0); // the files is saves by little pixel aka points. by this point we will represent the objects
-
-				if(info[4].compareTo("Point2D") == 0) {
-					p = new Point2D(Double.parseDouble(info[5]),Double.parseDouble(info[6])); // parse to the x,y values
-				}
-
-				else if (info[4].compareTo("Circle2D") == 0) {
-					double x = 0, y = 0;
-					x = Double.parseDouble(info[5]);
-					y = Double.parseDouble(info[6]);
-					Point2D center = new Point2D(x,y);
-					double radius = Double.parseDouble(info[7]);
-					gs = new Circle2D(center,radius);
-				}
-
-				else if (info[4].compareTo("Rect2D") == 0) {
-					double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
-
-					x1=Double.parseDouble(info[5]);
-					y1=Double.parseDouble(info[6]);
-					x2=Double.parseDouble(info[7]);
-					y2=Double.parseDouble(info[8]);
-
-					Point2D p1,p2;
-					p1 =new Point2D(x1,y1);
-					p2 = new Point2D(x2,y2);
-					gs = new Rect2D(p1, p2);
-				}
-
-				else if (info[4].compareTo("Segment2D") == 0) {
-					double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
-
-					x1=Double.parseDouble(info[5]);
-					y1=Double.parseDouble(info[6]);
-					x2=Double.parseDouble(info[7]);
-					y2=Double.parseDouble(info[8]);
-
-					Point2D p1,p2;
-					p1 =new Point2D(x1,y1);
-					p2 = new Point2D(x2,y2);
-					gs = new Segment2D(p1, p2);
-				}
-				else if (info[4].compareTo("Triangle2D") == 0) {
-					double x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
-					x1=Double.parseDouble(info[5]);
-					y1=Double.parseDouble(info[6]);
-					x2=Double.parseDouble(info[7]);
-					y2=Double.parseDouble(info[8]);
-					x3=Double.parseDouble(info[9]);
-					y3=Double.parseDouble(info[10]);
-
-					Point2D p1, p2, p3;
-					p1 =new Point2D(x1,y1);
-					p2 = new Point2D(x2,y2);
-					p3 = new Point2D(x3,y3);
-
-					gs = new Triangle2D(p1, p2, p3);
-				}
-
-			}
-		}
-		// notice maybe there are another exception such as trying to read uncorrect file
-		catch(IOException e){
-
-		}
-
-		//////////////////////////////////////////
-
-	 */
 }

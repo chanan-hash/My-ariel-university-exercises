@@ -35,7 +35,9 @@ public class GUIShape implements GUI_Shapeable{
 		this(ot._g, ot._fill, ot._color, ot._tag);
 	}
 	
-	// will help for loading state, to know to create a shape from String
+	/**
+	 *  Will help for loading state, to know to create a shape from String
+	 */
 	public GUIShape(String str) {
 		init(str.split(","));
 	} 
@@ -82,7 +84,17 @@ public class GUIShape implements GUI_Shapeable{
 		return cp;
 	}
 	
-	// maybe will help for saving 
+	/**
+	 *  Help us for loading.
+	 *  When we're saving the file, of going according the toString of the shape.
+	 *  So when we want to load we will read this toString it a arrays of strings, in every index in the array it represent something else on the shape
+	 * ww[0] = GUISahpe
+	 * ww[1] = color
+	 * ww[2] = is filled
+	 * ww[3] = tag, that is an Integer
+	 * ww[4] = the info of the shape --> the name
+	 * ww[5....and] --> the points, their x and y values, or also the radius if it a circle
+	 */
 	private void init(String[] ww) {
 		_color = new Color(Integer.parseInt(ww[1]));
 		_fill = Boolean.parseBoolean(ww[2]);
@@ -105,17 +117,34 @@ public class GUIShape implements GUI_Shapeable{
 		}
 
 		else if (info.compareTo("Rect2D") == 0) {
-			double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+			
+			double x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0, x4 = 0, y4= 0;
 
 			x1=Double.parseDouble(ww[5]);
 			y1=Double.parseDouble(ww[6]);
 			x2=Double.parseDouble(ww[7]);
 			y2=Double.parseDouble(ww[8]);
-
-			Point2D p1,p2;
-			p1 =new Point2D(x1,y1);
+			x3=Double.parseDouble(ww[9]);
+			y3=Double.parseDouble(ww[10]);
+			x4=Double.parseDouble(ww[11]);
+			y4=Double.parseDouble(ww[12]);
+			
+			Point2D p1,p2,p3,p4;
+			p1 = new Point2D(x1,y1);
 			p2 = new Point2D(x2,y2);
-			_g = new Rect2D(p1, p2);
+			p3 = new Point2D(x3,y3);
+			p4 = new Point2D(x4,y4);
+			
+			ArrayList<Point2D> rectPoints = new ArrayList<Point2D>();
+			rectPoints.add(p1);
+			rectPoints.add(p2);
+			rectPoints.add(p3);
+			rectPoints.add(p4);
+		
+			_g = new Polygon2D(rectPoints);
+			
+			// to think on the conversion between the rect and the polygon
+			// to see how boaz saved the rectangle
 		}
 
 		else if (info.compareTo("Segment2D") == 0) {
@@ -171,9 +200,9 @@ public class GUIShape implements GUI_Shapeable{
 	public void setSelected(boolean s) {
 		this._isSelected = s;
 	}
+	
 	@Override
 	public void setShape(GeoShapeable g) {
-		// TODO Auto-generated method stub
 		if(g instanceof Rect2D) {
 			this._g = (Rect2D)g;
 		}

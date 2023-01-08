@@ -59,6 +59,11 @@ public class Circle2D implements GeoShapeable{
 		ans[1] = new Point2D(ans[0].x(), ans[0].y()+this._radius);
 		return ans;
 	}
+	
+	/**
+	 * The scale and the rotate here are based on those function in Point2D class
+	 */
+	
 	@Override
 	public void scale(Point2D center, double ratio) {
 		this._center.scale(center, ratio);

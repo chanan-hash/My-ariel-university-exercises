@@ -19,7 +19,7 @@ public class Polygon2D implements GeoShapeable{
 	public Polygon2D(ArrayList<Point2D> points) {
 		this.arrayOfPoints = new ArrayList <Point2D>();
 		for (int i=0; i<points.size(); i++) {
-			this.arrayOfPoints.add(points.get(i));
+			this.arrayOfPoints.add(new Point2D(points.get(i))); // Adding a copy of the Point and not a the refe rence of it
 		}
 	}
 
@@ -84,10 +84,12 @@ public class Polygon2D implements GeoShapeable{
 		}
 		return perimeter;
 	}
-
+	
+	/**
+	 * Based on move function from Point2D class 
+	 */
 	@Override
 	public void move(Point2D vec) {
-
 		for (Point2D point : arrayOfPoints) {
 			point.move(vec);
 		}
@@ -97,7 +99,10 @@ public class Polygon2D implements GeoShapeable{
 	public GeoShapeable copy() {
 		return new Polygon2D(this.arrayOfPoints);
 	}
-
+	
+	/**
+	 * The scale and the rotate here are based on those function in Point2D class
+	 */
 	@Override
 	public void scale(Point2D center, double ratio) {
 		for (Point2D point : arrayOfPoints) {

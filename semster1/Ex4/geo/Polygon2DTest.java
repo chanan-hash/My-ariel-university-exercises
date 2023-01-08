@@ -52,6 +52,20 @@ class Polygon2DTest {
 		assertEquals(false, isIn2);
 		assertEquals(true, poly2.contains(p7));
 	
+		//Scale - we will check few points to see if the scale worked
+		Point2D cen = new Point2D (2,3);
+		poly.scale(cen, 0.9);
+		
+		Point2D p0 = poly.getPoints()[0];
+		Point2D p0_1 = new Point2D(0.2,0.3);
+		
+		
+		assertEquals(p0.x(),p0_1.x(),0.01);
+		assertEquals(p0.y(),p0_1.y(),0.01);
+	
+		//Rotate - we will check few points to see if the scale worked
+
+		
 	}
 
 }

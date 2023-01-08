@@ -63,6 +63,9 @@ public class Triangle2D implements GeoShapeable{
 		return peri;
 	}
 
+	/**
+	 * Based on move Function from Point2D class
+	 */
 	@Override
 	public void move(Point2D vec) {
 		p1.move(vec);
@@ -70,10 +73,8 @@ public class Triangle2D implements GeoShapeable{
 		p3.move(vec);
 	}
 
-	// A copy constructor
 	@Override
 	public GeoShapeable copy() {
-		// TODO Auto-generated method stub
 		return new Triangle2D(p1,p2,p3);
 	}
 
@@ -82,6 +83,9 @@ public class Triangle2D implements GeoShapeable{
 		return "Triangle2D," + p1 + "," + p2 + "," + p3;
 	}
 
+	/**
+	 * The scale and the rotate here are based on those function in Point2D class
+	 */
 	@Override
 	public void scale(Point2D center, double ratio) {
 		this.p1.scale(center,ratio);
