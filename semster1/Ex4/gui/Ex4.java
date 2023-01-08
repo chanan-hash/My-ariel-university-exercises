@@ -39,7 +39,7 @@ public class Ex4 implements Ex4_GUI{
 	private  String _mode = "";
 	private  Point2D _p1;
 	private  Point2D _p2; // helping us to draw the triangle, and for the rotate function	
-
+	private int tag_count = 0;
 	private ArrayList<Point2D> polygon = new ArrayList<Point2D>(); // will help us to draw the polygon
 
 	private  static Ex4 _winEx4 = null;
@@ -102,11 +102,11 @@ public class Ex4 implements Ex4_GUI{
 				StdDraw_Ex4.circle(cen.x(), cen.y(), rad);
 			}
 		}
-		
+
 		// Drawing rectangle
 		if(gs instanceof Rect2D) {
 			Rect2D rec = (Rect2D)gs;
-			
+
 			// We are Drawing the rectangle like a polygon so we can rotate it normally
 			double[] xArr = new double[] { rec.get_p1().x(), rec.get_p2().x(), rec.get_p3().x(), rec.get_p4().x() };
 			double[] yArr = new double[] { rec.get_p1().y(), rec.get_p2().y(), rec.get_p3().y(), rec.get_p4().y() };
@@ -190,7 +190,7 @@ public class Ex4 implements Ex4_GUI{
 		if(p.equals("Yellow")) {_color = Color.YELLOW; setColor(_color);}
 		if(p.equals("Fill")) {_fill = true; setFill();}
 		if(p.equals("Empty")) {_fill = false; setFill();}
-		if(p.equals("Clear")) {_shapes.removeAll();}
+		if(p.equals("Clear")) {_shapes.removeAll(); tag_count = 0;} 		// Reseting the count_tag to 0
 
 		// Calling the sorts
 		if(p.equals("ByArea")) {_shapes.sort(new ShapeComp(Ex4_Const.Sort_By_Area));}
@@ -231,13 +231,13 @@ public class Ex4 implements Ex4_GUI{
 			}
 
 		}
-		
+
 		// Getting all the info about the shape (name, color, isFilled, point values) .That info we are using for saving
 		if(p.equals("Info")) {
 			String str = getInfo();
 			System.out.println(str);
 		}
-		
+
 		/**
 		 * The save&load are using the stddDrawFrame and fileChooser to select the place were to save/read the file
 		 * and calling save and load function that we've built
@@ -270,7 +270,7 @@ public class Ex4 implements Ex4_GUI{
 			int result = fileChooser.showOpenDialog(StdDraw_Ex4.getFrame());
 			if (result == JFileChooser.APPROVE_OPTION) {
 				try {
-					fileChooser.getSelectedFile().getAbsoluteFile().createNewFile(); // need to be fixed
+					fileChooser.getSelectedFile().getAbsoluteFile().createNewFile();
 				} catch (IOException e) {
 
 					e.printStackTrace();
@@ -278,7 +278,7 @@ public class Ex4 implements Ex4_GUI{
 				_shapes.load(fileChooser.getSelectedFile().getPath());
 			}
 		}
-		
+
 		drawShapes(); // Drawing them actually
 
 	}
@@ -298,6 +298,7 @@ public class Ex4 implements Ex4_GUI{
 				_gs.setColor(_color);
 				_gs.setFilled(_fill);
 				_shapes.add(_gs);
+				tag_count++; 		// Incrementing the tag 
 				_gs = null;
 				_p1 = null;
 			}
@@ -312,6 +313,7 @@ public class Ex4 implements Ex4_GUI{
 				_gs.setColor(_color);
 				_gs.setFilled(_fill);
 				_shapes.add(_gs);
+				tag_count++; 		// Incrementing the tag 
 				_gs = null;
 				_p1 = null;
 			}
@@ -327,6 +329,7 @@ public class Ex4 implements Ex4_GUI{
 				_gs.setColor(_color);
 				_gs.setFilled(_fill);
 				_shapes.add(_gs);
+				tag_count++; 		// Incrementing the tag 
 				_gs = null;
 				_p1 = null;
 			}
@@ -345,6 +348,7 @@ public class Ex4 implements Ex4_GUI{
 				_gs.setColor(_color);
 				_gs.setFilled(_fill);
 				_shapes.add(_gs);
+				tag_count++; 		// Incrementing the tag 
 				_gs = null;
 				_p1 = null;
 				_p2 = null;
@@ -392,9 +396,9 @@ public class Ex4 implements Ex4_GUI{
 			if (_p1== null) {
 				_p1= new Point2D(p);
 			}
-			
+
 			else{
-				
+
 				Point2D moveVector = new Point2D(p.x() - _p1.x(), p.y() - _p1.y()); // The place where to copy it
 				for (int i = 0; i < _shapes.size(); ++i) {
 					GUI_Shapeable s = _shapes.get(i);
@@ -402,6 +406,7 @@ public class Ex4 implements Ex4_GUI{
 					if (s.isSelected() && g != null) {
 						GUI_Shapeable copy = s.copy();
 						copy.getShape().move(moveVector);
+						copy.setTag(tag_count++); 			// Setting the tag to a new shape, so it won't copy the old tag 
 						_shapes.add(copy);
 					}
 
@@ -409,7 +414,7 @@ public class Ex4 implements Ex4_GUI{
 				}
 			}
 		}
-		
+
 		// Scale mode
 		// making it smaller
 		if(_mode.equals("Scale_90%")){
@@ -422,7 +427,7 @@ public class Ex4 implements Ex4_GUI{
 				}
 			}
 		}
-		
+
 		// Making it bigger
 		if(_mode.equals("Scale_110%")){
 			_p1 = new Point2D(p);
@@ -442,7 +447,7 @@ public class Ex4 implements Ex4_GUI{
 			} 
 			else {
 				_p2 = new Point2D(p);
-				
+
 				for (int i = 0; i < _shapes.size(); i++) {
 					GUI_Shapeable s = _shapes.get(i);
 					GeoShapeable g = s.getShape();
@@ -454,7 +459,7 @@ public class Ex4 implements Ex4_GUI{
 				_p2 = null;
 			}
 		}
-		
+
 		drawShapes();
 	}
 
@@ -476,25 +481,30 @@ public class Ex4 implements Ex4_GUI{
 			}
 		}
 	}
-	
+
 
 	// The right click will help us to stop the polygon
 	public void mouseRightClicked(Point2D p) {
 		System.out.println("right click!");
 		if (_gs!=null) {
 			if(_mode.equals("Polygon")) {
+				//polygon = new ArrayList<Point2D>();
+				Polygon2D polygon2 = new Polygon2D(polygon); 
+				_gs = new GUIShape(polygon2, _fill, _color, tag_count); // Creating a new polygon so we won't save and remember the right click
 				_gs.setColor(_color);
 				_gs.setFilled(_fill);
 				_shapes.add(_gs);
+				tag_count++; 		// Incrementing the tag ,here it after we're creating the polygon 
 				_gs = null;
 				_p1 = null;
-				polygon = new ArrayList<Point2D>();
-
+				polygon.clear();
 				drawShapes();
 			}
 			if(_mode.equals("Circle") || _mode.equals("Rect" )||_mode.equals("Triangle" ) || _mode.equals("Segment")) {
 				_gs = null;
 				_p1 = null;
+				_p2 = null;
+				drawShapes();  // Drawing "nothing" so we can cancel the shape  
 			}
 		}
 
@@ -515,7 +525,7 @@ public class Ex4 implements Ex4_GUI{
 				double r = _p1.distance(p);
 				gs = new Circle2D(_p1,r);
 			}
-			
+
 			// We are doing it by four points so we will draw a polygon that will be a rectangle
 			// Drawing rectangle
 			if(_mode.equals("Rect")) {
@@ -546,7 +556,7 @@ public class Ex4 implements Ex4_GUI{
 				temp.remove(p); // Because we don't need it more
 			}
 
-			_gs = new GUIShape(gs,false, Color.pink, 0);
+			_gs = new GUIShape(gs,false, Color.pink, tag_count); // Changing the tag to the count
 			drawShapes();
 		}
 	}
@@ -559,7 +569,7 @@ public class Ex4 implements Ex4_GUI{
 	@Override
 	public void show() {show(Ex4_Const.DIM_SIZE); }
 
-	// Maybe to add more qualities 
+	// Returning the info about the shape. It helps us to save to the file
 	@Override
 	public String getInfo() {
 		// TODO Auto-generated method stub

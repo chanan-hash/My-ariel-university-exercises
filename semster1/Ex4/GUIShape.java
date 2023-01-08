@@ -101,7 +101,7 @@ public class GUIShape implements GUI_Shapeable{
 		_tag = Integer.parseInt(ww[3]);
 		String info = ww[4];
 		
-		Point2D p =new Point2D(0,0); // the files is saves by little pixel aka points. by this point we will represent the objects
+		Point2D p = new Point2D(0,0); // the files is saves by little pixel aka points. by this point we will represent the objects
 		
 		if(info.compareTo("Point2D") == 0) {
 			p = new Point2D(Double.parseDouble(ww[5]),Double.parseDouble(ww[6])); // parse to the x,y values
@@ -189,7 +189,7 @@ public class GUIShape implements GUI_Shapeable{
 	
 	@Override
 	public String toString() {
-		return "GUIShape," + _color.getRGB() +"," + _fill + "," + _tag + "," +_g;
+		return "GUIShape," + _color.getRGB() + "," + _fill + "," + _tag + "," +_g;
 	}
 	
 	@Override

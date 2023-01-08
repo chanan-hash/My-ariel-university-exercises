@@ -71,7 +71,7 @@ public class ShapeCollection implements ShapeCollectionable{
 
 	@Override
 	public void removeAll() {
-		_shapes.removeAll(_shapes); // Using remove from arrayslist
+		_shapes.removeAll(_shapes); // Using remove from arraysList
 	}
 
 	/**
@@ -82,8 +82,8 @@ public class ShapeCollection implements ShapeCollectionable{
 		try {
 			FileWriter file_Write = new FileWriter(file_path);
 			for(int i = 0; i<_shapes.size(); i++) {
-				file_Write.write((_shapes.get(i).toString()+ "\n")); 
-			}	
+				file_Write.write((_shapes.get(i).toString() + "\n")); 
+			}
 			file_Write.close();
 		}
 		catch(IOException e) {
@@ -104,7 +104,7 @@ public class ShapeCollection implements ShapeCollectionable{
 
 	@Override
 	public void load(String file) {
-		_shapes.clear(); // maybe to do a new one empty in the same size
+		_shapes.clear(); 		// When we are loading the file, we want it to be in a new and clear gui  
 		try {
 			// Open the file
 			FileReader reader = new FileReader(file); // getting the file path

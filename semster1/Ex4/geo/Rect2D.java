@@ -85,12 +85,10 @@ public class Rect2D implements GeoShapeable {
 	 */
 	@Override
 	public void move(Point2D vec) {
-		// TODO Auto-generated method stub
 		_p1.move(vec);
 		_p2.move(vec);		
 		_p3.move(vec);		
-		_p4.move(vec);		
-		
+		_p4.move(vec);				
 	}
 
 	@Override
