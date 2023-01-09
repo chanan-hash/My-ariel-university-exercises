@@ -55,8 +55,8 @@ public class ShapeCollection implements ShapeCollectionable{
 	@Override
 	public ShapeCollectionable copy() {
 		// Based on deep copy but according to the conditions of the classes
-		ShapeCollection copy_shapes= new ShapeCollection();
-		for (int i = 0; i<_shapes.size()-1; i++) {
+		ShapeCollection copy_shapes = new ShapeCollection();
+		for (int i = 0; i<_shapes.size(); i++) {
 			GeoShapeable g = _shapes.get(i).getShape().copy(); // Copying the shapes qualities
 			GUIShape guiSh = new GUIShape(g,_shapes.get(i).isFilled(),_shapes.get(i).getColor(), _shapes.get(i).getTag());
 			copy_shapes.add(guiSh);
@@ -162,6 +162,7 @@ public class ShapeCollection implements ShapeCollectionable{
 					maxY = cy + r;
 				}	
 			}
+			
 			// means --> it a shape the built up only from points
 			else {
 				Point2D[] points = g.getPoints();

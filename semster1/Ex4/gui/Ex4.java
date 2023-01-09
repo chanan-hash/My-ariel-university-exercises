@@ -1,12 +1,12 @@
 package Exe.Ex4.gui;
 import java.awt.Color;
+import java.awt.FileDialog;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
 import Exe.Ex4.Ex4_Const;
 import Exe.Ex4.GUIShape;
@@ -245,40 +245,60 @@ public class Ex4 implements Ex4_GUI{
 		 * Load - reading the toString and deciding how to create the shape 
 		 */
 		// Save&load
+
 		if(p.equals("Save")) {
-			//https://www.codejava.net/java-se/swing/show-simple-open-file-dialog-using-jfilechooser
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
-			int result = fileChooser.showSaveDialog(StdDraw_Ex4.getFrame());
 
-			if (result == JFileChooser.APPROVE_OPTION) {
-
-				try {
-					fileChooser.getSelectedFile().getAbsoluteFile().createNewFile();
-				} 
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-				_shapes.save(fileChooser.getSelectedFile().getPath());
-			}
-
-		}
-
-		// Similar to the save
-		if(p.equals("Load")) {
-			JFileChooser fileChooser = new JFileChooser();
-			int result = fileChooser.showOpenDialog(StdDraw_Ex4.getFrame());
-			if (result == JFileChooser.APPROVE_OPTION) {
-				try {
-					fileChooser.getSelectedFile().getAbsoluteFile().createNewFile();
-				} catch (IOException e) {
-
-					e.printStackTrace();
-				}
-				_shapes.load(fileChooser.getSelectedFile().getPath());
+			FileDialog chooser = new FileDialog(new JFrame(),"Use a .png or .jpg extension", FileDialog.SAVE);
+			chooser.setVisible(true);
+			String filename = chooser.getFile();
+			if(filename != null) {
+				_shapes.save(chooser.getDirectory() + File.separator + chooser.getFile());
 			}
 		}
 
+		if (p.equals("Load")) {
+			FileDialog chooser = new FileDialog(new JFrame(),"Use a .png or .jpg extension", FileDialog.LOAD);
+			chooser.setVisible(true);
+			String filename = chooser.getFile();
+			if(filename != null) {
+				_shapes.load(chooser.getDirectory() + File.separator + chooser.getFile());
+			}
+		}
+
+		// Save&Load with another JFrame
+		//		if(p.equals("Save")) {
+		//		//https://www.codejava.net/java-se/swing/show-simple-open-file-dialog-using-jfilechooser
+		//		JFileChooser fileChooser = new JFileChooser();
+		//		fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		//		int result = fileChooser.showSaveDialog(StdDraw_Ex4.getFrame());
+		//
+		//		if (result == JFileChooser.APPROVE_OPTION) {
+		//
+		//			try {
+		//				fileChooser.getSelectedFile().getAbsoluteFile().createNewFile();
+		//			} 
+		//			catch (IOException e) {
+		//				e.printStackTrace();
+		//			}
+		//			_shapes.save(fileChooser.getSelectedFile().getPath());
+		//		}
+		//
+		//	}
+		//
+		//	// Similar to the save
+		//	if(p.equals("Load")) {
+		//		JFileChooser fileChooser = new JFileChooser();
+		//		int result = fileChooser.showOpenDialog(StdDraw_Ex4.getFrame());
+		//		if (result == JFileChooser.APPROVE_OPTION) {
+		//			try {
+		//				fileChooser.getSelectedFile().getAbsoluteFile().createNewFile();
+		//			} catch (IOException e) {
+		//
+		//				e.printStackTrace();
+		//			}
+		//			_shapes.load(fileChooser.getSelectedFile().getPath());
+		//		}
+		//	}
 		drawShapes(); // Drawing them actually
 
 	}

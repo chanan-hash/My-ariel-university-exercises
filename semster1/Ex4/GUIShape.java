@@ -120,14 +120,14 @@ public class GUIShape implements GUI_Shapeable{
 			
 			double x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0, x4 = 0, y4= 0;
 
-			x1=Double.parseDouble(ww[5]);
-			y1=Double.parseDouble(ww[6]);
-			x2=Double.parseDouble(ww[7]);
-			y2=Double.parseDouble(ww[8]);
-			x3=Double.parseDouble(ww[9]);
-			y3=Double.parseDouble(ww[10]);
-			x4=Double.parseDouble(ww[11]);
-			y4=Double.parseDouble(ww[12]);
+			x1 = Double.parseDouble(ww[5]);
+			y1 = Double.parseDouble(ww[6]);
+			x2 = Double.parseDouble(ww[7]);
+			y2 = Double.parseDouble(ww[8]);
+			x3 = Double.parseDouble(ww[9]);
+			y3 = Double.parseDouble(ww[10]);
+			x4 = Double.parseDouble(ww[11]);
+			y4 = Double.parseDouble(ww[12]);
 			
 			Point2D p1,p2,p3,p4;
 			p1 = new Point2D(x1,y1);
@@ -150,10 +150,10 @@ public class GUIShape implements GUI_Shapeable{
 		else if (info.compareTo("Segment2D") == 0) {
 			double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
 
-			x1=Double.parseDouble(ww[5]);
-			y1=Double.parseDouble(ww[6]);
-			x2=Double.parseDouble(ww[7]);
-			y2=Double.parseDouble(ww[8]);
+			x1 = Double.parseDouble(ww[5]);
+			y1 = Double.parseDouble(ww[6]);
+			x2 = Double.parseDouble(ww[7]);
+			y2 = Double.parseDouble(ww[8]);
 
 			Point2D p1,p2;
 			p1 = new Point2D(x1,y1);
@@ -162,15 +162,15 @@ public class GUIShape implements GUI_Shapeable{
 		}
 		else if (info.compareTo("Triangle2D") == 0) {
 			double x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
-			x1=Double.parseDouble(ww[5]);
-			y1=Double.parseDouble(ww[6]);
-			x2=Double.parseDouble(ww[7]);
-			y2=Double.parseDouble(ww[8]);
-			x3=Double.parseDouble(ww[9]);
-			y3=Double.parseDouble(ww[10]);
+			x1 = Double.parseDouble(ww[5]);
+			y1 = Double.parseDouble(ww[6]);
+			x2 = Double.parseDouble(ww[7]);
+			y2 = Double.parseDouble(ww[8]);
+			x3 = Double.parseDouble(ww[9]);
+			y3 = Double.parseDouble(ww[10]);
 
 			Point2D p1, p2, p3;
-			p1 =new Point2D(x1,y1);
+			p1 = new Point2D(x1,y1);
 			p2 = new Point2D(x2,y2);
 			p3 = new Point2D(x3,y3);
 
