@@ -25,7 +25,7 @@ public class ShapeComp implements Comparator<GUI_Shapeable>{
 	 */
 	@Override
 	public int compare(GUI_Shapeable o1, GUI_Shapeable o2) {
-		if (o1 == null || o2== null) {return 0;}
+		if (o1 == null || o2 == null) {return 0;}
 		int ans=0;
 		if(_flag == Ex4_Const.Sort_By_toString) {
 			ans = o1.toString().compareTo(o2.toString());
