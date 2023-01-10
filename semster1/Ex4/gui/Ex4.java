@@ -235,7 +235,7 @@ public class Ex4 implements Ex4_GUI{
 
 		// Removing all the selected shapes
 		if(_mode.equals("Remove")) {
-			for (int i = _shapes.size() - 1; i >= 0; --i) {  
+			for (int i = _shapes.size() - 1; i >= 0; i--) {  
 				GUI_Shapeable s = _shapes.get(i);            
 				if (s.isSelected()) {                        
 					_shapes.removeElementAt(i);             
@@ -425,7 +425,7 @@ public class Ex4 implements Ex4_GUI{
 			else{
 
 				Point2D moveVector = new Point2D(p.x() - _p1.x(), p.y() - _p1.y()); // The place where to copy it
-				for (int i = 0; i < _shapes.size(); ++i) {
+				for (int i = 0; i < _shapes.size(); i++) {
 					GUI_Shapeable s = _shapes.get(i);
 					GeoShapeable g = s.getShape();
 					if (s.isSelected() && g != null) {
