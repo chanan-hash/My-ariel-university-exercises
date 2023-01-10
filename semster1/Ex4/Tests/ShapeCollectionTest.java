@@ -90,7 +90,7 @@ class ShapeCollectionTest {
 			assertEquals(coll.get(i).getShape().area(), coll2.get(i).getShape().area());
 			assertEquals(coll.get(i).getShape().perimeter(), coll2.get(i).getShape().perimeter());
 		}
-
+		
 		// Test area sort comp
 		shapes.sort(new ShapeComp(Ex4_Const.Sort_By_Area));
 		for (int i = 0; i<coll.size()-1; i++) {

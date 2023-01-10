@@ -49,7 +49,7 @@ class GUIShapeTest {
 		
 		assertEquals(gs.getShape().getPoints()[0], s.getPoints()[0]);
 		assertEquals(gs.getColor().getRGB(),Color.BLACK.getRGB());	
-		
+	
 		// Polygon test
 		String str2 = "GUIShape,-16777216,true,2,Polygon2D,1,2,2.0,7.0,7.0,7.0,4.0,4.0,8.0,4.0"; // A polygon data 
 		String [] ww2 = str.split(",");

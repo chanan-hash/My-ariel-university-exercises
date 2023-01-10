@@ -62,6 +62,7 @@ public class Ex4 implements Ex4_GUI{
 		StdDraw_Ex4.show();
 		drawShapes();
 	}
+
 	public static Ex4 getInstance() {
 		if(_winEx4 ==null) {
 			_winEx4 = new Ex4();
@@ -232,6 +233,17 @@ public class Ex4 implements Ex4_GUI{
 
 		}
 
+		// Removing all the selected shapes
+		if(_mode.equals("Remove")) {
+			for (int i = _shapes.size() - 1; i >= 0; --i) {  
+				GUI_Shapeable s = _shapes.get(i);            
+				if (s.isSelected()) {                        
+					_shapes.removeElementAt(i);             
+				}
+			}
+		}
+
+
 		// Getting all the info about the shape (name, color, isFilled, point values) .That info we are using for saving
 		if(p.equals("Info")) {
 			String str = getInfo();
@@ -299,6 +311,8 @@ public class Ex4 implements Ex4_GUI{
 		//			_shapes.load(fileChooser.getSelectedFile().getPath());
 		//		}
 		//	}
+
+
 		drawShapes(); // Drawing them actually
 
 	}
@@ -401,15 +415,6 @@ public class Ex4 implements Ex4_GUI{
 			select(p);
 		}
 
-		// Removing all the selected shapes
-		if(_mode.equals("Remove")) {
-			for (int i = _shapes.size() - 1; i >= 0; --i) {  
-				GUI_Shapeable s = _shapes.get(i);            
-				if (s.isSelected()) {                        
-					_shapes.removeElementAt(i);             
-				}
-			}
-		}
 
 		// Copying the shape according to a place we want to copy it
 		if(_mode.equals("Copy")) {
