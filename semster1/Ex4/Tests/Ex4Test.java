@@ -1,6 +1,9 @@
 package Exe.Ex4.Tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Color;
 
@@ -8,10 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import Exe.Ex4.GUIShape;
 import Exe.Ex4.GUI_Shapeable;
+import Exe.Ex4.ShapeCollection;
 import Exe.Ex4.ShapeCollectionable;
 import Exe.Ex4.geo.Circle2D;
 import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
+import Exe.Ex4.geo.Rect2D;
 import Exe.Ex4.geo.Segment2D;
 import Exe.Ex4.geo.Triangle2D;
 import Exe.Ex4.gui.Ex4;
@@ -28,11 +33,59 @@ class Ex4Test {
 
 	Ex4 object;  // The object of the class
 
+	
+	/**
+	 *  Test for init 
+	 *	We are creating a 
+	 *
+	 */
+	
+	void testInit() {
+		assertNotNull(object);
+		
+		object.init(null);
+		
+		assertNotNull(object.getShape_Collection());
+		assertEquals(0, object.getShape_Collection().size());
+		
+		ShapeCollection shape = new ShapeCollection();
+		
+		Point2D p1 = new Point2D(1.71875,8.15625);
+		Point2D p2 = new Point2D(5.734375,4.640625);
+		Point2D p3 = new Point2D(p1.x(),p2.y());
+		Point2D p4 = new Point2D(p1.y(),p2.x());
+		Rect2D rect = new Rect2D(p1, p2,p3,p4);
+		
+		Point2D p5 = new Point2D(2.28125,4.328125);
+		Point2D p6 = new Point2D(8.125,8.234375);
+		Segment2D seg = new Segment2D(p5,p6);
+		
+		Point2D p7 = new Point2D (5,5);
+		Point2D p8 = new Point2D (7,5);
+	    double dist = p7.distance(p8);
+	    Circle2D cir = new Circle2D(p7,dist);
+	    
+	    shape.add(new GUIShape(cir, false, null, 0));
+	    shape.add(new GUIShape(seg, false, null, 0));
+	    shape.add(new GUIShape(rect, false, null, 0));
+	    
+	    object.init(shape);
+	    
+	    ShapeCollectionable objShape = object.getShape_Collection();
+	    
+	    assertEquals(3, objShape.size());;
+	    assertArrayEquals(cir.getPoints(), objShape.get(0).getShape().getPoints());
+	    assertArrayEquals(seg.getPoints(), objShape.get(1).getShape().getPoints());
+	    assertArrayEquals(rect.getPoints(), objShape.get(2).getShape().getPoints());
+	}
+	
+	
 	@Test
 	void testAtionPerform() {
 		object = Ex4.getInstance();
 		ShapeCollectionable collection = null; 
 
+		//Checking init
 		object.init(collection);
 
 		collection = object.getShape_Collection();
@@ -79,6 +132,15 @@ class Ex4Test {
 		collection.add(gs4);
 		collection.add(gs5);
 
+		// Checking getShape_Collection
+		ShapeCollectionable collection_2 = null; 
+		collection_2 = object.getShape_Collection();
+		
+		// Now we will check that the both collection are eqauls
+		assertEquals(collection_2, collection);
+		
+		
+		
 		// Sort calling testing
 		object.actionPerformed("ByArea");
 

@@ -590,9 +590,9 @@ public class Ex4 implements Ex4_GUI{
 
 	@Override
 	public ShapeCollectionable getShape_Collection() {
-		
 		return this._shapes;
 	}
+	
 	@Override
 	public void show() {show(Ex4_Const.DIM_SIZE); }
 
@@ -607,6 +607,6 @@ public class Ex4 implements Ex4_GUI{
 		}
 		return ans;
 	}
-
+	
 }
 

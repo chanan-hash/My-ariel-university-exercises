@@ -20,8 +20,11 @@ import Exe.Ex4.gui.Ex4;
 public class Ex4Main {
 
 	public static void main(String[] args) {
-		// t1();
+		t1();
 		t2();
+		
+		// I've put the file in the write place to check it you need to put the right directory. 
+		// There function their that gives you it  
 		// t3(); // won't work "out of the box" - requires editing the code (save, load..)
 	}
 	// Minimal empty frame (no shapes)
@@ -45,12 +48,16 @@ public class Ex4Main {
 		ex4.show();
 		System.out.print(ex4.getInfo());
 	}
+	
 	// Loads a file from file a0.txt (Circles only).
 	public static void t3() {
 		Ex4 ex4 = Ex4.getInstance();
 		ShapeCollectionable shapes = ex4.getShape_Collection();
-		String file = "a0.txt"; //make sure the file is your working directory.
-		shapes.load(file);
+		String str = System.getProperty("user.dir") + "\\\\a0.txt";
+		System.out.println(str);
+		System.out.println(System.getProperty("user.dir")); // will gives us were is the file to read --> I've put  also intos
+		String file = "C:\\Users\\חנן\\Desktop\\אריאל אונ'\\מבוא לחישוב\\Intro2CS-main\\Intro2CS-main\\src\\Exe\\Ex4\\a0.txt"; //make sure the file is your working directory.
+		shapes.load(file); // you can also do --> shapes.load(str);
 		ex4.init(shapes);
 		ex4.show();
 	}
