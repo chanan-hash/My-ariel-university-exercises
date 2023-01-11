@@ -8,6 +8,14 @@ import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Triangle2D;
 
+/**
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
+ *
+ */
+
+
 class Trinagnle2DTest {
 
 	Triangle2D tri = null;
@@ -20,6 +28,7 @@ class Trinagnle2DTest {
 		
 		Triangle2D tri = new Triangle2D(p1, p2, p3);
 		
+		// Test area and perimeter
 		double area = tri.area();
 		double peri = tri.perimeter();
 		
@@ -34,6 +43,10 @@ class Trinagnle2DTest {
 		boolean isIn = tri.contains(pIn);
 	
 		assertEquals(true, isIn);
+		
+		//Test toString
+		String str = "Triangle2D,0.0,3.0,4.0,0.0,0.0,0.0";
+		assertEquals(str,tri.toString());
 		
 		// Move
 		Point2D pmove = new Point2D(2,5);

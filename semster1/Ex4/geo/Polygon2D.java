@@ -9,6 +9,9 @@ import java.util.Arrays;
  * 
  * You should update this class!
  * @author boaz.benmoshe
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
  *
  */
 public class Polygon2D implements GeoShapeable{
@@ -22,7 +25,7 @@ public class Polygon2D implements GeoShapeable{
 			this.arrayOfPoints.add(new Point2D(points.get(i))); // Adding a copy of the Point and not a the refe rence of it
 		}
 	}
-
+	
 
 	// Going over by loop and adding to the String the points
 	@Override

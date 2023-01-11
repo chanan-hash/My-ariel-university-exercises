@@ -10,7 +10,9 @@ import Exe.Ex4.GUI_Shapeable;
  * as a linear order over GUI_Shapes.
  * Ex4: you should implement this class!
  * @author I2CS
- *
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
  */
 public class ShapeComp implements Comparator<GUI_Shapeable>{
 	public static final Comparator<GUI_Shapeable> CompByToString = new ShapeComp(Ex4_Const.Sort_By_toString);
@@ -19,7 +21,7 @@ public class ShapeComp implements Comparator<GUI_Shapeable>{
 	public ShapeComp(int flag) {
 		_flag = flag;	
 	}
-	
+
 	/**
 	 * We are using the comperator of every class, Double, Integer, String to build the comperator
 	 */

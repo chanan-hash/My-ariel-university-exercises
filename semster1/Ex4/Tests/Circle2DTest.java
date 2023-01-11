@@ -8,6 +8,13 @@ import Exe.Ex4.geo.Circle2D;
 import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 
+/**
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
+ *
+ */
+
 class Circle2DTest {
 
 	Circle2D c = null;
@@ -24,6 +31,10 @@ class Circle2DTest {
 			Point2D p3 = new Point2D(6,3);
 			System.out.println(rad);
 			
+			// toString
+			String str = "Circle2D,3.0,4.0,5.0990195135927845";
+			assertEquals(str, c.toString());
+
 			// Copy
 			GeoShapeable c2 = c.copy();
 			

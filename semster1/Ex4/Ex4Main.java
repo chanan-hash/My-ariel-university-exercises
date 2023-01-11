@@ -13,6 +13,9 @@ import Exe.Ex4.gui.Ex4;
  * 
  * @author boaz.ben-moshe
  *
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
+ *
  */
 public class Ex4Main {
 

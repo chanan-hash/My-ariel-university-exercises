@@ -29,7 +29,9 @@ import Exe.Ex4.geo.Triangle2D;
  * Written for 101 java course it uses simple static functions to allow a 
  * "Singleton-like" implementation.
  * @author boaz.benmoshe
- *
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
  */
 public class Ex4 implements Ex4_GUI{
 	private  ShapeCollectionable _shapes = new ShapeCollection();
@@ -588,7 +590,7 @@ public class Ex4 implements Ex4_GUI{
 
 	@Override
 	public ShapeCollectionable getShape_Collection() {
-		// TODO Auto-generated method stub
+		
 		return this._shapes;
 	}
 	@Override

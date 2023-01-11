@@ -10,6 +10,14 @@ import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Polygon2D;
 
+/**
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
+ *
+ */
+
+
 class Polygon2DTest {
 
 	ArrayList<Point2D> parr = new ArrayList<Point2D>();
@@ -40,6 +48,9 @@ class Polygon2DTest {
 		boolean isIn = poly.contains(p5);
 		assertEquals(true, isIn);
 		
+		String str = "Polygon2D,0.0,0.0,0.0,5.0,5.0,5.0,5.0,0.0";
+		assertEquals(str, poly.toString());
+		
 		// Copy
 		GeoShapeable pol2 = poly.copy();
 		// Checking if the point are equal;
@@ -53,8 +64,7 @@ class Polygon2DTest {
 		parr.add(p2);
 		parr.add(p4);
 		parr.add(p3);
-		
-		System.out.println(parr);
+				
 		Polygon2D poly2 = new Polygon2D(parr);
 		
 		Point2D p6 = new Point2D(2.5,1);

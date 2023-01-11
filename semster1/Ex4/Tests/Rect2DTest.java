@@ -8,6 +8,14 @@ import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Rect2D;
 
+/**
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
+ *
+ */
+
+
 class Rect2DTest {
 
 	Rect2D rec = null;
@@ -35,6 +43,11 @@ class Rect2DTest {
 	Point2D pIn = new Point2D(2,2.5);
 	boolean isin = rec.contains(pIn);
 	assertTrue(isin);
+	
+	// toString
+	String str ="Rect2D,0.0,0.0,0.0,5.0,5.0,5.0,5.0,0.0";
+	assertEquals(str, rec.toString());
+	
 	
 	// Move
 	rec.move(new Point2D(2,6));

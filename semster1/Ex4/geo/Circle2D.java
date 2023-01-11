@@ -6,6 +6,8 @@ package Exe.Ex4.geo;
  * Ex4: you should update this class!
  * @author boaz.benmoshe
  *
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
  */
 public class Circle2D implements GeoShapeable{
 	private Point2D _center;

@@ -8,6 +8,14 @@ import Exe.Ex4.geo.GeoShapeable;
 import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Segment2D;
 
+/**
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
+ *
+ */
+
+
 class Segment2DTest {
 
 	Segment2D seg = null;
@@ -26,9 +34,16 @@ class Segment2DTest {
 		assertEquals(true, is);
 		assertNotEquals(true, isNot);
 		
+		// Test perimeter
 		double peri = (2.236067977)*2; // sqrt of 5
 		assertEquals(seg.perimeter(), peri,0.01);		
 		
+		//Test area
+		assertEquals(0, seg.area());
+		
+		//toString
+		String str = "Segment2D,1.0,9.0,3.0,8.0";
+		assertEquals(str, seg.toString());
 		//Copy
 		GeoShapeable seg2 = seg.copy();
 		

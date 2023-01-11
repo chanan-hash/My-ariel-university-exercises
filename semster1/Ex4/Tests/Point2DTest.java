@@ -5,6 +5,14 @@ import org.junit.jupiter.api.Test;
 
 import Exe.Ex4.geo.Point2D;
 
+/**
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
+ *
+ */
+
+
 class Point2DTest {
 
 /**
@@ -17,6 +25,14 @@ class Point2DTest {
 		Point2D p2 = new Point2D (5,7);
 		Point2D cen = new Point2D (2,3); 
 		
+		//toString
+		String str = "1.0,6.0";
+		String str2 = "5.0,7.0";
+	
+		assertEquals(str, p1.toString());
+		assertEquals(str2, p2.toString());
+		
+		//Scale
 		p1.scale(cen, 0.9); // Ratio 0.9
 		p2.scale(cen, 1.1); // Ratio 1.1
 		
@@ -34,6 +50,7 @@ class Point2DTest {
 		double angle = p3.angleFromPoints(center);
 		double angle2 = p4.angleFromPoints(center);
 		
+		//Rotate
 		p3.rotate(center, angle);
 		p4.rotate(center, angle2);
 		

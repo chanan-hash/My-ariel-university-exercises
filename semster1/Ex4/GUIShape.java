@@ -3,7 +3,11 @@ package Exe.Ex4;
  * This class implements the GUI_shape.
  * Ex4: you should implement this class!
  * @author I2CS
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
  */
+
 import java.awt.Color;
 import java.util.ArrayList;
 

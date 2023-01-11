@@ -7,6 +7,9 @@ import Exe.Ex4.Ex4_Const;
  * This class represents a 2D rectangle (NOT necessarily axis parallel - this shape can be rotated!)
  * Ex4: you should implement this class!
  * @author I2CS
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
  *
  */
 public class Rect2D implements GeoShapeable {

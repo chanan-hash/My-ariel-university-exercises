@@ -21,6 +21,14 @@ import Exe.Ex4.geo.Segment2D;
 import Exe.Ex4.geo.ShapeComp;
 import Exe.Ex4.geo.Triangle2D;
 
+/**
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
+ *
+ */
+
+
 class ShapeCollectionTest {
 
 	private ArrayList <GUI_Shapeable> shapes = new ArrayList<GUI_Shapeable>();

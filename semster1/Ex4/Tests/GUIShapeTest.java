@@ -14,6 +14,14 @@ import Exe.Ex4.geo.Point2D;
 import Exe.Ex4.geo.Polygon2D;
 import Exe.Ex4.geo.Segment2D;
 
+/**
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
+ *
+ */
+
+
 class GUIShapeTest {
 
 	private ArrayList<Point2D> arrayOfPoints = new ArrayList<Point2D>();
@@ -38,6 +46,10 @@ class GUIShapeTest {
 		
 		assertEquals(gs.getShape().getPoints()[0], c.getPoints()[0]);
 		assertEquals(gs.getColor().getRGB(),Color.BLACK.getRGB());	
+		
+		//toString
+		String str8 = "GUIShape,-16777216,true,1,Circle2D,3.0,4.0,2.0";
+		assertEquals(str8, gs.toString());
 		
 		// Test Segment
 		String str1 = "GUIShape,-16777216,true,1,Segment2D,3.0,3.0,7.0,7.0"; // A segment data 
