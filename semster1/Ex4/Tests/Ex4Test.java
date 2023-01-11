@@ -36,8 +36,8 @@ class Ex4Test {
 	
 	/**
 	 *  Test for init 
-	 *	We are creating a 
-	 *
+	 *	We are creating an object of the class and shapes and adding them to the collection/
+	 *	Then we are operate on the the functions
 	 */
 	
 	void testInit() {
