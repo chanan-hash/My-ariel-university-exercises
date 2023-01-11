@@ -16,17 +16,25 @@ import Exe.Ex4.geo.Segment2D;
 import Exe.Ex4.geo.Triangle2D;
 import Exe.Ex4.gui.Ex4;
 
+/**
+ * 
+ * @author Michael Id - 206917908
+ * @author Chanan Id -  209324102 
+ *
+ */
+
+
 class Ex4Test {
 
 	Ex4 object;  // The object of the class
-	
+
 	@Test
 	void testAtionPerform() {
 		object = Ex4.getInstance();
 		ShapeCollectionable collection = null; 
 
 		object.init(collection);
-		
+
 		collection = object.getShape_Collection();
 
 		// For the Circle
@@ -70,66 +78,68 @@ class Ex4Test {
 		collection.add(gs3);
 		collection.add(gs4);
 		collection.add(gs5);
-		
+
 		// Sort calling testing
 		object.actionPerformed("ByArea");
-		
+
 		for (int i = 0; i<collection.size()-1; i++) {
 			assertTrue(collection.get(i).getShape().area() <=collection.get(i+1).getShape().area() );
 		}
-		
+
 		object.actionPerformed("ByAntiArea");
 		for (int i = 0; i<collection.size()-1; i++) {
 			assertTrue(collection.get(i).getShape().area() >=collection.get(i+1).getShape().area() );
 		}
-				
+
 		object.actionPerformed("ByPerimeter");
 		for (int i = 0; i<collection.size()-1; i++) {
 			assertTrue(collection.get(i).getShape().perimeter() <= collection.get(i+1).getShape().perimeter());
 		}
-	
+
 		object.actionPerformed("ByAntiPerimeter");
 		for (int i = 0; i<collection.size()-1; i++) {
 			assertTrue(collection.get(i).getShape().perimeter() >= collection.get(i+1).getShape().perimeter());
 		}
-		
+
 		object.actionPerformed("ByTag");
 		for (int i = 0; i<collection.size()-1; i++) {
 			assertTrue(collection.get(i).getTag() <= collection.get(i+1).getTag());
 		}
-		
+
 		object.actionPerformed("ByAntiTag");
 		for (int i = 0; i<collection.size()-1; i++) {
 			assertTrue(collection.get(i).getTag() >= collection.get(i+1).getTag());
 		}
+
+		
 		
 		// Test the None --> all shapes supposed to be isSelected = false
 		object.actionPerformed("None");
 		for (int i = 0; i<collection.size()-1; i++) {
 			assertTrue(!collection.get(i).isSelected());
 		}
-		
+
 		// Test the None --> all shapes supposed to be isSelected = True
 		object.actionPerformed("All");
 		for (int i = 0; i<collection.size()-1; i++) {
 			assertTrue(collection.get(i).isSelected());
 		}
+
+		// Test info
+		String str2 = object.getInfo();
+		String str3 = "GUIShape,-256,true,4,Triangle2D,8.0,9.0,14.0,6.0,11.0,3.0\n"
+				+ "GUIShape,-16711936,false,3,Triangle2D,15.0,6.0,8.0,3.0,7.0,2.0\n"
+				+ "GUIShape,-65536,true,2,Segment2D,8.0,7.0,9.0,10.0\n"
+				+ "GUIShape,-16777216,false,1,Segment2D,4.0,3.0,5.0,6.0\n"
+				+ "GUIShape,-16776961,true,0,Circle2D,1.0,2.0,5.0\n";
+		assertEquals(str2, str3);
 		
+		object.actionPerformed("Remove");
 		
-		object.actionPerformed("Info");
+		//Test Remove
+		// Because all shapes are selected so we will remove all so the size of the collection supposed to be 0
 		
-		
-//		object.actionPerformed("Anti");
-//		for (int i = 0; i<collection.size()-1; i++) {
-//			if(collection.get(i).isSelected() == false) {
-//				
-//			}
-//			else {
-//				
-//			}
-//	
-//			//assertTrue(collection.get(i).isSelected());
-//		}
+		assertEquals(0, collection.size());
 		
 		
 	}
